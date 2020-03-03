@@ -5,9 +5,6 @@ Walid Ennaceur 40060735
 Édouard Gagné 40061204
 Anthony Vespoli 40042677
 
-
-
-
 Comp 371 Project Implementation Plan
 
 
@@ -52,11 +49,11 @@ Timeline
 
 
 Milestone 1
-	Milestone 2
-	Milestone 3
-	Milestone 4
-	Milestone 5
-	Complete terrain
+Milestone 2
+Milestone 3
+Milestone 4
+Milestone 5
+Complete terrain
 
 
 Astronaut model
