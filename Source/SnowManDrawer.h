@@ -13,7 +13,8 @@ public:
     void SnowManDrawer::drawHat(GLuint worldMatrixLocationColor);
     void SnowManDrawer::drawNose(GLuint worldMatrixLocationColor);
     void SnowManDrawer::drawSnow(GLuint worldMatrixLocationColor);
-    
+    void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture);
+    void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double **a, int width, int height);
 
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
