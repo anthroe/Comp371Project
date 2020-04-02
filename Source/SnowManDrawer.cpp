@@ -163,28 +163,17 @@ void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double **a, 
     {
         for (int x = 0; x < width; x++)
         {
-            //std::cout << a[x][z] << std::endl;
-            for (int y = 0; y < a[z][x]; y++)
+            if (a[z][x] > 0)
             {
-                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width/2, y, z - height/2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                for (int y = 0; y < a[z][x]; y++)
+                {
+                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                    texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+                }
+                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
                 texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
             }
-            mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width/2, a[z][x], z - height/2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-            texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
         }
     }
 }
-/*
-void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double** a, int width, int height)
-{
-    for (int x = 0; x < width; x++)
-    {
-        for (int z = 0; z < height; z++)
-        {
-            //std::cout << a[x][z] << std::endl;
-            mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - 1.0f, a[x][z] * 5, z - 1.0f)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-            texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
-        }
-    }
-}
-*/
+

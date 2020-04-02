@@ -37,6 +37,7 @@ using namespace glm;
 using namespace std;
 float footRotationFactor = 0;
 bool footSwitch = true;
+
 const char* getVertexShaderSource()
 {
     // Shader code, sets the modelViewProjection matrix which is the 2D representation of the 3D world [represented with 4D matrixes]
@@ -231,10 +232,10 @@ void generateGround() {
 
     // Create a PerlinNoise object with the reference permutation vector
     PerlinNoise pn;
-    depthArray = new double *[width];
+    depthArray = new double *[height];
     // Visit every pixel of the image and assign a color generated with Perlin noise
     for (unsigned int i = 0; i < height; ++i) {     // y
-        depthArray[i] = new double [height];
+        depthArray[i] = new double [width];
         for (unsigned int j = 0; j < width; ++j) {  // x
             double x = (double)j / ((double)width);
             double y = (double)i / ((double)height);
@@ -254,9 +255,11 @@ void generateGround() {
 
 
 }
+
+
 void generateMountain()
 {
-    srand(time(0));
+    
     int xCord = rand() % width;
     int zCord = rand() % height;
 
@@ -273,7 +276,6 @@ void generateMountain()
         {
             int additional = rand() % 2;
             depthArray[z][x] = depthArray[zCord][xCord] + 2 + additional;
-            std::cout << "test" << endl;
         }
     }
     for (int z = zCord - 1; z <= zCord + 1 && zCord - 1 > 0 && zCord + 1 < height; z++)
@@ -282,7 +284,6 @@ void generateMountain()
         {
             int additional = rand() % 2;
             depthArray[z][x] = depthArray[zCord][xCord] + 2 + additional;
-            std::cout << "test" << endl;
         }
     }
     int additional = rand() % 2;
@@ -292,8 +293,12 @@ void generateMountain()
 
 int main(int argc, char* argv[])
 {
+    srand((unsigned)time(NULL));
     generateGround();
     generateMountain();
+    generateMountain();
+    generateMountain();
+
     // Initialize GLFW and OpenGL version
     glfwInit();
 
@@ -334,10 +339,12 @@ int main(int argc, char* argv[])
         GLuint silverTextureID = loadTexture("Textures/silver.jpg");
         GLuint carrotTextureID = loadTexture("Textures/carrot.jpg");
         GLuint snowTextureID = loadTexture("Textures/snow.jpg");
+        GLuint grassTextureID = loadTexture("Textures/grass.jpg");
     #else
         GLuint silverTextureID = loadTexture("../Assets/Textures/silver.jpg");
         GLuint carrotTextureID = loadTexture("../Assets/Textures/carrot.jpg");
         GLuint snowTextureID = loadTexture("../Assets/Textures/snow.jpg");
+        GLuint grassTextureID = loadTexture("../Assets/Textures/grass.jpg");
     #endif
     // Black background
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
@@ -383,7 +390,7 @@ int main(int argc, char* argv[])
     // initializing all the variable that will be used for transformations
     float worldRotateXFactor = 0.0f;
     float worldRotateYFactor = 0.0f;
-    float zoomFactor = 0.5f;
+
 
     GLenum mode = GL_TRIANGLES;
    
@@ -391,6 +398,7 @@ int main(int argc, char* argv[])
     float rotateFactor = 0.0f;
     
     vec3 translationVector = vec3(0.0f);
+    vec3 translationVector2 = vec3(0.0f);
     vec3 scaleVector = vec3(1.0f);
     vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
     vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
@@ -410,7 +418,7 @@ int main(int argc, char* argv[])
 
 
         // Set projection matrix for shader
-        mat4 projectionMatrix = glm::perspective(zoomFactor,            // field of view in degrees
+        mat4 projectionMatrix = glm::perspective(0.5f,            // field of view in degrees
             1024.0f / 768.0f,  // aspect ratio
             0.01f, 100.0f);   // near and far (near > 0)
         
@@ -444,6 +452,7 @@ int main(int argc, char* argv[])
         mat4 groundWorldMatrix;
 
         // create groupMatrix which is used to transform all the parts, using predifined data
+        translationVector[1] = 2.5f;
         mat4 groupMatrix =  translate(mat4(1.0f), translationVector) * rotate(mat4(1.0f), glm::radians(rotateFactor), yRotationVector) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
         mat4 worldRotationMatrix = rotate(mat4(1.0f), glm::radians(worldRotateYFactor), yRotationVector) * rotate(mat4(1.0f), glm::radians(worldRotateXFactor), xRotationVector);
 
@@ -451,18 +460,15 @@ int main(int argc, char* argv[])
         snowManDrawer->setGroupMatrix(groupMatrix);
         glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &worldRotationMatrix[0][0]);
 
-        glBindTexture(GL_TEXTURE_2D, carrotTextureID);
+        glBindTexture(GL_TEXTURE_2D, grassTextureID);
         glUniform3fv(texturedColorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
         mat4 pillarWorldMatrix;
-        snowManDrawer->drawSnowCube(worldMatrixLocationTexture, depthArray,width,height);
 
- 
+        snowManDrawer->drawSnowCube(worldMatrixLocationTexture, depthArray,width,height);
 
         glUseProgram(shaderProgram);
         glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 0.0f)));
 
-        
-        
         glUniformMatrix4fv(rotationColorMatrixLocation, 1, GL_FALSE, &worldRotationMatrix[0][0]);
 
 
@@ -482,6 +488,9 @@ int main(int argc, char* argv[])
         glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
         groundWorldMatrix = scale(mat4(1.0f), vec3(0.05f)) * translate(mat4(1.0f), vec3(0.0f, 50.01f, 0.0f)) * rotate(mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         lineModel->Draw(worldMatrixLocationColor, groundWorldMatrix);
+
+        mat4 cubeMatrix = translate(mat4(1.0f), vec3((float)cameraPosition.x - 1.0f, (float)cameraPosition.y - 1.0f, (float)cameraPosition.z));
+        //snowManDrawer->drawTestCube(worldMatrixLocationColor, cubeMatrix);
 
         snowManDrawer->drawBody(worldMatrixLocationColor);
         //building olaf, using relative positioning by applying transformation of the following order T * R * S
@@ -531,6 +540,7 @@ int main(int argc, char* argv[])
         // Convert to spherical coordinates
         const float cameraAngularSpeed = 60.0f;
         
+        
 
         // Clamp vertical angle to [-85, 85] degrees
         cameraVerticalAngle = std::max(-85.0f, std::min(85.0f, cameraVerticalAngle));
@@ -551,25 +561,28 @@ int main(int argc, char* argv[])
 
         glm::normalize(cameraSideVector);
 
+        cameraHorizontalAngle -= dx * cameraAngularSpeed * dt;
+        cameraVerticalAngle -= dy * cameraAngularSpeed * dt;
+
         //to do shift see fast cam
         // @TODO 5 = use camera lookat and side vectors to update positions with ASDW
         // adjust code below
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // move camera to the left
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) // move camera to the left
         {
             cameraPosition -= cameraSideVector * currentCameraSpeed * dt;
         }
 
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) // move camera to the right
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) // move camera to the right
         {
             cameraPosition += cameraSideVector * currentCameraSpeed * dt;
         }
 
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) // move camera up
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) // move camera up
         {
             cameraPosition -= cameraLookAt * currentCameraSpeed * dt;
         }
 
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) // move camera down
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) // move camera down
         {
             cameraPosition += cameraLookAt * currentCameraSpeed * dt;
         }
@@ -640,7 +653,6 @@ int main(int argc, char* argv[])
             translationVector *= 0.0f;
             scaleNumber = scaleNumber * 0.0f + 1.0f;
             rotateFactor = rotateFactor * 0.0f;
-            zoomFactor = 0.5f;
             worldRotateXFactor = 0.0f;
             worldRotateYFactor = 0.0f;
         }
@@ -658,77 +670,6 @@ int main(int argc, char* argv[])
 
         }
         
-        if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) // zooming in and out, holding m and moving along x axis with mouse
-        {
-            if (dx > 0)
-            {
-                if (zoomFactor <= 3.13)
-                {
-                    zoomFactor += 0.01f;
-                }
-            }
-            else if (dx < 0)
-            {
-                if (zoomFactor >= 0.15)
-                {
-                    zoomFactor -= 0.01f;
-                }
-            }
-
-        }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) // panning
-        {
-            cameraHorizontalAngle -= dx * cameraAngularSpeed * dt;
-        
-
-        }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // tilting
-        {
-            cameraVerticalAngle -= dy * cameraAngularSpeed * dt;
-
-        }
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) // rotate world positive x
-        {
-            worldRotateXFactor += 0.5f;
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) // rotate world negative x
-        {
-            worldRotateXFactor -= 0.5f;
-
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) // rotate world positive y
-        {
-            worldRotateYFactor += 0.5f;
-
-        }
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) // rotate world negative y
-        {
-            worldRotateYFactor -= 0.5f;
-
-        }
-        if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) // create olaf with points
-        {
-            mode = GL_POINTS;
-
-        }
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) // create olaf with lines
-        {
-            mode = GL_LINES;
-
-        }
-        if (!shiftHold && glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) // create olaf with triangles
-        {
-            mode = GL_TRIANGLES;
-
-        }
-        
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
-        {
-            float x = rand() % 100 - 50.0f;
-            float z = rand() % 100 - 50.0f;
-            translationVector[0] = x;
-            translationVector[2] = z;
-        }
         
 
         // TODO 6
