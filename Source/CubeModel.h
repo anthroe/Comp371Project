@@ -15,7 +15,7 @@ class CubeModel
 public:
     CubeModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
     virtual ~CubeModel(void);
-    unsigned int* CubeModel::createVBOCube();
+    unsigned int* createVBOCube();
     virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix);
     virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix, GLenum mode);
     

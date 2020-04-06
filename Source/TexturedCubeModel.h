@@ -14,7 +14,7 @@ class TexturedCubeModel
 {
 public:
     TexturedCubeModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
-    void TexturedCubeModel::createTexturedCubeVertexBufferObject();
+    void createTexturedCubeVertexBufferObject();
     virtual ~TexturedCubeModel(void);
     virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix);
 

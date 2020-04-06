@@ -15,7 +15,7 @@ class LineModel
 public:
     LineModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
     virtual ~LineModel(void);
-    unsigned int* LineModel::createVBOCube();
+    unsigned int* createVBOCube();
     virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix);
     
 //protected:
