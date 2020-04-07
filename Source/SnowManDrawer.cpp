@@ -20,24 +20,32 @@
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 using namespace glm;
 
-GLenum mode = GL_TRIANGLES;
-LineModel* lineModel;
-mat4 groupMatrix;
 SphereModel* sphere;
 CubeModel* coloredCube;
 TexturedCubeModel* texturedCube1;
-vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
-vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
-float footRotationBase = 180.0f;
+
 SnowManDrawer::SnowManDrawer()
 {
-    lineModel = new LineModel();
+
     sphere = new SphereModel();
     coloredCube = new CubeModel();
     texturedCube1 = new TexturedCubeModel();
     texturedCube1->createTexturedCubeVertexBufferObject();
+    // Load Textures
+    #if defined(PLATFORM_OSX)
+        silverTextureID = loadTexture("Textures/silver.jpg");
+        carrotTextureID = loadTexture("Textures/carrot.jpg");
+        snowTextureID = loadTexture("Textures/snow.jpg");
+    #else
+        silverTextureID = loadTexture("../Resources/Assets/Textures/silver.jpg");
+        carrotTextureID = loadTexture("../Resources/Assets/Textures/carrot.jpg");
+        snowTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
+    #endif
 }
 
  
@@ -54,26 +62,7 @@ void SnowManDrawer::setGroupMatrix(mat4 snowManGroupMatrix)
 {
     groupMatrix = snowManGroupMatrix;
 }
-void SnowManDrawer::drawGrid(Shader * shader)
-{
-    //draw the z axis 100 lines
-    mat4 groundWorldMatrix;
-    for (int i = 1; i <= 100; i++)
-    {
-            float z = 1.0f * i;
-            groundWorldMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, z - 50.0f));
-            lineModel->Draw(shader, groundWorldMatrix);
-    }
 
-    //draw the x axis100 lines
-    for (int i = 1; i <= 100; i++)
-    {
-            float x = 1.0f * i;
-            groundWorldMatrix = translate(mat4(1.0f), vec3(x - 50.0f, 0.0f, 0.0f)) * rotate(mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            lineModel->Draw(shader, groundWorldMatrix);
-    }
-        
-}
 void SnowManDrawer::drawArmsAndLegs(Shader * shader, float footRotationFactor)
 {
     mat4 leftFoot = translate(mat4(1.0f), vec3(0.0f, 0.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(footRotationBase + footRotationFactor), xRotationVector);
@@ -147,4 +136,100 @@ void SnowManDrawer::drawSnow(Shader * shader)
 
 }
 
+void SnowManDrawer::draw(Shader* shader, Shader* textureShader, mat4 worldRotationMatrix)
+{
+    // create groupMatrix which is used to transform all the parts, using predifined data
+    mat4 groupMatrix = translate(mat4(1.0f), translationVector) * rotate(mat4(1.0f), glm::radians(rotateFactor), yRotationVector) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
+    // create world rotation matrix, which is used to rotate the whole world
+    setGroupMatrix(groupMatrix);
+    textureShader->use();
+    textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
+    shader->use();
+    shader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
+    drawBody(shader);
+    //building olaf, using relative positioning by applying transformation of the following order T * R * S
+
+    shader->setVec3("objectColor", vec3(0.98f, 0.98f, 0.98f));
+    drawArmsAndLegs(shader, footRotationFactor);
+
+    //right eye
+    shader->setVec3("objectColor", vec3(0.0f, 0.0f, 0.0f)); // setting color of cube
+    drawEyesAndMouth(shader);
+
+    //hat
+    textureShader->use();
+    glBindTexture(GL_TEXTURE_2D, silverTextureID);
+    textureShader->setVec3("objectColor", glm::vec3(0.82f, 0.82f, 0.82f));
+    drawHat(textureShader);
+
+    //nose
+    glBindTexture(GL_TEXTURE_2D, carrotTextureID);
+    textureShader->setVec3("objectColor", glm::vec3(0.90f, 0.65f, 0.0f));
+    //glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.0f))); // setting color of cube
+    drawNose(shader);
+
+}
+void SnowManDrawer::snowManAnimation()
+{
+    if (footSwitch)
+    {
+        if (footRotationFactor < 45.0f)
+            footRotationFactor += 2.0f;
+        else
+            footSwitch = false;
+
+    }
+    else
+    {
+        if (footRotationFactor > -45.0f)
+            footRotationFactor -= 2.0f;
+        else
+            footSwitch = true;
+    }
+}
+float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired)
+{
+    /*
+        1 --> A, 2 --> D, 3 --> W, 4 --> S
+    */
+    if (fmod(rotateFactor, 360.0f) != angleRequired)
+        rotateFactor += 1.0f;
+    return rotateFactor;
+}
+
+unsigned int SnowManDrawer::loadTexture(std::string imagePath) {
+    unsigned int texture;
+    glGenTextures(1, &texture);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(imagePath.c_str(), &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << imagePath << std::endl;
+        stbi_image_free(data);
+    }
+
+    return texture;
+}
