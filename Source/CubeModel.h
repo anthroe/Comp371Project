@@ -8,16 +8,16 @@
 //
 
 #pragma once
-
+#include <Shader.h>
 
 class CubeModel
 {
 public:
     CubeModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
     virtual ~CubeModel(void);
-    unsigned int* CubeModel::createVBOCube();
-    virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix);
-    virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix, GLenum mode);
+    unsigned int* createVBOCube();
+    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix, GLenum mode);
     
 //protected:
   //  virtual bool ParseLine(const std::vector<ci_string> &token);

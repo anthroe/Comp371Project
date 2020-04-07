@@ -135,7 +135,7 @@ TexturedCubeModel::~TexturedCubeModel()
 }
 
 
-void TexturedCubeModel::Draw(GLuint WorldMatrixLocation, mat4 WorldMatrix)
+void TexturedCubeModel::Draw(Shader * shader, mat4 WorldMatrix)
 {
     // Draw the Vertex Buffer
     // Note this draws a Sphere
@@ -143,7 +143,7 @@ void TexturedCubeModel::Draw(GLuint WorldMatrixLocation, mat4 WorldMatrix)
     glBindVertexArray(mVAO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-    glUniformMatrix4fv(WorldMatrixLocation, 1, GL_FALSE, &WorldMatrix[0][0]);
+    shader->setMat4("worldMatrix", WorldMatrix);
 
     // Draw the triangles !
     glDrawArrays(GL_TRIANGLES, 0, 36);
