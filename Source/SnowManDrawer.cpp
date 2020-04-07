@@ -14,10 +14,12 @@
 #include <glm/gtc/matrix_transform.hpp> // include this to create transformation matrices
 #include <glm/common.hpp>
 #include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
+#include <iostream>
 #include "SnowManDrawer.h"
 #include "CubeModel.h"
 #include "SphereModel.h"
 #include "LineModel.h"
+
 #include "TexturedCubeModel.h"
 
 using namespace glm;
@@ -147,4 +149,31 @@ void SnowManDrawer::drawSnow(GLuint worldMatrixLocationTexture)
 
 }
 
+void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture)
+{
+    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+
+    texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+
+}
+
+void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double **a, int width, int height)
+{
+    for (int z = 0; z < height; z++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (a[z][x] > 0)
+            {
+                for (int y = 0; y < a[z][x]; y++)
+                {
+                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                    texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+                }
+                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+            }
+        }
+    }
+}
 
