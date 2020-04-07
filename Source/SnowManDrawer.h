@@ -1,4 +1,7 @@
 #pragma once
+
+#include <Shader.h>
+
 class SnowManDrawer
 {
 public:
@@ -6,13 +9,13 @@ public:
     ~SnowManDrawer();
     void setMode(GLenum mode);
     void setGroupMatrix(glm::mat4 groupMatrix);
-    void drawGrid(GLuint worldMatrixLocationColor);
-    void drawArmsAndLegs(GLuint worldMatrixLocationColor, float footRotationFactor);
-    void drawBody(GLuint worldMatrixLocationColor);
-    void drawEyesAndMouth(GLuint worldMatrixLocationColor);
-    void drawHat(GLuint worldMatrixLocationColor);
-    void drawNose(GLuint worldMatrixLocationColor);
-    void drawSnow(GLuint worldMatrixLocationColor);
+    void drawGrid(Shader * shader);
+    void drawArmsAndLegs(Shader * shader, float footRotationFactor);
+    void drawBody(Shader * shader);
+    void drawEyesAndMouth(Shader * shader);
+    void drawHat(Shader * shader);
+    void drawNose(Shader * shader);
+    void drawSnow(Shader * shader);
     
 
     //protected:

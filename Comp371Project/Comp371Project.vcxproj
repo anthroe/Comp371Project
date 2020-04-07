@@ -144,6 +144,7 @@
     <ClCompile Include="..\Source\Assignment2.cpp" />
     <ClCompile Include="..\Source\CubeModel.cpp" />
     <ClCompile Include="..\Source\LineModel.cpp" />
+    <ClCompile Include="..\Source\Shader.cpp" />
     <ClCompile Include="..\Source\SnowManDrawer.cpp" />
     <ClCompile Include="..\Source\SphereModel.cpp" />
     <ClCompile Include="..\Source\TexturedCubeModel.cpp" />
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="..\Source\CubeModel.h" />
     <ClInclude Include="..\Source\LineModel.h" />
+    <ClInclude Include="..\Source\Shader.h" />
     <ClInclude Include="..\Source\SnowManDrawer.h" />
     <ClInclude Include="..\Source\SphereModel.h" />
     <ClInclude Include="..\Source\TexturedCubeModel.h" />

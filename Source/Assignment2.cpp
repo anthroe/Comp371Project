@@ -28,140 +28,16 @@
 #include "TexturedCubeModel.h"
 #include "CubeModel.h"
 #include "LineModel.h"
-
+#include "Shader.h"
 
 using namespace glm;
 using namespace std;
 float footRotationFactor = 0;
 bool footSwitch = true;
-const char* getVertexShaderSource()
-{
-    // Shader code, sets the modelViewProjection matrix which is the 2D representation of the 3D world [represented with 4D matrixes]
-    // globalRotationMatrix is in charge of rotating the world before converting to 2D
-    return
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;"
-        ""
-        "uniform mat4 worldMatrix;"
-        "uniform mat4 globalRotationMatrix;"
-        "uniform mat4 viewMatrix = mat4(1.0);"  
-        "uniform mat4 projectionMatrix = mat4(1.0);"
-        ""
-        "out vec3 vertexColor;"
-        "void main()"
-        "{"
-        "   mat4 modelViewProjection = projectionMatrix * viewMatrix * globalRotationMatrix * worldMatrix;"//global rotation * world
-        "   gl_Position = modelViewProjection * vec4(aPos.x, aPos.y, aPos.z, 1.0);"
-        "}";
-}
 
+Shader * shader;
+Shader * textureShader;
 
-const char* getFragmentShaderSource()
-{
-    // code that sets colors to access variable use pointers
-    return
-        "#version 330 core\n"
-        "uniform vec3 objectColor;"
-        "out vec4 FragColor;"
-        "void main()"
-        "{"
-        "   FragColor = vec4(objectColor.r, objectColor.g, objectColor.b, 1.0f);"
-        "}";
-}
-const char* getTexturedVertexShaderSource()
-{
-    // For now, you use a string for your shader code, in the assignment, shaders will be stored in .glsl files
-    return
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;"
-        "layout (location = 1) in vec3 aColor;"
-        "layout (location = 2) in vec2 aUV;" //COMMENTTEXTURE
-        ""
-        "uniform mat4 worldMatrix;"
-        "uniform mat4 viewMatrix = mat4(1.0);"  // default value for view matrix (identity)
-        "uniform mat4 projectionMatrix = mat4(1.0);"
-        "uniform mat4 globalRotationMatrix;"
-        ""
-        "out vec3 vertexColor;"
-        "out vec2 vertexUV;" //COMMENTTEXTURE
-        ""
-        "void main()"
-        "{"
-        "   vertexColor = aColor;"
-        "   mat4 modelViewProjection = projectionMatrix * viewMatrix * globalRotationMatrix * worldMatrix;"
-        "   gl_Position = modelViewProjection * vec4(aPos.x, aPos.y, aPos.z, 1.0);"
-        "   vertexUV = aUV;" //COMMENTTEXTURE
-        "}";
-}
-
-const char* getTexturedFragmentShaderSource()
-{
-    return
-        "#version 330 core\n"
-        "in vec3 vertexColor;"
-        "in vec2 vertexUV;" //COMMENTTEXTURE
-        "uniform sampler2D textureSampler;" //COMMENTTEXTURE
-        "uniform vec3 objectColor;"
-        ""
-        "out vec4 FragColor;"
-        "void main()"
-        "{"
-        "   vec4 textureColor = texture( textureSampler, vertexUV );" //COMMENTTEXTURE
-        "   FragColor = textureColor * vec4(objectColor.r, objectColor.g, objectColor.b, 1.0f);" //COMMENTTEXTURE
-        "}";
-}
-int compileAndLinkShaders(const char* vertexShaderSource, const char* fragmentShaderSource)
-{
-    // compile and link shader program
-    // return shader program id
-    // ------------------------------------
-
-    // vertex shader
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    // fragment shader
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    // link shaders
-    int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
-}
 
 unsigned int loadTexture(std::string imagePath) {
     unsigned int texture;
@@ -270,22 +146,16 @@ int main(int argc, char* argv[])
         GLuint carrotTextureID = loadTexture("Textures/carrot.jpg");
         GLuint snowTextureID = loadTexture("Textures/snow.jpg");
     #else
-        GLuint silverTextureID = loadTexture("../Assets/Textures/silver.jpg");
-        GLuint carrotTextureID = loadTexture("../Assets/Textures/carrot.jpg");
-        GLuint snowTextureID = loadTexture("../Assets/Textures/snow.jpg");
+        GLuint silverTextureID = loadTexture("../Resources/Assets/Textures/silver.jpg");
+        GLuint carrotTextureID = loadTexture("../Resources/Assets/Textures/carrot.jpg");
+        GLuint snowTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
     #endif
     // Black background
     glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
-    // Compile and link shaders here ...
-    int shaderProgram = compileAndLinkShaders(getVertexShaderSource(), getFragmentShaderSource());
-    int texturedShaderProgram = compileAndLinkShaders(getTexturedVertexShaderSource(), getTexturedFragmentShaderSource());
 
-    // We can set the shader once, since we have only one
-    glUseProgram(texturedShaderProgram);
-    GLuint texturedColorLocation = glGetUniformLocation(texturedShaderProgram, "objectColor");
-    glUseProgram(shaderProgram);
-
+    shader = new Shader("SHADER", "../Resources/Shaders/VertexShader.glsl", "../Resources/Shaders/FragmentShader.glsl");
+    textureShader = new Shader("TEXTURE", "../Resources/Shaders/VertexShaderTexture.glsl", "../Resources/Shaders/FragmentShaderTexture.glsl");
 
     // Camera parameters for view transform
     vec3 cameraPosition(0.6f, 1.0f, 10.0f);
@@ -311,8 +181,6 @@ int main(int argc, char* argv[])
     // @TODO 1 - Enable Depth Test
     // ...
     glEnable(GL_DEPTH_TEST);
-
-    GLuint colorLocation = glGetUniformLocation(shaderProgram, "objectColor");
 
 
     // initializing all the variable that will be used for transformations
@@ -343,38 +211,28 @@ int main(int argc, char* argv[])
         // @TODO 1 - Clear Depth Buffer Bit as well
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        mat4 projectionMatrix = glm::mat4(1.0f);
+        mat4 viewMatrix = glm::mat4(1.0f);
         // Set projection matrix for shader
-        mat4 projectionMatrix = glm::perspective(zoomFactor,            // field of view in degrees
+        projectionMatrix = glm::perspective(zoomFactor,            // field of view in degrees
             1024.0f / 768.0f,  // aspect ratio
             0.01f, 100.0f);   // near and far (near > 0)
         
 
         // Set initial view matrix
-        mat4 viewMatrix = lookAt(cameraPosition,  // eye
+        viewMatrix = lookAt(cameraPosition,  // eye
             cameraPosition + cameraLookAt,  // center
             cameraUp); // up
 
         // creating pointers to matrices that compose modelViewProjection (and the rotationMatrix
-        glUseProgram(shaderProgram);
-        GLuint viewMatrixLocation = glGetUniformLocation(shaderProgram, "viewMatrix");
-        glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
-        GLuint projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
-        glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-        GLuint worldMatrixLocationColor = glGetUniformLocation(shaderProgram, "worldMatrix");
-        GLuint rotationColorMatrixLocation = glGetUniformLocation(shaderProgram, "globalRotationMatrix");
+        shader->use();
+        shader->setMat4("viewMatrix", viewMatrix);
+        shader->setMat4("projectionMatrix", projectionMatrix);
 
-        glUseProgram(texturedShaderProgram);
-        viewMatrixLocation = glGetUniformLocation(texturedShaderProgram, "viewMatrix");
-        glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
-        projectionMatrixLocation = glGetUniformLocation(texturedShaderProgram, "projectionMatrix");
-        glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-        GLuint worldMatrixLocationTexture = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
-        GLuint rotationMatrixLocation = glGetUniformLocation(texturedShaderProgram, "globalRotationMatrix");
-
-        // setting initial color (green) for the grid
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 0.0f)));
-
+        textureShader->use();
+        textureShader->setMat4("viewMatrix", viewMatrix);
+        textureShader->setMat4("projectionMatrix", projectionMatrix);
+        
         // Draw ground
         mat4 groundWorldMatrix;
 
@@ -384,61 +242,58 @@ int main(int argc, char* argv[])
 
         // create world rotation matrix, which is used to rotate the whole world
         snowManDrawer->setGroupMatrix(groupMatrix);
-        glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &worldRotationMatrix[0][0]);
+        textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
         glBindTexture(GL_TEXTURE_2D, snowTextureID);
-        glUniform3fv(texturedColorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+        textureShader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
         mat4 pillarWorldMatrix;
-        //snowManDrawer->drawSnow(worldMatrixLocationTexture);
+        //snowManDrawer->drawSnow(textureShader);
 
  
 
-        glUseProgram(shaderProgram);
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 0.0f)));
-
-        
-        
-        glUniformMatrix4fv(rotationColorMatrixLocation, 1, GL_FALSE, &worldRotationMatrix[0][0]);
+        shader->use();
+        shader->setVec3("objectColor", vec3(0.0f, 1.0f, 0.0f));
+        textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
 
-        snowManDrawer->drawGrid(worldMatrixLocationColor);
+        snowManDrawer->drawGrid(shader);
         //drawing the axis
         //x is blue
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
+        shader->setVec3("objectColor", vec3(0.0f, 0.0f, 1.0f));
         groundWorldMatrix = scale(mat4(1.0f), vec3(0.05f)) * translate(mat4(1.0f), vec3(50.0f, 0.01f, 0.0f));
-        lineModel->Draw(worldMatrixLocationColor, groundWorldMatrix);
+        lineModel->Draw(shader, groundWorldMatrix);
 
         //z is red
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
+        shader->setVec3("objectColor", vec3(1.0f, 0.0f, 0.0f));
         groundWorldMatrix = scale(mat4(1.0f), vec3(0.05f)) * translate(mat4(1.0f), vec3(0.0f, 0.01f, 50.0f)) * rotate(mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        lineModel->Draw(worldMatrixLocationColor, groundWorldMatrix);
+        lineModel->Draw(shader, groundWorldMatrix);
         
         //y is white
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+        shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
         groundWorldMatrix = scale(mat4(1.0f), vec3(0.05f)) * translate(mat4(1.0f), vec3(0.0f, 50.01f, 0.0f)) * rotate(mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        lineModel->Draw(worldMatrixLocationColor, groundWorldMatrix);
+        lineModel->Draw(shader, groundWorldMatrix);
 
-        snowManDrawer->drawBody(worldMatrixLocationColor);
+        snowManDrawer->drawBody(shader);
         //building olaf, using relative positioning by applying transformation of the following order T * R * S
         
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.98f, 0.98f, 0.98f)));
-        snowManDrawer->drawArmsAndLegs(worldMatrixLocationColor, footRotationFactor);
+        shader->setVec3("objectColor", vec3(0.98f, 0.98f, 0.98f));
+        snowManDrawer->drawArmsAndLegs(shader, footRotationFactor);
 
         //right eye
-        glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.0f))); // setting color of cube
-        snowManDrawer->drawEyesAndMouth(worldMatrixLocationColor);
+        shader->setVec3("objectColor", vec3(0.0f, 0.0f, 0.0f)); // setting color of cube
+        snowManDrawer->drawEyesAndMouth(shader);
 
         //hat
-        glUseProgram(texturedShaderProgram);
+        textureShader->use();
         glBindTexture(GL_TEXTURE_2D, silverTextureID);
-        glUniform3fv(texturedColorLocation, 1, glm::value_ptr(glm::vec3(0.82f, 0.82f, 0.82f)));
-        snowManDrawer->drawHat(worldMatrixLocationTexture);
+        textureShader->setVec3("objectColor", glm::vec3(0.82f, 0.82f, 0.82f));
+        snowManDrawer->drawHat(textureShader);
 
         //nose
         glBindTexture(GL_TEXTURE_2D, carrotTextureID);
-        glUniform3fv(texturedColorLocation, 1, glm::value_ptr(glm::vec3(0.90f, 0.65f, 0.0f)));
+        textureShader->setVec3("objectColor", glm::vec3(0.90f, 0.65f, 0.0f));
         //glUniform3fv(colorLocation, 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.0f))); // setting color of cube
-        snowManDrawer->drawNose(worldMatrixLocationColor);
+        snowManDrawer->drawNose(shader);
 
         // Handle inputs
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

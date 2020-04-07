@@ -8,7 +8,7 @@
 //
 
 #pragma once
-
+#include <Shader.h>
 
 class LineModel
 {
@@ -16,7 +16,7 @@ public:
     LineModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
     virtual ~LineModel(void);
     unsigned int* createVBOCube();
-    virtual void Draw(GLuint WorldMatrixLocation, glm::mat4 WorldMatrix);
+    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix);
     
 //protected:
   //  virtual bool ParseLine(const std::vector<ci_string> &token);
