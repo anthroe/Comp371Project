@@ -94,11 +94,7 @@ int main(int argc, char* argv[])
     // Shutdown GLFW
     glfwTerminate();
 
-    /* for (int i = 0; i < 10; ++i) {
-        delete[] depthArray[i];
-    }
-    //Free the array of pointers
-    delete[] depthArray; */
+    
 
     return 0;
 }

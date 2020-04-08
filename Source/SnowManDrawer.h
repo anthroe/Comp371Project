@@ -1,14 +1,13 @@
 #pragma once
 
-#include <Shader.h>
+#include <Drawer.h>
 
-class SnowManDrawer
+class SnowManDrawer : public Drawer
 {
 public:
     GLuint silverTextureID;
     GLuint carrotTextureID;
     GLuint snowTextureID;
-    GLuint grassTextureID;
 
     float scaleNumber = 1.0f;
     float rotateFactor = 0.0f;
@@ -27,7 +26,9 @@ public:
 
     mat4 groupMatrix;
 
-    
+    SphereModel* sphere;
+    CubeModel* coloredCube;
+    TexturedCubeModel* texturedCube1;
     
 
     float footRotationBase = 180.0f;
@@ -45,11 +46,6 @@ public:
     void draw(Shader* shader, Shader * textureShader, mat4 worldRotationMatrix);
     void snowManAnimation();
     float snowRotateAnimation(float rotateFactor, float angleRequired);
-    void drawSnowCube(Shader * shader);
-    void drawTestCube(Shader * shader, glm::mat4 cameraPosition);
-    void drawSnowCube(Shader* shader, double** a, int width, int height);
-
-    unsigned int loadTexture(std::string imagePath);
 
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
