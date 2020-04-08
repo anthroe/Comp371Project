@@ -19,8 +19,8 @@ class Camera {
 
     public:
         // Camera parameters for view transform
-        vec3 cameraPosition = vec3(0.6f, 10.0f, 10.0f);
-        vec3 cameraLookAt = vec3(0.0f, 0.0f, -1.0f);
+        vec3 cameraPosition = vec3(0.0f, 30.0f, 60.0f);
+        vec3 cameraLookAt = vec3(0.0f, 5.0f, 5.0f);
         vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
 
         vec3 cameraSideVector = vec3(1.0f);
@@ -28,7 +28,7 @@ class Camera {
         float cameraSpeed = 5.0f;
         float cameraFastSpeed = 2 * cameraSpeed;
         float cameraHorizontalAngle = 90.0f;
-        float cameraVerticalAngle = 0.0f;
+        float cameraVerticalAngle = -30.0f;
 
         float zoomFactor =0.5f;
 

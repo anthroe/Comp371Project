@@ -1,39 +1,10 @@
-//
-// COMP 371 Assignment Framework
-//
-// Created by Nicolas Bergeron on 8/7/14.
-// Updated by Gary Chang on 14/1/15
-//
-// Copyright (c) 2014-2019 Concordia University. All rights reserved.
-//
-#include <GL/glew.h>    // Include GLEW - OpenGL Extension Wrangler
 
-#include <GLFW/glfw3.h> // cross-platform interface for creating a graphical context,
-                        // initializing OpenGL and binding inputs
-#include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
-#include <glm/gtc/matrix_transform.hpp> // include this to create transformation matrices
-#include <glm/common.hpp>
-#include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
-#include <iostream>
 #include "SnowManDrawer.h"
-#include "CubeModel.h"
-#include "SphereModel.h"
-#include "LineModel.h"
-
-#include "TexturedCubeModel.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 using namespace glm;
 
-SphereModel* sphere;
-CubeModel* coloredCube;
-TexturedCubeModel* texturedCube1;
-
 SnowManDrawer::SnowManDrawer()
 {
-
     sphere = new SphereModel();
     coloredCube = new CubeModel();
     texturedCube1 = new TexturedCubeModel();
@@ -43,12 +14,10 @@ SnowManDrawer::SnowManDrawer()
         silverTextureID = loadTexture("Textures/silver.jpg");
         carrotTextureID = loadTexture("Textures/carrot.jpg");
         snowTextureID = loadTexture("Textures/snow.jpg");
-        grassTextureID = loadTexture("Textures/grass.jpg");
     #else
         silverTextureID = loadTexture("../Resources/Assets/Textures/silver.jpg");
         carrotTextureID = loadTexture("../Resources/Assets/Textures/carrot.jpg");
         snowTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
-        grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
     #endif
 }
 
@@ -202,66 +171,4 @@ float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired
     return rotateFactor;
 }
 
-unsigned int SnowManDrawer::loadTexture(std::string imagePath) {
-    unsigned int texture;
-    glGenTextures(1, &texture);
 
-    int width, height, nrComponents;
-    unsigned char* data = stbi_load(imagePath.c_str(), &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << imagePath << std::endl;
-        stbi_image_free(data);
-    }
-
-    return texture;
-}
-void SnowManDrawer::drawSnowCube(Shader * shader)
-{
-    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-
-    texturedCube1->Draw(shader, pillarWorldMatrix);
-
-}
-void SnowManDrawer::drawSnowCube(Shader * shader, double **a, int width, int height)
-{
-    glBindTexture(GL_TEXTURE_2D, grassTextureID);
-    shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
-    for (int z = 0; z < height; z++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            if (a[z][x] > 0)
-            {
-                for (int y = 0; y < a[z][x]; y++)
-                {
-                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                    texturedCube1->Draw(shader, pillarWorldMatrix);
-                }
-                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                texturedCube1->Draw(shader, pillarWorldMatrix);
-            }
-        }
-    }
-}
