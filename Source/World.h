@@ -24,13 +24,16 @@ using namespace std;
 
 class World {
 	public:
-      
+
+        static const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
         // initializing all the variable that will be used for transformations
         float worldRotateXFactor = 0.0f;
         float worldRotateYFactor = 0.0f;
         float zoomFactor = 0.5f;
 
-        
+        unsigned int depthMap;
+        unsigned int depthMapFBO;
+
         vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
         vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
 
@@ -38,11 +41,15 @@ class World {
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
+        GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;
 		Shader* textureShader;
+        Shader* shadowShader;
 
-		World();
+		World(GLFWwindow* window);
 		void draw();
+        void setupLighting();
+        void setupShadows();
 };
 

@@ -8,5 +8,5 @@ class GridDrawer : public Drawer{
 		LineModel* lineModel;
 		GridDrawer();
 		void drawGrid(Shader* shader);
-		void draw(Shader* shader, mat4 worldRotationMatrix);
+		void draw(Shader* shader);
 };

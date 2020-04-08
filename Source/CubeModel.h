@@ -15,7 +15,6 @@ class CubeModel
 public:
     CubeModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
     virtual ~CubeModel(void);
-    unsigned int* createVBOCube();
     virtual void Draw(Shader * shader, glm::mat4 WorldMatrix);
     virtual void Draw(Shader * shader, glm::mat4 WorldMatrix, GLenum mode);
     
@@ -28,7 +27,6 @@ private:
     {
         glm::vec3 position;
         glm::vec3 normal;
-        glm::vec3 color;
     };
 
     unsigned int mVAO;

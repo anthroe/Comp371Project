@@ -15,58 +15,52 @@
 #include "CubeModel.h"
 
 using namespace glm;
-vec3 cubeVArray[] = {  // position,                            color
-        vec3(-0.5f,-0.5f,-0.5f), //left - red
-        vec3(-0.5f,-0.5f, 0.5f),
-        vec3(-0.5f, 0.5f, 0.5f),
 
-        vec3(-0.5f,-0.5f,-0.5f),
-        vec3(-0.5f, 0.5f, 0.5f),
-        vec3(-0.5f, 0.5f,-0.5f),
-
-        vec3(0.5f, 0.5f,-0.5f), // far - blue
-        vec3(-0.5f,-0.5f,-0.5f),
-        vec3(-0.5f, 0.5f,-0.5f),
-
-        vec3(0.5f, 0.5f,-0.5f),
-        vec3(0.5f,-0.5f,-0.5f),
-        vec3(-0.5f,-0.5f,-0.5f),
-
-        vec3(0.5f,-0.5f, 0.5f), // bottom - turquoise
-        vec3(-0.5f,-0.5f,-0.5f),
-        vec3(0.5f,-0.5f,-0.5f),
-
-        vec3(0.5f,-0.5f, 0.5f),
-        vec3(-0.5f,-0.5f, 0.5f),
-        vec3(-0.5f,-0.5f,-0.5f),
-
-        vec3(-0.5f, 0.5f, 0.5f), // near - green
-        vec3(-0.5f,-0.5f, 0.5f),
-        vec3(0.5f,-0.5f, 0.5f),
-
-        vec3(0.5f, 0.5f, 0.5f),
-        vec3(-0.5f, 0.5f, 0.5f),
-        vec3(0.5f,-0.5f, 0.5f),
-
-        vec3(0.5f, 0.5f, 0.5f), // right - purple
-        vec3(0.5f,-0.5f,-0.5f),
-        vec3(0.5f, 0.5f,-0.5f),
-
-        vec3(0.5f,-0.5f,-0.5f),
-        vec3(0.5f, 0.5f, 0.5f),
-        vec3(0.5f,-0.5f, 0.5f),
-
-        vec3(0.5f, 0.5f, 0.5f), // top - yellow
-        vec3(0.5f, 0.5f,-0.5f),
-        vec3(-0.5f, 0.5f,-0.5f),
-
-        vec3(0.5f, 0.5f, 0.5f),
-        vec3(-0.5f, 0.5f,-0.5f),
-        vec3(-0.5f, 0.5f, 0.5f)
-};
 CubeModel::CubeModel(vec3 size)
 {
-    
+    Vertex cubeVArray[] = {
+            { vec3(-0.5f, -0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+           { vec3(0.5f, -0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+           { vec3(0.5f,  0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+           { vec3(0.5f,  0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+           { vec3(-0.5f,  0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+           { vec3(-0.5f, -0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
+
+           { vec3(-0.5f, -0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+           { vec3(0.5f, -0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+           { vec3(0.5f,  0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+           { vec3(0.5f,  0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+           { vec3(-0.5f,  0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+           { vec3(-0.5f, -0.5f,  0.5f), vec3(0.0f, 0.0f, 1.0f)},
+
+           { vec3(-0.5f,  0.5f,  0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+           { vec3(-0.5f,  0.5f, -0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+           { vec3(-0.5f, -0.5f, -0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+           { vec3(-0.5f, -0.5f, -0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+           { vec3(-0.5f, -0.5f,  0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+           { vec3(-0.5f,  0.5f,  0.5f), vec3(-1.0f, 0.0f, 0.0f)},
+
+           { vec3(0.5f,  0.5f,  0.5f), vec3(1.0f, 0.0f, 0.0f)},
+           { vec3(0.5f,  0.5f, -0.5f), vec3(1.0f, 0.0f, 0.0f)},
+           { vec3(0.5f, -0.5f, -0.5f), vec3(1.0f, 0.0f, 0.0f)},
+           { vec3(0.5f, -0.5f, -0.5f), vec3(1.0f, 0.0f, 0.0f)},
+           { vec3(0.5f, -0.5f,  0.5f), vec3(1.0f, 0.0f, 0.0f)},
+           { vec3(0.5f,  0.5f,  0.5f), vec3(1.0f, 0.0f, 0.0f)},
+
+           { vec3(-0.5f, -0.5f, -0.5f), vec3(0.0f, -1.0f, 0.0f)},
+           { vec3(0.5f, -0.5f, -0.5f), vec3(0.0f, -1.0f, 0.0f)},
+           { vec3(0.5f, -0.5f,  0.5f), vec3(0.0f, -1.0f, 0.0f)},
+           { vec3(0.5f, -0.5f,  0.5f), vec3(0.0f, -1.0f, 0.0f)},
+           { vec3(-0.5f, -0.5f,  0.5f), vec3(0.0f, -1.0f, 0.0f)},
+           { vec3(-0.5f, -0.5f, -0.5f), vec3(0.0f, -1.0f, 0.0f)},
+
+           { vec3(-0.5f,  0.5f, -0.5f), vec3(0.0f, 1.0f, 0.0f)},
+           { vec3(0.5f,  0.5f, -0.5f), vec3(0.0f, 1.0f, 0.0f)},
+           { vec3(0.5f,  0.5f,  0.5f), vec3(0.0f, 1.0f, 0.0f)},
+           { vec3(0.5f,  0.5f,  0.5f), vec3(0.0f, 1.0f, 0.0f)},
+           { vec3(-0.5f,  0.5f,  0.5f), vec3(0.0f, 1.0f, 0.0f)},
+           { vec3(-0.5f,  0.5f, -0.5f), vec3(0.0f, 1.0f, 0.0f)}
+    };
 
     numOfVertices = sizeof(cubeVArray) / sizeof(Vertex);
 
@@ -78,39 +72,15 @@ CubeModel::CubeModel(vec3 size)
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVArray), cubeVArray, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
+    glEnableVertexAttribArray(1);
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // 2nd attribute buffer : vertex normal
     
-}
-unsigned int* CubeModel::createVBOCube()
-{
-
-    unsigned int cubeVBO, cubeVAO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &cubeVBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(cubeVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVArray), cubeVArray, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    unsigned int returnObjCube[2];
-    returnObjCube[0] = cubeVBO;
-    returnObjCube[1] = cubeVAO;
-
-    //return vbo and vao
-    return returnObjCube;
 }
 CubeModel::~CubeModel()
 {

@@ -7,6 +7,7 @@ GridDrawer::GridDrawer() {
 }
 void GridDrawer::drawGrid(Shader* shader) {
     //draw the z axis 100 lines
+    shader->use();
     mat4 groundWorldMatrix;
     for (int i = 1; i <= 100; i++)
     {
@@ -25,7 +26,7 @@ void GridDrawer::drawGrid(Shader* shader) {
 
 }
 
-void GridDrawer::draw(Shader* shader, mat4 worldRotationMatrix) {
+void GridDrawer::draw(Shader* shader) {
     /* glBindTexture(GL_TEXTURE_2D, snowTextureID);
     textureShader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
     mat4 pillarWorldMatrix;
@@ -34,13 +35,10 @@ void GridDrawer::draw(Shader* shader, mat4 worldRotationMatrix) {
 
     mat4 groundWorldMatrix;
 
-    shader->use();
-    shader->setVec3("objectColor", vec3(0.0f, 1.0f, 0.0f));
-    shader->setMat4("globalRotationMatrix", worldRotationMatrix);
-
     drawGrid(shader);
     //drawing the axis
     //x is blue
+    shader->use();
     shader->setVec3("objectColor", vec3(0.0f, 0.0f, 1.0f));
     groundWorldMatrix = scale(mat4(1.0f), vec3(0.05f)) * translate(mat4(1.0f), vec3(50.0f, 0.01f, 0.0f));
     lineModel->Draw(shader, groundWorldMatrix);
