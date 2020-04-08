@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
     // Black background
     glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 
-    world = new World();
+    world = new World(window);
     eventHandler = new EventHandler(world, window);
 
     // Other OpenGL states to set once
