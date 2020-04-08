@@ -78,7 +78,6 @@ void GroundDrawer::generateGround() {
 }
 void GroundDrawer::generateMountain()
 {
-    srand(time(0));
     int xCord = rand() % width;
     int zCord = rand() % height;
 
