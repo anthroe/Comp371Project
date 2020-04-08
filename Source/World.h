@@ -14,6 +14,12 @@
 #include <Camera.h>
 #include <SnowManDrawer.h>
 #include <GridDrawer.h>
+
+#include <cmath>
+#include <ctime>
+#include "PerlinNoise.h"
+
+
 using namespace glm;
 using namespace std;
 
@@ -24,6 +30,9 @@ class World {
         float worldRotateXFactor = 0.0f;
         float worldRotateYFactor = 0.0f;
         float zoomFactor = 0.5f;
+
+        unsigned const int width = 40, height = 40;
+        double** depthArray;
 
         vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
         vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
@@ -37,5 +46,7 @@ class World {
 
 		World();
 		void draw();
+        void generateGround();
+        void generateMountain();
 };
 

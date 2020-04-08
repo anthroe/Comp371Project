@@ -43,10 +43,12 @@ SnowManDrawer::SnowManDrawer()
         silverTextureID = loadTexture("Textures/silver.jpg");
         carrotTextureID = loadTexture("Textures/carrot.jpg");
         snowTextureID = loadTexture("Textures/snow.jpg");
+        grassTextureID = loadTexture("Textures/grass.jpg");
     #else
         silverTextureID = loadTexture("../Resources/Assets/Textures/silver.jpg");
         carrotTextureID = loadTexture("../Resources/Assets/Textures/carrot.jpg");
         snowTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
+        grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
     #endif
 }
 
@@ -235,9 +237,17 @@ unsigned int SnowManDrawer::loadTexture(std::string imagePath) {
 
     return texture;
 }
-
-void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double **a, int width, int height)
+void SnowManDrawer::drawSnowCube(Shader * shader)
 {
+    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+
+    texturedCube1->Draw(shader, pillarWorldMatrix);
+
+}
+void SnowManDrawer::drawSnowCube(Shader * shader, double **a, int width, int height)
+{
+    glBindTexture(GL_TEXTURE_2D, grassTextureID);
+    shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
     for (int z = 0; z < height; z++)
     {
         for (int x = 0; x < width; x++)
@@ -247,10 +257,10 @@ void SnowManDrawer::drawSnowCube(GLuint worldMatrixLocationTexture, double **a, 
                 for (int y = 0; y < a[z][x]; y++)
                 {
                     mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                    texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+                    texturedCube1->Draw(shader, pillarWorldMatrix);
                 }
                 mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                texturedCube1->Draw(worldMatrixLocationTexture, pillarWorldMatrix);
+                texturedCube1->Draw(shader, pillarWorldMatrix);
             }
         }
     }

@@ -13,20 +13,17 @@
 #include "World.h"
 #include "EventHandler.h"
 
+
 using namespace glm;
 using namespace std;
 
 World * world;
 EventHandler* eventHandler;
 
+
 int main(int argc, char* argv[])
 {
-    srand((unsigned)time(NULL));
-    generateGround();
-    generateMountain();
-    generateMountain();
-    generateMountain();
-
+   
     // Initialize GLFW and OpenGL version
     glfwInit();
 
@@ -97,11 +94,11 @@ int main(int argc, char* argv[])
     // Shutdown GLFW
     glfwTerminate();
 
-    for (int i = 0; i < 10; ++i) {
+    /* for (int i = 0; i < 10; ++i) {
         delete[] depthArray[i];
     }
     //Free the array of pointers
-    delete[] depthArray;
+    delete[] depthArray; */
 
     return 0;
 }

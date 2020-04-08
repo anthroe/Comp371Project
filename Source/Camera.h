@@ -19,7 +19,7 @@ class Camera {
 
     public:
         // Camera parameters for view transform
-        vec3 cameraPosition = vec3(0.6f, 1.0f, 10.0f);
+        vec3 cameraPosition = vec3(0.6f, 10.0f, 10.0f);
         vec3 cameraLookAt = vec3(0.0f, 0.0f, -1.0f);
         vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
 
