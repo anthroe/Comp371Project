@@ -24,7 +24,7 @@ GroundDrawer::~GroundDrawer()
     //Free the array of pointers
     delete[] depthArray;
 }
-void GroundDrawer::draw(Shader * shader)
+void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
 {
     glBindTexture(GL_TEXTURE_2D, grassTextureID);
     shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
@@ -32,14 +32,14 @@ void GroundDrawer::draw(Shader * shader)
     {
         for (int x = 0; x < width; x++)
         {
-            if (depthArray[z][x] > 0)
+            if (a[z][x] > 0)
             {
-                for (int y = 0; y < depthArray[z][x]; y++)
+                for (int y = 0; y < a[z][x]; y++)
                 {
                     mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
                     texturedCube->Draw(shader, pillarWorldMatrix);
                 }
-                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, depthArray[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
                 texturedCube->Draw(shader, pillarWorldMatrix);
             }
         }

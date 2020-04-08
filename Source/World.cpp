@@ -19,6 +19,6 @@ void World::draw() {
     mat4 worldRotationMatrix = rotate(mat4(1.0f), glm::radians(worldRotateYFactor), yRotationVector) * rotate(mat4(1.0f), glm::radians(worldRotateXFactor), xRotationVector);
     gridDrawer->draw(shader, worldRotationMatrix);
     snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
-    groundDrawer->draw(shader);
+    groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
     camera->updateLookAt();
 }
