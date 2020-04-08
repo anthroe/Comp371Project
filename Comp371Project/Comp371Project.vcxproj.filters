@@ -98,5 +98,28 @@
     <ClInclude Include="..\Source\Drawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\OBJloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\OBJloaderV2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\TexturedModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\FragmentShaderTexture.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\VertexShader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\VertexShaderTexture.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\FragmentShader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -164,12 +164,21 @@
     <ClInclude Include="..\Source\GridDrawer.h" />
     <ClInclude Include="..\Source\GroundDrawer.h" />
     <ClInclude Include="..\Source\LineModel.h" />
+    <ClInclude Include="..\Source\OBJloader.h" />
+    <ClInclude Include="..\Source\OBJloaderV2.h" />
     <ClInclude Include="..\Source\PerlinNoise.h" />
     <ClInclude Include="..\Source\Shader.h" />
     <ClInclude Include="..\Source\SnowManDrawer.h" />
     <ClInclude Include="..\Source\SphereModel.h" />
     <ClInclude Include="..\Source\TexturedCubeModel.h" />
+    <ClInclude Include="..\Source\TexturedModel.h" />
     <ClInclude Include="..\Source\World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\FragmentShader.glsl" />
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\FragmentShaderTexture.glsl" />
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\VertexShader.glsl" />
+    <None Include="..\..\..\COMP-425-A2\Comp371Project-master\Resources\Shaders\VertexShaderTexture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

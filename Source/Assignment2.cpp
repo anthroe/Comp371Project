@@ -12,7 +12,7 @@
                         // initializing OpenGL and binding inputs
 #include "World.h"
 #include "EventHandler.h"
-
+#include "TexturedModel.h"
 
 using namespace glm;
 using namespace std;
@@ -73,6 +73,12 @@ int main(int argc, char* argv[])
     // @TODO 1 - Enable Depth Test
     // ...
     glEnable(GL_DEPTH_TEST);
+
+	//select model to load
+	string model = "cube4.obj";
+	TexturedModel* tm = new TexturedModel();
+	int treeVertexCount;
+	GLuint treeVao = tm->setupModelEBO("..Resources/Assets/Models/cube4.obj", treeVertexCount);
 
     // Entering Main Loop
     while (!glfwWindowShouldClose(window))
