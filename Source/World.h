@@ -44,5 +44,6 @@ class World {
 
 		World();
 		void draw();
+        void setupLighting();
 };
 

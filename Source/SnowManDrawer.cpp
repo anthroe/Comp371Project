@@ -8,7 +8,6 @@ SnowManDrawer::SnowManDrawer()
     sphere = new SphereModel();
     coloredCube = new CubeModel();
     texturedCube1 = new TexturedCubeModel();
-    texturedCube1->createTexturedCubeVertexBufferObject();
     // Load Textures
     #if defined(PLATFORM_OSX)
         silverTextureID = loadTexture("Textures/silver.jpg");
@@ -115,10 +114,6 @@ void SnowManDrawer::draw(Shader* shader, Shader* textureShader, mat4 worldRotati
     mat4 groupMatrix = translate(mat4(1.0f), translationVector) * rotate(mat4(1.0f), glm::radians(rotateFactor), yRotationVector) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
     // create world rotation matrix, which is used to rotate the whole world
     setGroupMatrix(groupMatrix);
-    textureShader->use();
-    textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
-    shader->use();
-    shader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
     drawBody(shader);
     //building olaf, using relative positioning by applying transformation of the following order T * R * S

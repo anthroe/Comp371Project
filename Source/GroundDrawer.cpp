@@ -8,7 +8,6 @@ GroundDrawer::GroundDrawer()
         grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
     #endif
     texturedCube = new TexturedCubeModel();
-    texturedCube->createTexturedCubeVertexBufferObject();
 
     srand((unsigned)time(NULL));
     generateGround();
@@ -26,7 +25,10 @@ GroundDrawer::~GroundDrawer()
 }
 void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
 {
+    shader->use();
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, grassTextureID);
+    
     shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
     for (int z = 0; z < height; z++)
     {
