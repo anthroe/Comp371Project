@@ -30,15 +30,16 @@ using namespace std;
 class Shader {
     public:
         string name;
+        GLuint ProgramID;
         Shader(string name, string vertex_shader_path, string fragment_shader_path);
         void use();
         void setMat4(const string &name, const mat4 &mat);
         void setVec3(const string &name, const vec3 &value);
+        void setVec3(const string& name, float x, float y, float z);
         void setInt(const string &name, int value);
         void setFloat(const string &name, float value);
         void setBool(const string &name, bool value);
     private:
-        GLuint ProgramID;
         void checkCompileErrors(GLuint shader, string type);
         string getShaderCode(string shader_path);
 };

@@ -69,16 +69,16 @@ bool loadOBJ2(
 			}
 
        		//vertex, uv, norm
-       		int matches = sscanf_s(line, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+       		int matches = sscanf(line, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
        		if (matches != 9){
            		//vertex, norm
-           		matches = sscanf_s(line, "%d//%d %d//%d %d//%d\n", &vertexIndex[0], &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
+           		matches = sscanf(line, "%d//%d %d//%d %d//%d\n", &vertexIndex[0], &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
            		if (matches != 6){
            			//vertex, uv
-           			matches = sscanf_s(line, "%d/%d %d/%d %d/%d\n", &vertexIndex[0], &uvIndex[0], &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
+           			matches = sscanf(line, "%d/%d %d/%d %d/%d\n", &vertexIndex[0], &uvIndex[0], &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2]);
           			if (matches != 6){
                			//vertex
-               			matches = sscanf_s(line, "%d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2]);
+               			matches = sscanf(line, "%d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2]);
                			if (matches != 3){
                				printf("File can't be read by our simple parser. 'f' format expected: d/d/d d/d/d d/d/d || d/d d/d d/d || d//d d//d d//d\n");
                				printf("Character at %ld", ftell(file));
@@ -117,11 +117,11 @@ bool loadOBJ2(
 		out_uvs.resize(temp_normals.size());
 	for (unsigned int i = 0; i<vertexIndices.size(); i++) {
 		int vi = vertexIndices[i];
-		if (normalIndices.size() != 0) {
+		if (normalIndices.size() != 0 && vi <= out_normals.size() - 1) {
 			int ni = normalIndices[i];
 			out_normals[vi] = temp_normals[ni];
 		}
-		if (uvIndices.size() != 0 && i < uvIndices.size()) {
+		if (uvIndices.size() != 0 && i < uvIndices.size() && vi <= out_uvs.size() - 1) {
 			int ui = uvIndices[i];
 			out_uvs[vi] = temp_uvs[ui];
 		}

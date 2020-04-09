@@ -80,6 +80,7 @@ void LineModel::Draw(Shader * shader, mat4 WorldMatrix)
     // Draw the Vertex Buffer
     // Note this draws a Sphere
     // The Model View Projection transforms are computed in the Vertex Shader
+    shader->use();
     glBindVertexArray(mVAO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
  
