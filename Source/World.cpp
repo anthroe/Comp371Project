@@ -5,8 +5,8 @@ GLuint activeVAO;
 int activeVerticesCount;
 
 World::World(GLFWwindow* window) {
-	this->window = window;
-	// Setup Camera
+  this->window = window;
+  // Setup Camera
 	camera = new Camera();
 	// Setup Shaders
 	shader = new Shader("SHADER", "../Resources/Shaders/VertexShader.glsl", "../Resources/Shaders/FragmentShader.glsl");
@@ -46,7 +46,6 @@ World::World(GLFWwindow* window) {
 	textureShader->use();
 	textureShader->setInt("textureSampler", 0);
 	textureShader->setInt("shadowMap", 1);
-
 }
 
 void World::draw() {
@@ -74,7 +73,6 @@ void World::draw() {
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	camera->updateLookAt();
-
 
 }
 
@@ -123,5 +121,4 @@ void World::Update(float dt)
 	glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
 	snowManDrawer->Accelerate(gravityVector, dt);
 	snowManDrawer->Update(dt);
-
 }
