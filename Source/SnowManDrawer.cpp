@@ -172,16 +172,18 @@ float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired
 void SnowManDrawer::Update(float dt)
 {
     translationVector += dt * mVelocity;
-
-    std::cout << glm::to_string(mVelocity) << std::endl;
+    //mPosition += dt * mVelocity;
+    
     //std::cout << dt << std::endl;
 }
 
 void SnowManDrawer::Accelerate(glm::vec3 acceleration, float delta)
 {
     if (mMass != 0.0f) { //No acceleration for massless objects
-        if (mVelocity.y > -0.010000 ) {
-            mVelocity += acceleration * delta;
+        if (translationVector.y > 0.0f) {
+            if (mVelocity.y > -0.010000) {
+                mVelocity += acceleration * delta;
+            }
         }
     }
 }
@@ -196,5 +198,33 @@ void SnowManDrawer::Angulate(glm::vec3 torque)
 
 void SnowManDrawer::BounceOffGround()
 {
-    mVelocity.y = glm::abs(mVelocity.y);
+    translationVector.y = 0.0f;
+    mVelocity.y = 0.0f;
+}
+void SnowManDrawer::Jump()
+{
+    translationVector.y = 1.0f;
+    mVelocity.y = 0.0f;
+}
+
+//Assumes the sphere is evenly scaled
+bool SnowManDrawer::IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal)
+{
+    //TODO 1 - Make spheres bounce on the ground
+    
+    //We simply compare the distance between the ground and sphere center, with its radius
+    float radius = GetScaling().x;
+    
+
+    return glm::dot(planeNormal, GetPosition() - planePoint) < radius;
+
+    return false;
+}
+
+bool SnowManDrawer::ContainsPoint(glm::vec3 position)
+{
+    float radius = GetScaling().x; //This is where the assumption lies
+    float distance = glm::distance(GetPosition(), position);
+
+    return distance <= radius;
 }

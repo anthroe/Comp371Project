@@ -91,6 +91,11 @@ void EventHandler::handleEvents() {
         }
     }
 
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
+    {
+        snowman->Jump();
+    }
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
         if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 0.0f)
@@ -210,7 +215,7 @@ void EventHandler::handleEvents() {
         snowman->mode = GL_TRIANGLES;
 
     }
-
+    /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
     {
         float x = rand() % 100 - 50.0f;
@@ -218,7 +223,7 @@ void EventHandler::handleEvents() {
         snowman->translationVector[0] = x;
         snowman->translationVector[2] = z;
     }
-
+    */
     // TODO 6
     // Set the view matrix for first cameras
     // - In first person, camera lookat is set like below

@@ -105,4 +105,16 @@ void World::Update(float dt)
     snowManDrawer->Accelerate(gravityVector, dt);
     snowManDrawer->Update(dt);
 
+    glm::vec3 groundPoint = glm::vec3(0.0f);
+    glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    //Collisions with ground
+    //complexity: O(n)
+
+    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
+    {
+
+        snowManDrawer->BounceOffGround(); //Reverses y velocity
+    }
+
 }
