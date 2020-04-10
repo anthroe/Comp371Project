@@ -23,5 +23,7 @@ class EventHandler {
 	public:
 		EventHandler(World * world, GLFWwindow * window);
 		void handleEvents();
+		static float GetFrameTime();
+		static float sFrameTime;
 
 };

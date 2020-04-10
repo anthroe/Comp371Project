@@ -16,7 +16,7 @@ public:
     float footRotationFactor = 0;
     bool footSwitch = true;
 
-    vec3 translationVector = vec3(0.0f);
+    vec3 translationVector = vec3(1.0f);
     vec3 scaleVector = vec3(1.0f);
 
     vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
@@ -46,6 +46,23 @@ public:
     void draw(Shader* shader, Shader * textureShader, mat4 worldRotationMatrix);
     void snowManAnimation();
     float snowRotateAnimation(float rotateFactor, float angleRequired);
+    void Accelerate(glm::vec3 force, float dt);
+    void Angulate(glm::vec3 torque);
+    virtual void Update(float dt);
+    glm::vec3 mPosition;
+    glm::vec3 mScaling;
+    glm::vec3 mRotationAxis;
+    float     mRotationAngleInDegrees;
+
+    glm::vec3 mVelocity;
+    glm::vec3 mAngularAxis;
+    float     mAngularVelocityInDegrees;
+
+    void BounceOffGround();
+    bool ContainsPoint(glm::vec3 position);//Whether or not the given point is withing the model. For collisions.
+    bool IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal);
+
+    float mMass = 1.0f;
 
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);

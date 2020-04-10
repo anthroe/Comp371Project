@@ -98,34 +98,14 @@
     <ClInclude Include="..\Source\Drawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\TexturedModel.h">
+    <ClInclude Include="..\Source\OBJloaderV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\OBJloaderV2.h">
+    <ClInclude Include="..\Source\TexturedModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\OBJloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Resources\Shaders\FragmentShaderShadow.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\FragmentShaderTexture.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\VertexShader.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\VertexShaderShadow.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\VertexShaderTexture.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\FragmentShader.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
