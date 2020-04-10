@@ -1,10 +1,12 @@
 #include <EventHandler.h>
 
+
 EventHandler::EventHandler(World * world, GLFWwindow* window) {
 	this->world = world;
 	this->window = window;
     glfwGetCursorPos(window, &lastMousePosX, &lastMousePosY);
 }
+float  EventHandler::sFrameTime = glfwGetTime() ;
 void EventHandler::handleEvents() {
     // Frame time calculation
     float dt = glfwGetTime() - lastFrameTime;
@@ -225,4 +227,8 @@ void EventHandler::handleEvents() {
     glm::vec3 position = cameraPosition - radius * cameraLookAt;
     viewMatrix = lookAt(position, position + cameraLookAt, cameraUp); */
 
+}
+float EventHandler::GetFrameTime()
+{
+    return sFrameTime;
 }

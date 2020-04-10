@@ -1,6 +1,6 @@
 
 #include "SnowManDrawer.h"
-
+#include "glm/gtx/string_cast.hpp"
 using namespace glm;
 
 SnowManDrawer::SnowManDrawer()
@@ -8,6 +8,7 @@ SnowManDrawer::SnowManDrawer()
     sphere = new SphereModel();
     coloredCube = new CubeModel();
     texturedCube1 = new TexturedCubeModel();
+    mMass = 1.0f;
     // Load Textures
     #if defined(PLATFORM_OSX)
         silverTextureID = loadTexture("Textures/silver.jpg");
@@ -20,7 +21,9 @@ SnowManDrawer::SnowManDrawer()
     #endif
 }
 
- 
+
+
+
 SnowManDrawer::~SnowManDrawer()
 {
 
@@ -166,4 +169,32 @@ float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired
     return rotateFactor;
 }
 
+void SnowManDrawer::Update(float dt)
+{
+    translationVector += dt * mVelocity;
 
+    std::cout << glm::to_string(mVelocity) << std::endl;
+    //std::cout << dt << std::endl;
+}
+
+void SnowManDrawer::Accelerate(glm::vec3 acceleration, float delta)
+{
+    if (mMass != 0.0f) { //No acceleration for massless objects
+        if (mVelocity.y > -0.010000 ) {
+            mVelocity += acceleration * delta;
+        }
+    }
+}
+
+void SnowManDrawer::Angulate(glm::vec3 torque)
+{
+    if (mMass != 0.0f) {//No angular acceleration for massless objects
+        mAngularAxis = torque;
+        mAngularVelocityInDegrees += glm::dot(mAngularAxis, mRotationAxis);
+    }
+}
+
+void SnowManDrawer::BounceOffGround()
+{
+    mVelocity.y = glm::abs(mVelocity.y);
+}

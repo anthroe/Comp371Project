@@ -54,11 +54,13 @@ void World::draw() {
 
     setupShadows();
     //gridDrawer->draw(shader);
-    //snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
+    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
     camera->updateLookAt();
+
+
 }
 
 void World::setupLighting() {
@@ -94,4 +96,13 @@ void World::setupShadows() {
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);
     glViewport(0, 0, WIDTH, HEIGHT);
+}
+
+void World::Update(float dt)
+{
+
+    glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
+    snowManDrawer->Accelerate(gravityVector, dt);
+    snowManDrawer->Update(dt);
+
 }

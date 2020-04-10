@@ -51,5 +51,8 @@ class World {
 		void draw();
         void setupLighting();
         void setupShadows();
+        void Update(float dt);
+        float gravity = 0.0003f;
+        float friction = 0.0f;
 };
 
