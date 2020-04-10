@@ -213,7 +213,6 @@ void EventHandler::handleEvents() {
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) // create olaf with triangles
     {
         snowman->mode = GL_TRIANGLES;
-
     }
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
