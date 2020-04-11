@@ -10,6 +10,7 @@ class GroundDrawer : public Drawer  {
         unsigned const int width = 40, height = 40;
         double** depthArray;
         TexturedCubeModel* texturedCube;
+        CubeModel* regularCube;
         GLuint grassTextureID;
         GroundDrawer();
         ~GroundDrawer();

@@ -8,6 +8,7 @@ GroundDrawer::GroundDrawer()
         grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
     #endif
     texturedCube = new TexturedCubeModel();
+    regularCube = new CubeModel();
 
     srand((unsigned)time(NULL));
     generateGround();
@@ -25,23 +26,29 @@ GroundDrawer::~GroundDrawer()
 }
 void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
 {
+    float cubeFactor = 2.5f;
     shader->use();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, grassTextureID);
     
     shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
+    float heightValue = height * cubeFactor;
+    float widthValue = width * cubeFactor;
     for (int z = 0; z < height; z++)
     {
         for (int x = 0; x < width; x++)
         {
+            float xValue = x * cubeFactor;
+            float zValue = z * cubeFactor;
             if (a[z][x] > 0)
             {
-                for (int y = 0; y < a[z][x]; y++)
+                for (float y = 0; y < a[z][x]; y++)
                 {
-                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                    texturedCube->Draw(shader, pillarWorldMatrix);
+                    //float yValue = y * cubeFactor;
+                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(xValue - widthValue / 2, y, zValue - heightValue / 2)) * scale(mat4(1.0f), vec3(cubeFactor, 1.0f, cubeFactor));
+                    regularCube->Draw(shader, pillarWorldMatrix);
                 }
-                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(xValue - widthValue / 2, a[z][x], zValue - heightValue / 2)) * scale(mat4(1.0f), vec3(cubeFactor, 1.0f, cubeFactor));
                 texturedCube->Draw(shader, pillarWorldMatrix);
             }
         }
@@ -92,18 +99,18 @@ void GroundDrawer::generateMountain()
     {
         for (int x = xCord - 2; x <= xCord + 2 && xCord - 2 > 0 && xCord + 2 < width; x++)
         {
-            int additional = rand() % 2;
-            depthArray[z][x] = depthArray[zCord][xCord] + 2 + additional;
+            int additional = rand() % 3;
+            depthArray[z][x] = depthArray[zCord][xCord] + 3 + additional;
         }
     }
     for (int z = zCord - 1; z <= zCord + 1 && zCord - 1 > 0 && zCord + 1 < height; z++)
     {
         for (int x = xCord - 1; x <= xCord + 1 && xCord - 1 > 0 && xCord + 1 < width; x++)
         {
-            int additional = rand() % 2;
-            depthArray[z][x] = depthArray[zCord][xCord] + 2 + additional;
+            int additional = rand() % 3;
+            depthArray[z][x] = depthArray[zCord][xCord] + 3 + additional;
         }
     }
-    int additional = rand() % 2;
-    depthArray[zCord][xCord] = depthArray[zCord][xCord] + 2 + additional;
+    int additional = rand() % 3;
+    depthArray[zCord][xCord] = depthArray[zCord][xCord] + 3 + additional;
 }
