@@ -77,7 +77,6 @@ void World::draw() {
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
 	// Draw models
 	textureShader->use();
-	textureShader->setMat4("worldMatrix", mat4(1.0f) * translate(mat4(1.0f), vec3(0.5f, 0.0f, 0.5f) * scale(mat4(1.0f), 50.0f * vec3(0.0f, 1.0f, 0.0f));
 	glBindVertexArray(activeVAO);
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);		   		  
