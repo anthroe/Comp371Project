@@ -113,7 +113,7 @@ void World::Update(float dt)
 
     if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
     {
-
+        
         snowManDrawer->BounceOffGround(); //Reverses y velocity
     }
 
