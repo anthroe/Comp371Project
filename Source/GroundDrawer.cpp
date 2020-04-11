@@ -46,6 +46,7 @@ void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
             }
         }
     }
+    shader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)));
 }
 
 void GroundDrawer::generateGround() {

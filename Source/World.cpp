@@ -43,11 +43,7 @@ World::World(GLFWwindow* window) {
 	GLuint rockVAO = rock->setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
 	activeVAO = rockVAO;
 	activeVerticesCount = rockVerticesCount;							
-					   
-										   
-																								
-					 
-										 
+					   								 
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -78,6 +74,13 @@ void World::draw() {
 	// Draw models
 	textureShader->use();
 	glBindVertexArray(activeVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
+    // Setting world matrix for the loaded model
+    textureShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
+
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);		   		  
     camera->updateLookAt();
@@ -113,11 +116,19 @@ void World::setupShadows() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
     groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
 	// Draw models
 	glBindVertexArray(activeVAO);
+    shadowShader->use();
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
+
+    // Setting world matrix for the loaded model
+    shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);					  
+	glBindVertexArray(0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);
