@@ -1,5 +1,11 @@
 #include <World.h>
+#include "TexturedModel.h"
 
+GLuint activeVAO;
+int activeVerticesCount;					  
+
+				 
+						
 
 World::World(GLFWwindow* window) {
     this->window = window;
@@ -31,6 +37,17 @@ World::World(GLFWwindow* window) {
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
+	// Model loading goes here
+	int rockVerticesCount;
+	TexturedModel* rock = new TexturedModel();
+	GLuint rockVAO = rock->setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
+	activeVAO = rockVAO;
+	activeVerticesCount = rockVerticesCount;							
+					   
+										   
+																								
+					 
+										 
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -58,6 +75,11 @@ void World::draw() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
+	// Draw models
+	textureShader->use();
+	glBindVertexArray(activeVAO);
+	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);		   		  
     camera->updateLookAt();
 
 
@@ -92,6 +114,10 @@ void World::setupShadows() {
     glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
     groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// Draw models
+	glBindVertexArray(activeVAO);
+	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);					  
     // reset viewport
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);
@@ -116,5 +142,4 @@ void World::Update(float dt)
         
         snowManDrawer->BounceOffGround(); //Reverses y velocity
     }
-
 }
