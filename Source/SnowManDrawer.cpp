@@ -40,6 +40,7 @@ void SnowManDrawer::setGroupMatrix(mat4 snowManGroupMatrix)
 
 void SnowManDrawer::drawArmsAndLegs(Shader * shader, float footRotationFactor)
 {
+    shader->use();
     mat4 leftFoot = translate(mat4(1.0f), vec3(0.0f, 0.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(footRotationBase + footRotationFactor), xRotationVector);
     mat4 rightFoot = translate(mat4(1.0f), vec3(0.0f, 0.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(footRotationBase - footRotationFactor), xRotationVector);
     mat4 leftArm = translate(mat4(1.0f), vec3(1.55f, 1.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(footRotationBase + footRotationFactor), xRotationVector);
@@ -64,6 +65,7 @@ void SnowManDrawer::drawArmsAndLegs(Shader * shader, float footRotationFactor)
 }
 void SnowManDrawer::drawBody(Shader * shader) //legs and body and head
 {
+    shader->use();
     mat4 groundWorldMatrix = groupMatrix * translate(mat4(1.0f), vec3(0.0f, 1.1f, 0.0f)) * scale(mat4(1.0f), vec3(0.75f));
     sphere->Draw(shader, groundWorldMatrix);
 
@@ -74,6 +76,7 @@ void SnowManDrawer::drawBody(Shader * shader) //legs and body and head
 }
 void SnowManDrawer::drawEyesAndMouth(Shader * shader)
 {
+    shader->use();
     mat4 groundWorldMatrix = groupMatrix * translate(mat4(1.0f), vec3(0.12f, 2.3f, 0.60f)) * scale(mat4(1.0f), vec3(0.1f, 0.1f, 0.1f)); //transforming
     coloredCube->Draw(shader, groundWorldMatrix, mode);
 
@@ -89,6 +92,7 @@ void SnowManDrawer::drawEyesAndMouth(Shader * shader)
 }
 void SnowManDrawer::drawHat(Shader * shader)
 {
+    shader->use();
     //hat
     mat4 groundWorldMatrix = groupMatrix * translate(mat4(1.0f), vec3(0.0f, 3.0f, 0.0f)) * scale(mat4(1.0f), vec3(0.3f, 0.7f, 0.3f));
     //coloredCube->Draw(shader, groundWorldMatrix, mode);
@@ -97,6 +101,7 @@ void SnowManDrawer::drawHat(Shader * shader)
 }
 void SnowManDrawer::drawNose(Shader * shader)
 {
+    shader->use();
     mat4 groundWorldMatrix = groupMatrix * translate(mat4(1.0f), vec3(0.0f, 2.1f, 0.8f)) * scale(mat4(1.0f), vec3(0.1f, 0.1f, 0.5f)); //transforming
     //coloredCube->Draw(shader, groundWorldMatrix, mode);
     texturedCube1->Draw(shader, groundWorldMatrix);
