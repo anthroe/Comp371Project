@@ -34,8 +34,6 @@ class World {
         unsigned int depthMap;
         unsigned int depthMapFBO;
 
-        vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
-        vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();

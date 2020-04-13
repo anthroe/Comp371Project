@@ -8,15 +8,18 @@
 //
 
 #pragma once
-#include <Shader.h>
+#include <Model.h>
 
-class CubeModel
+class CubeModel : public Model
 {
 public:
-    CubeModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
-    virtual ~CubeModel(void);
-    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix);
-    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix, GLenum mode);
+    CubeModel();
+    CubeModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
+    CubeModel(vec3 translateVector, vec3 scaleVector, vec3 color);
+    ~CubeModel();
+    void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    void init();
+
     
 //protected:
   //  virtual bool ParseLine(const std::vector<ci_string> &token);

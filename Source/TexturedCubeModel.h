@@ -8,20 +8,22 @@
 //
 
 #pragma once
-#include <Shader.h>
+#include <Model.h>
 
-class TexturedCubeModel
+class TexturedCubeModel : public Model
 {
 public:
     TexturedCubeModel();
+    TexturedCubeModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
+    TexturedCubeModel(vec3 translateVector, vec3 scaleVector, vec3 color);
     ~TexturedCubeModel();
-    void Draw(Shader * shader, glm::mat4 WorldMatrix);
-
+    void Draw(Shader * shader, mat4 groupMatrix);
+    void init();
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
 
 private:
-    // The vertex format could be different for different types of models
+
     struct Vertex
     {
         vec3 position;
@@ -33,5 +35,6 @@ private:
     unsigned int mVBO;
     unsigned int numOfVertices;
 };
+
 
 

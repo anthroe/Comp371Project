@@ -200,6 +200,7 @@ void EventHandler::handleEvents() {
         world->worldRotateYFactor -= 0.5f;
 
     }
+    /*
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) // create olaf with points
     {
         snowman->mode = GL_POINTS;
@@ -214,6 +215,7 @@ void EventHandler::handleEvents() {
     {
         snowman->mode = GL_TRIANGLES;
     }
+    */
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
     {

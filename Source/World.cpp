@@ -57,7 +57,7 @@ void World::draw() {
 	camera->setViewProjectionMatrices(shader);
 	camera->setViewProjectionMatrices(textureShader);
     setupLighting();
-    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), yRotationVector) * rotate(mat4(1.0f), radians(worldRotateXFactor), xRotationVector);
+    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), vec3(0.0f,1.0f,0.0f)) * rotate(mat4(1.0f), radians(worldRotateXFactor), vec3(1.0f,0.0f,0.0f));
     shadowShader->use();
     shadowShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     textureShader->use();
@@ -67,7 +67,7 @@ void World::draw() {
 
     setupShadows();
     //gridDrawer->draw(shader);
-    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
+    snowManDrawer->draw(shader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);

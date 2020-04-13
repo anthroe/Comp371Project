@@ -8,14 +8,16 @@
 //
 
 #pragma once
-#include <Shader.h>
+#include <Model.h>
 
-class SphereModel
-{
+class SphereModel : public Model {
 public:
-	SphereModel(glm::vec3 size = glm::vec3(1.0f, 1.0f, 1.0f));
-    virtual ~SphereModel(void);
-    virtual void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    SphereModel();
+    SphereModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
+    SphereModel(vec3 translateVector, vec3 scaleVector, vec3 color);
+    virtual ~SphereModel();
+    void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    void init();
     
 //protected:
   //  virtual bool ParseLine(const std::vector<ci_string> &token);

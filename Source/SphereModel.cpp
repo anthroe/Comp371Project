@@ -16,8 +16,47 @@
 
 using namespace glm;
 
-SphereModel::SphereModel(vec3 size)
+SphereModel::SphereModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color) 
+    : Model(translateVector, rotateVector, scaleVector, color)
 {
+    init();
+}
+SphereModel::SphereModel(vec3 translateVector, vec3 scaleVector, vec3 color) :
+    Model(translateVector, scaleVector, color)
+{
+    init();
+}
+SphereModel::SphereModel()
+{
+    init();
+}
+SphereModel::~SphereModel()
+{
+    glDeleteBuffers(1, &mVBO);
+    glDeleteVertexArrays(1, &mVAO);
+}
+
+
+void SphereModel::Draw(Shader * shader, mat4 groupMatrix)
+{
+    shader->use();
+
+    shader->setVec3("objectColor", color);
+
+    glBindVertexArray(mVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+
+    mat4 worldMatrix = groupMatrix * translate(mat4(1.0f), translateVector);
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.x), vec3(1.0f, 0.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    worldMatrix = worldMatrix * scale(mat4(1.0f), scaleVector);
+
+    shader->setMat4("worldMatrix", worldMatrix);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, numOfVertices);
+}
+void SphereModel::init() {
     Vertex vertexBuffer[] = {
         // position,                                    normal,                              color
         { vec3(0.000000, 0.000000, -1.000000), vec3(0.000000, 0.000000, -1.000000), vec3(1.0f, 0.05f, 0.05f) },
@@ -1287,60 +1326,18 @@ SphereModel::SphereModel(vec3 size)
 
     glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
-    
+
     glGenBuffers(1, &mVBO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBuffer), vertexBuffer, GL_STATIC_DRAW);
-    
+
     // 1st attribute buffer : vertex Positions
-    glVertexAttribPointer(  0,              // attribute. No particular reason for 0, but must match the layout in the shader.
-                          3,              // size
-                          GL_FLOAT,       // type
-                          GL_FALSE,       // normalized?
-                          sizeof(Vertex), // stride
-                          (void*)0        // array buffer offset
-                          );
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
-
     // 2nd attribute buffer : vertex normal
-    glVertexAttribPointer(  1,
-                          3,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          sizeof(Vertex),
-                          (void*)sizeof(vec3)    // Normal is Offseted by vec3 (see class Vertex)
-                          );
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec3));
     glEnableVertexAttribArray(1);
-
-    
     // 3rd attribute buffer : vertex color
-    glVertexAttribPointer(  2,
-                          3,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          sizeof(Vertex),
-                          (void*) (2* sizeof(vec3)) // Color is Offseted by 2 vec3 (see class Vertex)
-                          );
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2 * sizeof(vec3)));
     glEnableVertexAttribArray(2);
-}
-
-SphereModel::~SphereModel()
-{
-    glDeleteBuffers(1, &mVBO);
-    glDeleteVertexArrays(1, &mVAO);
-}
-
-
-void SphereModel::Draw(Shader * shader, mat4 WorldMatrix)
-{
-    // Draw the Vertex Buffer
-    // Note this draws a Sphere
-    // The Model View Projection transforms are computed in the Vertex Shader
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
- 
-    shader->setMat4("worldMatrix", WorldMatrix);
-    
-    // Draw the triangles !
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, numOfVertices);
 }
