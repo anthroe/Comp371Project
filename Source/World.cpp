@@ -1,6 +1,6 @@
 #include <World.h>
 #include "TexturedModel.h"
-
+#include "glm/gtx/string_cast.hpp"
 World::World(GLFWwindow* window) {
     this->window = window;
     // Setup Camera
@@ -51,7 +51,6 @@ void World::draw() {
     textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     shader->use();
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
-
     setupShadows();
     //gridDrawer->draw(shader);
     snowManDrawer->draw(shader, worldRotationMatrix);
@@ -102,20 +101,38 @@ void World::setupShadows() {
 
 void World::Update(float dt)
 {
+    if (flyMode == false) {
+        glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
+        snowManDrawer->Accelerate(gravityVector, dt);
+        snowManDrawer->Update(dt);
+        cout << glm::to_string(gravityVector) << endl;
+        glm::vec3 groundPoint = glm::vec3(0.0f);
+        glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
-    snowManDrawer->Accelerate(gravityVector, dt);
-    snowManDrawer->Update(dt);
+        for (int z = 0; z < groundDrawer->getHeight(); z++)
+        {
+            for (int x = 0; x < groundDrawer->getWidth(); x++)
+            {
+                if (groundDrawer->getDepthArray()[z][x] > 0)
+                {
+                    for (int y = 0; y < groundDrawer->getDepthArray()[z][x]; y++)
+                    {
+                        groundUp = vec3(x - groundDrawer->getWidth() / 2, y, z - groundDrawer->getHeight() / 2);
 
-    glm::vec3 groundPoint = glm::vec3(0.0f);
-    glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
+                        if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
+                        {
+                            snowManDrawer->translationVector.y = groundUp.y;
 
-    //Collisions with ground
-    //complexity: O(n)
+                        }
+                    }
+                    groundUp = vec3(x - groundDrawer->getWidth() / 2, groundDrawer->getDepthArray()[z][x], z - groundDrawer->getHeight() / 2);
+                    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
+                    {
+                        snowManDrawer->translationVector.y = groundUp.y;
 
-    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-    {
-        
-        snowManDrawer->BounceOffGround(); //Reverses y velocity
+                    }
+                }
+            }
+        }
     }
 }

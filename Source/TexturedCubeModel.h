@@ -23,6 +23,8 @@ public:
     void draw(Shader* shader);
     void draw(Shader * shader, mat4 groupMatrix);
     void init();
+    glm::vec3 GetPosition() const { return translationVector; }
+    glm::vec3 GetScaling() const { return scaleVector; }
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
 

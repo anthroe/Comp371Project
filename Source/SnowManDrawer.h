@@ -13,8 +13,8 @@ public:
     float footRotationFactor = 0;
     bool footSwitch = true;
 
-    vec3 translationVector = vec3(1.0f);
-    vec3 scaling = vec3(1.0f);
+    vec3 translationVector = vec3(2.0f);
+    vec3 scaleVector = vec3(1.0f);
 
     mat4 groupMatrix;
 
@@ -32,7 +32,7 @@ public:
     void Angulate(glm::vec3 torque);
     virtual void Update(float dt);
     glm::vec3 mPosition = vec3(1.0f, 1.0f, 1.0f);
-    glm::vec3 mScaling = vec3(0.1f, 0.1f, 0.1f);
+    glm::vec3 mScaling = vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 mRotationAxis;
     float     mRotationAngleInDegrees;
     
@@ -50,10 +50,6 @@ public:
     float mMass = 1.0f;
 
     void createModels();
-    //protected:
-      //  virtual bool ParseLine(const std::vector<ci_string> &token);
-
-private:
-    // The vertex format could be different for different types of models
-    
+    double** depthArray;
+    void setDepthArray(double** depthArray1) { depthArray = depthArray1; }
 };

@@ -90,10 +90,11 @@ void EventHandler::handleEvents() {
             snowman->snowManAnimation();
         }
     }
-
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
-    {
-        snowman->Jump();
+    if (!world->flyMode) {
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
+        {
+            snowman->Jump();
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
@@ -216,6 +217,22 @@ void EventHandler::handleEvents() {
         snowman->mode = GL_TRIANGLES;
     }
     */
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // create olaf with triangles
+    {
+        world->flyMode = world->flyMode ? false : true;
+    }
+    if (world->flyMode) {
+        world->gravity = 0;
+        snowman->mVelocity = vec3(0.0f,0.0f,0.0f);
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) // create olaf with triangles
+        {
+            snowman->translationVector[1] -= 0.1f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) // create olaf with triangles
+        {
+            snowman->translationVector[1] += 0.1f;
+        }
+    }
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
     {

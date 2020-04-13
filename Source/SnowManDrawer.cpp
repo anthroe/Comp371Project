@@ -89,7 +89,7 @@ void SnowManDrawer::BounceOffGround()
 }
 void SnowManDrawer::Jump()
 {
-    translationVector.y = 1.0f;
+    translationVector.y = 3.0f;
     mVelocity.y = 0.0f;
 }
 
@@ -101,7 +101,7 @@ bool SnowManDrawer::IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal)
     //We simply compare the distance between the ground and sphere center, with its radius
     float radius = GetScaling().x;
     
-
+   
     return glm::dot(planeNormal, GetPosition() - planePoint) < radius;
 
     return false;
