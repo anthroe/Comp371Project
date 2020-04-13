@@ -23,11 +23,6 @@ public:
     // For animation
     vector<Model*> footAndArmsModels;
 
-    SphereModel* sphere;
-    CubeModel* coloredCube;
-    TexturedCubeModel* texturedCube1;
-    
-
     SnowManDrawer();
     ~SnowManDrawer();
     void setGroupMatrix(glm::mat4 groupMatrix);
@@ -54,7 +49,7 @@ public:
 
     float mMass = 1.0f;
 
-    void init();
+    void createModels();
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
 

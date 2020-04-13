@@ -9,6 +9,8 @@
 
 #pragma once
 #include <Model.h>
+#include <OBJloader.h>
+#include <OBJloaderV2.h>
 
 class TexturedCubeModel : public Model
 {

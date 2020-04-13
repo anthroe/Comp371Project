@@ -5,10 +5,7 @@ using namespace glm;
 
 SnowManDrawer::SnowManDrawer()
 {
-    init();
-    sphere = new SphereModel();
-    coloredCube = new CubeModel();
-    texturedCube1 = new TexturedCubeModel();
+    createModels();
     mMass = 1.0f;
 }
 
@@ -117,7 +114,7 @@ bool SnowManDrawer::ContainsPoint(glm::vec3 position)
 
     return distance <= radius;
 }
-void SnowManDrawer::init() {
+void SnowManDrawer::createModels() {
     /* position, rotation, scaling, color*/
     // Body
     models.push_back(new SphereModel(vec3(0.0f, 1.1f, 0.0f), vec3(0.75f), vec3(1.0f,1.0f,1.0f)));

@@ -1,12 +1,6 @@
 #include <World.h>
 #include "TexturedModel.h"
 
-GLuint activeVAO;
-int activeVerticesCount;					  
-
-				 
-						
-
 World::World(GLFWwindow* window) {
     this->window = window;
     // Setup Camera
@@ -36,14 +30,7 @@ World::World(GLFWwindow* window) {
     // Attach the depth map texture to the depth map framebuffer
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
-	// Model loading goes here
-	int rockVerticesCount;
-	TexturedModel* rock = new TexturedModel();
-	GLuint rockVAO = rock->setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
-	activeVAO = rockVAO;
-	activeVerticesCount = rockVerticesCount;							
-					   								 
+    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values								   								 
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -71,21 +58,9 @@ void World::draw() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader);
-	// Draw models
-	textureShader->use();
-	glBindVertexArray(activeVAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, grassTextureID);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
     // Setting world matrix for the loaded model
-    textureShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
-
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);		   		  
+    environmentDrawer->draw(textureShader);	   		  
     camera->updateLookAt();
-
-
 }
 
 void World::setupLighting() {
@@ -113,21 +88,11 @@ void World::setupShadows() {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, grassTextureID);
-    groundDrawer->draw(shadowShader);
-    
-	// Draw models
-	glBindVertexArray(activeVAO);
-    shadowShader->use();
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, grassTextureID);
 
-    // Setting world matrix for the loaded model
-    shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+    groundDrawer->draw(shadowShader);
+    shadowShader->use();
+    environmentDrawer->draw(shadowShader);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
     int WIDTH, HEIGHT;

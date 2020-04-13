@@ -3,7 +3,16 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-void Drawer::init() {
+Drawer::Drawer() {
+
+}
+Drawer::~Drawer() {
+
+}
+void Drawer::draw(Shader* shader) {
+
+}
+void Drawer::createModels() {
 
 }
 unsigned int Drawer::loadTexture(std::string imagePath) {

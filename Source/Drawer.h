@@ -25,6 +25,9 @@
 #include "TexturedCubeModel.h"
 class Drawer {
     public:
-        virtual void init();
+        Drawer();
+        ~Drawer();
+        virtual void draw(Shader* shader);
+        virtual void createModels();
         unsigned int loadTexture(std::string imagePath);
  };
