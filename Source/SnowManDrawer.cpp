@@ -134,9 +134,9 @@ void SnowManDrawer::createModels() {
     models.push_back(new CubeModel(vec3(-0.9f, 1.5f, 0.0f), vec3(180.0f, 0.0f, 60.0f), vec3(0.2f, 1.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
     footAndArmsModels.push_back(models[8]);
     // Left foot
-    models.push_back(new CubeModel(vec3(-0.5f, 0.0f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    models.push_back(new CubeModel(vec3(-0.5f, 0.5f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
     footAndArmsModels.push_back(models[9]);
     // Right foot
-    models.push_back(new CubeModel(vec3(0.5f, 0.0f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    models.push_back(new CubeModel(vec3(0.5f, 0.5f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
     footAndArmsModels.push_back(models[10]);
 }

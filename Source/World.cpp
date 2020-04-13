@@ -64,7 +64,7 @@ void World::draw() {
 
 void World::setupLighting() {
     float near_plane = 1.0f, far_plane = 180.0f;
-    mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
+    mat4 lightProjection = ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
     mat4 lightView = lookAt(vec3(30.0f, 100.0f, 40.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
@@ -102,36 +102,18 @@ void World::setupShadows() {
 void World::Update(float dt)
 {
     if (flyMode == false) {
-        glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
+        vec3 gravityVector(0.0f, -gravity, 0.0f);
         snowManDrawer->Accelerate(gravityVector, dt);
         snowManDrawer->Update(dt);
-        cout << glm::to_string(gravityVector) << endl;
-        glm::vec3 groundPoint = glm::vec3(0.0f);
-        glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        vec3 groundPoint = vec3(0.0f);
+        vec3 groundUp = vec3(0.0f, 1.0f, 0.0f);
 
-        for (int z = 0; z < groundDrawer->getHeight(); z++)
-        {
-            for (int x = 0; x < groundDrawer->getWidth(); x++)
+        for (int i = 0; i < groundDrawer->models.size(); i++) {
+            groundUp = groundDrawer->models[i]->position;
+            if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
             {
-                if (groundDrawer->getDepthArray()[z][x] > 0)
-                {
-                    for (int y = 0; y < groundDrawer->getDepthArray()[z][x]; y++)
-                    {
-                        groundUp = vec3(x - groundDrawer->getWidth() / 2, y, z - groundDrawer->getHeight() / 2);
+                snowManDrawer->translationVector.y = groundUp.y;
 
-                        if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-                        {
-                            snowManDrawer->translationVector.y = groundUp.y;
-
-                        }
-                    }
-                    groundUp = vec3(x - groundDrawer->getWidth() / 2, groundDrawer->getDepthArray()[z][x], z - groundDrawer->getHeight() / 2);
-                    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-                    {
-                        snowManDrawer->translationVector.y = groundUp.y;
-
-                    }
-                }
             }
         }
     }
