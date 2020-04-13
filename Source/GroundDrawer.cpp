@@ -39,10 +39,10 @@ void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
                 for (int y = 0; y < a[z][x]; y++)
                 {
                     mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                    texturedCube->Draw(shader, pillarWorldMatrix);
+                   // texturedCube->Draw(shader, pillarWorldMatrix);
                 }
                 mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                texturedCube->Draw(shader, pillarWorldMatrix);
+               // texturedCube->Draw(shader, pillarWorldMatrix);
             }
         }
     }

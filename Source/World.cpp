@@ -1,6 +1,6 @@
 #include <World.h>
 #include "TexturedModel.h"
-
+#include "glm/gtx/string_cast.hpp"
 GLuint activeVAO;
 int activeVerticesCount;					  
 
@@ -64,13 +64,14 @@ void World::draw() {
     textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     shader->use();
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
-
     setupShadows();
     //gridDrawer->draw(shader);
-    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
+   
+
+    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
 	// Draw models
 	textureShader->use();
 	glBindVertexArray(activeVAO);
@@ -143,14 +144,74 @@ void World::Update(float dt)
     snowManDrawer->Update(dt);
 
     glm::vec3 groundPoint = glm::vec3(0.0f);
-    glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
+    glm::vec3 groundUp = glm::vec3(0.0f,1.0f , 0.0f);
+    
+    for (int z = 0; z < groundDrawer->getHeight(); z++)
+    {
+        for (int x = 0; x < groundDrawer->getWidth(); x++)
+        {
+            if (groundDrawer->getDepthArray()[z][x] > 0)
+            {
+                for (int y = 0; y < groundDrawer->getDepthArray()[z][x]; y++)
+                {
+                    groundUp = vec3(x - groundDrawer->getWidth() / 2, y, z - groundDrawer->getHeight() / 2);
+                   
+                    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
+                    {
+                        snowManDrawer->translationVector.y = groundUp.y;
+                      
+                    }
+                }
+                groundUp = vec3(x - groundDrawer->getWidth() / 2, groundDrawer->getDepthArray()[z][x], z - groundDrawer->getHeight() / 2);
+                if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
+                {
+                    snowManDrawer->translationVector.y = groundUp.y;
+                  
+                }
+            }
+        }
+    }
+    //cout << glm::to_string(groundUp) << endl;
     //Collisions with ground
     //complexity: O(n)
-
+    
     if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
     {
         
         snowManDrawer->BounceOffGround(); //Reverses y velocity
     }
+    
+      //  Model* s1 = *it;
+      //  Model* s2 = *it2;
+    /*
+        float distance = glm::distance(snowManDrawer->GetPosition(), ->GetPosition());
+        float r1 = s1->GetScaling().x;
+        float r2 = s2->GetScaling().x;
+        float totalRadii = r1 + r2;
+
+        //TODO 2 - Collisions between spheres
+
+        if (distance < totalRadii) //Collision
+        {
+            glm::vec3 collisionNormal = glm::normalize(s1->GetPosition() - s2->GetPosition());
+            glm::vec3 collisionPoint = s2->GetPosition() + r2 * collisionNormal;
+
+            //decompose momentum
+            //
+            float m1 = s1->GetMass();
+            float m2 = s2->GetMass();
+
+            glm::vec3 normalVelocity1 = glm::dot(s1->GetVelocity(), collisionNormal) * collisionNormal;
+            glm::vec3 normalVelocity2 = glm::dot(s2->GetVelocity(), collisionNormal) * collisionNormal;
+
+            glm::vec3 tangentMomentum1 = s1->GetVelocity() - normalVelocity1;
+            glm::vec3 tangentMomentum2 = s2->GetVelocity() - normalVelocity2;
+
+            glm::vec3 newNormalVelocity1 = ((m1 - m2) / (m1 + m2)) * normalVelocity1 + ((2 * m2) / (m1 + m2) * normalVelocity2);
+            glm::vec3 newNormalVelocity2 = ((2 * m1) / (m1 + m2)) * normalVelocity1 + ((m2 - m1) / (m1 + m2) * normalVelocity2);
+
+            s1->SetVelocity(newNormalVelocity1 + tangentMomentum1);
+            s2->SetVelocity(newNormalVelocity2 + tangentMomentum2);
+        
+        }*/
 }
