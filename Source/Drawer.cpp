@@ -3,6 +3,18 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+Drawer::Drawer() {
+
+}
+Drawer::~Drawer() {
+
+}
+void Drawer::draw(Shader* shader) {
+
+}
+void Drawer::createModels() {
+
+}
 unsigned int Drawer::loadTexture(std::string imagePath) {
     unsigned int texture;
     glGenTextures(1, &texture);

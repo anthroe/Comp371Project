@@ -5,9 +5,6 @@
 class SnowManDrawer : public Drawer
 {
 public:
-    GLuint silverTextureID;
-    GLuint carrotTextureID;
-    GLuint snowTextureID;
 
     float scaleNumber = 1.0f;
     float rotateFactor = 0.0f;
@@ -19,33 +16,18 @@ public:
     vec3 translationVector = vec3(2.0f);
     vec3 scaleVector = vec3(1.0f);
 
-    vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
-    vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
-
-    GLenum mode = GL_TRIANGLES;
-
     mat4 groupMatrix;
 
-    SphereModel* sphere;
-    CubeModel* coloredCube;
-    TexturedCubeModel* texturedCube1;
-    
-
-    float footRotationBase = 180.0f;
+    // All our models
+    vector<Model*> models;
+    // For animation
+    vector<Model*> footAndArmsModels;
 
     SnowManDrawer();
     ~SnowManDrawer();
-    void setMode(GLenum mode);
     void setGroupMatrix(glm::mat4 groupMatrix);
-    void drawArmsAndLegs(Shader * shader, float footRotationFactor);
-    void drawBody(Shader * shader);
-    void drawEyesAndMouth(Shader * shader);
-    void drawHat(Shader * shader);
-    void drawNose(Shader * shader);
-    void drawSnow(Shader * shader);
-    void draw(Shader* shader, Shader * textureShader, mat4 worldRotationMatrix);
+    void draw(Shader* shader, mat4 worldRotationMatrix);
     void snowManAnimation();
-    float snowRotateAnimation(float rotateFactor, float angleRequired);
     void Accelerate(glm::vec3 force, float dt);
     void Angulate(glm::vec3 torque);
     virtual void Update(float dt);
@@ -53,7 +35,7 @@ public:
     glm::vec3 mScaling = vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 mRotationAxis;
     float     mRotationAngleInDegrees;
-
+    
     glm::vec3 mVelocity;
     glm::vec3 mAngularAxis;
     float     mAngularVelocityInDegrees;
@@ -67,6 +49,7 @@ public:
 
     float mMass = 1.0f;
 
+    void createModels();
     double** depthArray;
     void setDepthArray(double** depthArray1) { depthArray = depthArray1; }
 };

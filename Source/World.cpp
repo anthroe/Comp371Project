@@ -1,12 +1,6 @@
 #include <World.h>
 #include "TexturedModel.h"
 #include "glm/gtx/string_cast.hpp"
-GLuint activeVAO;
-int activeVerticesCount;					  
-
-				 
-						
-
 World::World(GLFWwindow* window) {
     this->window = window;
     // Setup Camera
@@ -36,14 +30,7 @@ World::World(GLFWwindow* window) {
     // Attach the depth map texture to the depth map framebuffer
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
-	// Model loading goes here
-	int rockVerticesCount;
-	TexturedModel* rock = new TexturedModel();
-	GLuint rockVAO = rock->setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
-	activeVAO = rockVAO;
-	activeVerticesCount = rockVerticesCount;							
-					   								 
+    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values								   								 
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -57,7 +44,7 @@ void World::draw() {
 	camera->setViewProjectionMatrices(shader);
 	camera->setViewProjectionMatrices(textureShader);
     setupLighting();
-    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), yRotationVector) * rotate(mat4(1.0f), radians(worldRotateXFactor), xRotationVector);
+    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), vec3(0.0f,1.0f,0.0f)) * rotate(mat4(1.0f), radians(worldRotateXFactor), vec3(1.0f,0.0f,0.0f));
     shadowShader->use();
     shadowShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     textureShader->use();
@@ -66,32 +53,18 @@ void World::draw() {
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
     setupShadows();
     //gridDrawer->draw(shader);
+    snowManDrawer->draw(shader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
-    groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
-   
-
-    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
-	// Draw models
-	textureShader->use();
-	glBindVertexArray(activeVAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
+    groundDrawer->draw(textureShader);
     // Setting world matrix for the loaded model
-    textureShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
-
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);		   		  
+    environmentDrawer->draw(textureShader);	   		  
     camera->updateLookAt();
-
-
 }
 
 void World::setupLighting() {
     float near_plane = 1.0f, far_plane = 180.0f;
-    mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
+    mat4 lightProjection = ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
     mat4 lightView = lookAt(vec3(30.0f, 100.0f, 40.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
@@ -114,21 +87,11 @@ void World::setupShadows() {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
-    groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
-    
-	// Draw models
-	glBindVertexArray(activeVAO);
-    shadowShader->use();
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
 
-    // Setting world matrix for the loaded model
-    shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+    groundDrawer->draw(shadowShader);
+    shadowShader->use();
+    environmentDrawer->draw(shadowShader);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
     int WIDTH, HEIGHT;
@@ -139,36 +102,18 @@ void World::setupShadows() {
 void World::Update(float dt)
 {
     if (flyMode == false) {
-        glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
+        vec3 gravityVector(0.0f, -gravity, 0.0f);
         snowManDrawer->Accelerate(gravityVector, dt);
         snowManDrawer->Update(dt);
-        cout << glm::to_string(gravityVector) << endl;
-        glm::vec3 groundPoint = glm::vec3(0.0f);
-        glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        vec3 groundPoint = vec3(0.0f);
+        vec3 groundUp = vec3(0.0f, 1.0f, 0.0f);
 
-        for (int z = 0; z < groundDrawer->getHeight(); z++)
-        {
-            for (int x = 0; x < groundDrawer->getWidth(); x++)
+        for (int i = 0; i < groundDrawer->models.size(); i++) {
+            groundUp = groundDrawer->models[i]->position;
+            if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
             {
-                if (groundDrawer->getDepthArray()[z][x] > 0)
-                {
-                    for (int y = 0; y < groundDrawer->getDepthArray()[z][x]; y++)
-                    {
-                        groundUp = vec3(x - groundDrawer->getWidth() / 2, y, z - groundDrawer->getHeight() / 2);
+                snowManDrawer->translationVector.y = groundUp.y;
 
-                        if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-                        {
-                            snowManDrawer->translationVector.y = groundUp.y;
-
-                        }
-                    }
-                    groundUp = vec3(x - groundDrawer->getWidth() / 2, groundDrawer->getDepthArray()[z][x], z - groundDrawer->getHeight() / 2);
-                    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-                    {
-                        snowManDrawer->translationVector.y = groundUp.y;
-
-                    }
-                }
             }
         }
     }

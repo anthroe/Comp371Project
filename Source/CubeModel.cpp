@@ -16,8 +16,48 @@
 
 using namespace glm;
 
-CubeModel::CubeModel(vec3 size)
+CubeModel::CubeModel()
 {
+    init();
+}
+CubeModel::CubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color) : 
+    Model(position, rotation, scaling, color)
+{
+    init();
+}
+CubeModel::CubeModel(vec3 position, vec3 scaling, vec3 color) :
+    Model(position, scaling, color)
+{
+    init();
+}
+CubeModel::~CubeModel()
+{
+    glDeleteBuffers(1, &mVBO);
+    glDeleteVertexArrays(1, &mVAO);
+}
+
+
+void CubeModel::draw(Shader * shader, mat4 groupMatrix)
+{
+    shader->use();
+
+    shader->setVec3("objectColor", color);
+
+    glBindVertexArray(mVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+
+    mat4 worldMatrix = groupMatrix * translate(mat4(1.0f), position);
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
+
+    shader->setMat4("worldMatrix", worldMatrix);
+
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void CubeModel::init() {
     Vertex cubeVArray[] = {
             { vec3(-0.5f, -0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
            { vec3(0.5f, -0.5f, -0.5f), vec3(0.0f, 0.0f, -1.0f)},
@@ -79,41 +119,5 @@ CubeModel::CubeModel(vec3 size)
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    
-}
-CubeModel::~CubeModel()
-{
-    glDeleteBuffers(1, &mVBO);
-    glDeleteVertexArrays(1, &mVAO);
-}
-
-
-void CubeModel::Draw(Shader * shader, mat4 WorldMatrix)
-{
-    // Draw the Vertex Buffer
-    // Note this draws a Sphere
-    // The Model View Projection transforms are computed in the Vertex Shader
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
- 
-    shader->setMat4("worldMatrix", WorldMatrix);
-    
-    // Draw the triangles !
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-}
-
-void CubeModel::Draw(Shader * shader, mat4 WorldMatrix, GLenum mode)
-{
-    // Draw the Vertex Buffer
-    // Note this draws a Sphere
-    // The Model View Projection transforms are computed in the Vertex Shader
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-
-    shader->setMat4("worldMatrix", WorldMatrix);
-
-    // Draw the triangles !
-    glDrawArrays(mode, 0, 36);
 }
 

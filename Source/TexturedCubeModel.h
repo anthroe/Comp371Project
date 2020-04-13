@@ -8,24 +8,28 @@
 //
 
 #pragma once
-#include <Shader.h>
+#include <Model.h>
+#include <OBJloader.h>
+#include <OBJloaderV2.h>
 
-class TexturedCubeModel
+class TexturedCubeModel : public Model
 {
 public:
     TexturedCubeModel();
+    TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
+    TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
+    TexturedCubeModel(vec3 position, vec3 scaling, vec3 color);
     ~TexturedCubeModel();
-    void Draw(Shader * shader, glm::mat4 WorldMatrix);
-    glm::vec3 GetPosition() const { return translationVector; }
-    glm::vec3 GetScaling() const { return scaleVector; }
-
-    vec3 translationVector = vec3(1.0f);
-    vec3 scaleVector = vec3(1.0f);
+    void draw(Shader* shader);
+    void draw(Shader * shader, mat4 groupMatrix);
+    void init();
+    glm::vec3 GetPosition() const { return position; }
+    glm::vec3 GetScaling() const { return scaling; }
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);
 
 private:
-    // The vertex format could be different for different types of models
+
     struct Vertex
     {
         vec3 position;
@@ -37,5 +41,6 @@ private:
     unsigned int mVBO;
     unsigned int numOfVertices;
 };
+
 
 
