@@ -186,7 +186,7 @@ void SnowManDrawer::Accelerate(glm::vec3 acceleration, float delta)
 {
     if (mMass != 0.0f) { //No acceleration for massless objects
         if (translationVector.y > 0.0f) {
-            if (mVelocity.y > 0.00000) {
+            if (mVelocity.y > -0.010000) {
                 mVelocity += acceleration * delta;
             }
         }

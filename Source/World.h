@@ -24,7 +24,7 @@ using namespace std;
 
 class World {
 	public:
-
+        bool flyMode = false;
         static const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
         // initializing all the variable that will be used for transformations
         float worldRotateXFactor = 0.0f;
@@ -52,7 +52,7 @@ class World {
         void setupLighting();
         void setupShadows();
         void Update(float dt);
-        float gravity = 0.03f;
+        float gravity = 0.000000003f;
         float friction = 0.0f;
 };
 

@@ -13,7 +13,6 @@ using namespace std;
 class EventHandler {
 	GLFWwindow* window;
 	World* world;
-
 	// For frame time
 	float lastFrameTime = glfwGetTime();
 	int lastMouseLeftState = GLFW_RELEASE;
