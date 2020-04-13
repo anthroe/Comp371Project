@@ -14,7 +14,7 @@ public:
     bool footSwitch = true;
 
     vec3 translationVector = vec3(1.0f);
-    vec3 scaleVector = vec3(1.0f);
+    vec3 scaling = vec3(1.0f);
 
     mat4 groupMatrix;
 
@@ -31,7 +31,6 @@ public:
     SnowManDrawer();
     ~SnowManDrawer();
     void setGroupMatrix(glm::mat4 groupMatrix);
-    void drawArmsAndLegs(Shader * shader);
     void draw(Shader* shader, mat4 worldRotationMatrix);
     void snowManAnimation();
     void Accelerate(glm::vec3 force, float dt);

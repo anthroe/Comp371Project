@@ -34,6 +34,7 @@ class World {
         unsigned int depthMap;
         unsigned int depthMapFBO;
 
+        GLuint grassTextureID;
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();

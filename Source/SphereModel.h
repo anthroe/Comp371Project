@@ -13,10 +13,10 @@
 class SphereModel : public Model {
 public:
     SphereModel();
-    SphereModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
-    SphereModel(vec3 translateVector, vec3 scaleVector, vec3 color);
+    SphereModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
+    SphereModel(vec3 position, vec3 scaling, vec3 color);
     virtual ~SphereModel();
-    void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    void draw(Shader * shader, glm::mat4 WorldMatrix);
     void init();
     
 //protected:

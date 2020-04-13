@@ -14,10 +14,12 @@ class TexturedCubeModel : public Model
 {
 public:
     TexturedCubeModel();
-    TexturedCubeModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
-    TexturedCubeModel(vec3 translateVector, vec3 scaleVector, vec3 color);
+    TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
+    TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
+    TexturedCubeModel(vec3 position, vec3 scaling, vec3 color);
     ~TexturedCubeModel();
-    void Draw(Shader * shader, mat4 groupMatrix);
+    void draw(Shader* shader);
+    void draw(Shader * shader, mat4 groupMatrix);
     void init();
     //protected:
       //  virtual bool ParseLine(const std::vector<ci_string> &token);

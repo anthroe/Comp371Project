@@ -16,13 +16,13 @@
 
 using namespace glm;
 
-SphereModel::SphereModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color) 
-    : Model(translateVector, rotateVector, scaleVector, color)
+SphereModel::SphereModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color) 
+    : Model(position, rotation, scaling, color)
 {
     init();
 }
-SphereModel::SphereModel(vec3 translateVector, vec3 scaleVector, vec3 color) :
-    Model(translateVector, scaleVector, color)
+SphereModel::SphereModel(vec3 position, vec3 scaling, vec3 color) :
+    Model(position, scaling, color)
 {
     init();
 }
@@ -37,7 +37,7 @@ SphereModel::~SphereModel()
 }
 
 
-void SphereModel::Draw(Shader * shader, mat4 groupMatrix)
+void SphereModel::draw(Shader * shader, mat4 groupMatrix)
 {
     shader->use();
 
@@ -46,11 +46,11 @@ void SphereModel::Draw(Shader * shader, mat4 groupMatrix)
     glBindVertexArray(mVAO);
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-    mat4 worldMatrix = groupMatrix * translate(mat4(1.0f), translateVector);
-    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.x), vec3(1.0f, 0.0f, 0.0f));
-    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotateVector.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    worldMatrix = worldMatrix * scale(mat4(1.0f), scaleVector);
+    mat4 worldMatrix = groupMatrix * translate(mat4(1.0f), position);
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
 
     shader->setMat4("worldMatrix", worldMatrix);
 

@@ -14,10 +14,10 @@ class CubeModel : public Model
 {
 public:
     CubeModel();
-    CubeModel(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
-    CubeModel(vec3 translateVector, vec3 scaleVector, vec3 color);
+    CubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
+    CubeModel(vec3 position, vec3 scaling, vec3 color);
     ~CubeModel();
-    void Draw(Shader * shader, glm::mat4 WorldMatrix);
+    void draw(Shader * shader, glm::mat4 WorldMatrix);
     void init();
 
     

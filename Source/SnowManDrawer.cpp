@@ -28,12 +28,8 @@ void SnowManDrawer::draw(Shader* shader, mat4 worldRotationMatrix)
     // create world rotation matrix, which is used to rotate the whole world
     setGroupMatrix(groupMatrix);
     for (int i = 0; i < models.size(); i++) {
-        models[i]->Draw(shader, groupMatrix);
+        models[i]->draw(shader, groupMatrix);
     }
-    //building olaf, using relative positioning by applying transformation of the following order T * R * S
-
-    shader->setVec3("objectColor", vec3(0.98f, 0.98f, 0.98f));
-    drawArmsAndLegs(shader);
 }
 void SnowManDrawer::snowManAnimation()
 {
@@ -53,13 +49,13 @@ void SnowManDrawer::snowManAnimation()
             footSwitch = true;
     }
     // Left arm
-    footAndArmsModels[0]->rotateVector.x = 180.0f + footRotationFactor;
+    footAndArmsModels[0]->rotation.x = 180.0f + footRotationFactor;
     // Right arm
-    footAndArmsModels[1]->rotateVector.x = 180.0f - footRotationFactor;
+    footAndArmsModels[1]->rotation.x = 180.0f - footRotationFactor;
     // Left foot
-    footAndArmsModels[2]->rotateVector.x = 180.0f + footRotationFactor;
+    footAndArmsModels[2]->rotation.x = 180.0f + footRotationFactor;
     // Right foot
-    footAndArmsModels[3]->rotateVector.x = 180.0f - footRotationFactor;
+    footAndArmsModels[3]->rotation.x = 180.0f - footRotationFactor;
 }
 
 void SnowManDrawer::Update(float dt)
@@ -122,7 +118,7 @@ bool SnowManDrawer::ContainsPoint(glm::vec3 position)
     return distance <= radius;
 }
 void SnowManDrawer::init() {
-    /* translateVector, rotateVector, scaleVector, color*/
+    /* position, rotation, scaling, color*/
     // Body
     models.push_back(new SphereModel(vec3(0.0f, 1.1f, 0.0f), vec3(0.75f), vec3(1.0f,1.0f,1.0f)));
     models.push_back(new SphereModel(vec3(0.0f, 2.1f, 0.0f), vec3(0.60f), vec3(1.0f,1.0f,1.0f)));
@@ -146,13 +142,4 @@ void SnowManDrawer::init() {
     // Right foot
     models.push_back(new CubeModel(vec3(0.5f, 0.0f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
     footAndArmsModels.push_back(models[10]);
-}
-
-void SnowManDrawer::drawArmsAndLegs(Shader* shader)
-{
-    shader->use();
-    mat4 leftFoot = translate(mat4(1.0f), vec3(0.0f, 0.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(180.0f + footRotationFactor), vec3(1.0f, 0.0f, 0.0f));
-    mat4 rightFoot = translate(mat4(1.0f), vec3(0.0f, 0.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(180.0f - footRotationFactor), vec3(1.0f, 0.0f, 0.0f));
-    mat4 rightArm = translate(mat4(1.0f), vec3(-1.55f, 1.5f, 0.0f)) * rotate(mat4(1.0f), glm::radians(180.0f - footRotationFactor), vec3(1.0f, 0.0f, 0.0f));
-
 }

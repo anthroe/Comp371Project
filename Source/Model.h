@@ -12,13 +12,16 @@
 class Model {
 public:
     Model();
-    Model(vec3 translateVector, vec3 scaleVector, vec3 color);
-    Model(vec3 translateVector, vec3 rotateVector, vec3 scaleVector, vec3 color);
+    Model(vec3 position, vec3 scaling, vec3 color);
+    Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
+    Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
     ~Model();
-    virtual void Draw(Shader* shader, glm::mat4 WorldMatrix);
+    virtual void draw(Shader* shader, glm::mat4 WorldMatrix);
+    virtual void draw(Shader* shader);
     virtual void init();
-    vec3 translateVector = vec3(0.0f);
-    vec3 scaleVector = vec3(1.0f);
-    vec3 rotateVector = vec3(0.0f);
+    vec3 position = vec3(0.0f);
+    vec3 scaling = vec3(1.0f);
+    vec3 rotation = vec3(0.0f);
     vec3 color = vec3(0.0f);
+    GLuint texture = 0;
 };

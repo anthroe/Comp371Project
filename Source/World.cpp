@@ -70,12 +70,12 @@ void World::draw() {
     snowManDrawer->draw(shader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
-    groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
+    groundDrawer->draw(textureShader);
 	// Draw models
 	textureShader->use();
 	glBindVertexArray(activeVAO);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
+    glBindTexture(GL_TEXTURE_2D, grassTextureID);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     // Setting world matrix for the loaded model
@@ -114,15 +114,15 @@ void World::setupShadows() {
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
-    groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
+    glBindTexture(GL_TEXTURE_2D, grassTextureID);
+    groundDrawer->draw(shadowShader);
     
 	// Draw models
 	glBindVertexArray(activeVAO);
     shadowShader->use();
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
+    glBindTexture(GL_TEXTURE_2D, grassTextureID);
 
     // Setting world matrix for the loaded model
     shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
