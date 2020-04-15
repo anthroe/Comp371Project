@@ -1,3 +1,4 @@
+#pragma once
 #include <glm/glm.hpp>
 #include <cstring>
 #include <vector>
@@ -5,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-bool loadOBJ2(
+static bool loadOBJ2(
 	const char * path,
 	std::vector<int> & vertexIndices,
 	std::vector<glm::vec3> & temp_vertices,

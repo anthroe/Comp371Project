@@ -23,7 +23,11 @@
 #include "SphereModel.h"
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
+#include "OBJloaderV2.h"
 class Drawer {
     public:
         unsigned int loadTexture(std::string imagePath);
+		GLuint setupModelEBO(std::string path);
+		int vertexCount;
+		GLuint vao;
  };

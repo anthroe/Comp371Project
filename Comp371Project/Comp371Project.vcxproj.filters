@@ -57,6 +57,9 @@
     <ClCompile Include="..\Source\Drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\RockDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\CubeModel.h">
@@ -101,10 +104,10 @@
     <ClInclude Include="..\Source\OBJloaderV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\TexturedModel.h">
+    <ClInclude Include="..\Source\OBJloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\OBJloader.h">
+    <ClInclude Include="..\Source\RockDrawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,7 +15,7 @@
 #include <SnowManDrawer.h>
 #include <GridDrawer.h>
 #include <GroundDrawer.h>
-
+#include <RockDrawer.h>
 
 
 
@@ -41,6 +41,7 @@ class World {
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
+		RockDrawer* rockDrawer = new RockDrawer();
         GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;

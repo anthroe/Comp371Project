@@ -1,8 +1,5 @@
 #include <World.h>
-#include "TexturedModel.h"
 
-GLuint activeVAO;
-int activeVerticesCount;					  
 
 				 
 						
@@ -37,6 +34,7 @@ World::World(GLFWwindow* window) {
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
+<<<<<<< Updated upstream
 	// Model loading goes here
 	int rockVerticesCount;
 	TexturedModel* rock = new TexturedModel();
@@ -48,6 +46,10 @@ World::World(GLFWwindow* window) {
 																								
 					 
 										 
+=======
+	// Model loading goes here			
+					   								 
+>>>>>>> Stashed changes
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -76,11 +78,18 @@ void World::draw() {
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
 	// Draw models
+<<<<<<< Updated upstream
 	textureShader->use();
 	textureShader->setMat4("worldMatrix", mat4(1.0f) * translate(mat4(1.0f), vec3(0.5f, 0.0f, 0.5f) * scale(mat4(1.0f), 50.0f * vec3(0.0f, 1.0f, 0.0f));
 	glBindVertexArray(activeVAO);
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);		   		  
+=======
+	rockDrawer->draw(textureShader);
+	rockDrawer->generateRock();
+	textureShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
+
+>>>>>>> Stashed changes
     camera->updateLookAt();
 
 
@@ -116,9 +125,16 @@ void World::setupShadows() {
     groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Draw models
+<<<<<<< Updated upstream
 	glBindVertexArray(activeVAO);
 	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);					  
+=======
+	rockDrawer->draw(shadowShader);
+    shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
+	rockDrawer->generateRock();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+>>>>>>> Stashed changes
     // reset viewport
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);

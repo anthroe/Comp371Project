@@ -156,6 +156,7 @@
     <ClCompile Include="..\Source\GroundDrawer.cpp" />
     <ClCompile Include="..\Source\LineModel.cpp" />
     <ClCompile Include="..\Source\PerlinNoise.cpp" />
+    <ClCompile Include="..\Source\RockDrawer.cpp" />
     <ClCompile Include="..\Source\Shader.cpp" />
     <ClCompile Include="..\Source\SnowManDrawer.cpp" />
     <ClCompile Include="..\Source\SphereModel.cpp" />
@@ -173,11 +174,11 @@
     <ClInclude Include="..\Source\OBJloader.h" />
     <ClInclude Include="..\Source\OBJloaderV2.h" />
     <ClInclude Include="..\Source\PerlinNoise.h" />
+    <ClInclude Include="..\Source\RockDrawer.h" />
     <ClInclude Include="..\Source\Shader.h" />
     <ClInclude Include="..\Source\SnowManDrawer.h" />
     <ClInclude Include="..\Source\SphereModel.h" />
     <ClInclude Include="..\Source\TexturedCubeModel.h" />
-    <ClInclude Include="..\Source\TexturedModel.h" />
     <ClInclude Include="..\Source\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
