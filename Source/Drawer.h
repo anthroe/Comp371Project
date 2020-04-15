@@ -15,7 +15,7 @@
 #include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
 #include <glm/gtc/matrix_transform.hpp> // include this to create transformation matrices
 #include <glm/common.hpp>
-#include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
+
 #include <iostream>
 
 #include <Shader.h>
@@ -25,5 +25,9 @@
 #include "TexturedCubeModel.h"
 class Drawer {
     public:
+        Drawer();
+        ~Drawer();
+        virtual void draw(Shader* shader);
+        virtual void createModels();
         unsigned int loadTexture(std::string imagePath);
  };

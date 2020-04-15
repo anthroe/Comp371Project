@@ -15,7 +15,7 @@
 #include <SnowManDrawer.h>
 #include <GridDrawer.h>
 #include <GroundDrawer.h>
-
+#include <EnvironmentDrawer.h>
 
 
 
@@ -24,7 +24,9 @@ using namespace std;
 
 class World {
 	public:
-
+        vector<string> cameraModes = { "firstPerson","thirdPerson","free" };
+        int cameraMode = 0;
+        bool flyMode = false;
         static const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
         // initializing all the variable that will be used for transformations
         float worldRotateXFactor = 0.0f;
@@ -33,14 +35,13 @@ class World {
 
         unsigned int depthMap;
         unsigned int depthMapFBO;
-
-        vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
-        vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
+        
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
+        EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer();
         GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;
@@ -52,7 +53,7 @@ class World {
         void setupLighting();
         void setupShadows();
         void Update(float dt);
-        float gravity = 0.03f;
+        float gravity = 0.000000003f;
         float friction = 0.0f;
 };
 

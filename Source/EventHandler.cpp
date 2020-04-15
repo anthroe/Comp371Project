@@ -41,8 +41,20 @@ void EventHandler::handleEvents() {
     // @TODO 5 = use camera lookat and side vectors to update positions with ASDW
     // adjust code below
 
-
-
+   
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) //change to first person camera
+    {
+        world->cameraMode = 0;
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) //change to third person camera
+    {
+        world->cameraMode = 1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) //free looking camera
+    {
+        world->cameraMode = 2;
+    }
+   
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // move camera to the left
     {
         camera->cameraPosition -= camera->cameraSideVector * currentCameraSpeed * dt;
@@ -62,64 +74,47 @@ void EventHandler::handleEvents() {
     {
         camera->cameraPosition += camera->cameraLookAt * currentCameraSpeed * dt;
     }
+    
     //TRANSFORMATIONS
+    if (!world->flyMode) {
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
+        {
+            snowman->Jump();
+        }
+    }
+
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
-        if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 270.0f)
-        {
-            snowman->rotateFactor += 1.0f;
-        }
-        else
-        {
-            snowman->translationVector[0] -= 0.1f;
-            snowman->snowManAnimation();
-        }
+     
+           snowman->translationVector[0] += 0.05f;
+           snowman->snowManAnimation();
+
 
 
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
-        if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 90.0f)
-        {
-            snowman->rotateFactor += 1.0f;
-        }
-        else
-        {
-            snowman->translationVector[0] += 0.1f;
+
+            snowman->translationVector[0] -= 0.05f;
             snowman->snowManAnimation();
-        }
-    }
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
-    {
-        snowman->Jump();
     }
-
+ 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
-        if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 0.0f)
-        {
-            snowman->rotateFactor += 1.0f;
-        }
-        else
-        {
-            snowman->translationVector[2] += 0.1f;
+        
+            snowman->translationVector[2] += 0.05f;
             snowman->snowManAnimation();
-        }
+        
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
-        if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 180.0f)
-        {
-            snowman->rotateFactor += 1.0f;
-        }
-        else
-        {
-            snowman->translationVector[2] -= 0.1f;
+      
+            snowman->translationVector[2] -= 0.05f;
             snowman->snowManAnimation();
-        }
+        
     }
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) // move olaf up
     {
@@ -138,20 +133,6 @@ void EventHandler::handleEvents() {
         world->worldRotateXFactor = 0.0f;
         world->worldRotateYFactor = 0.0f;
     }
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) // Getting bigger
-    {
-        snowman->scaleNumber -= 0.01f;
-        if (snowman->scaleNumber < 0)
-        {
-            snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
-        }
-    }
-    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) // getting smaller
-    {
-        snowman->scaleNumber += 0.01f;
-
-    }
-
     if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) // zooming in and out, holding m and moving along x axis with mouse
     {
         if (dx > 0)
@@ -200,6 +181,7 @@ void EventHandler::handleEvents() {
         world->worldRotateYFactor -= 0.5f;
 
     }
+    /*
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) // create olaf with points
     {
         snowman->mode = GL_POINTS;
@@ -213,6 +195,23 @@ void EventHandler::handleEvents() {
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) // create olaf with triangles
     {
         snowman->mode = GL_TRIANGLES;
+    }
+    */
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // create olaf with triangles
+    {
+        world->flyMode = world->flyMode ? false : true;
+    }
+    if (world->flyMode) {
+        world->gravity = 0;
+        snowman->mVelocity = vec3(0.0f,0.0f,0.0f);
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        {
+            snowman->translationVector[1] -= 0.1f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) 
+        {
+            snowman->translationVector[1] += 0.1f;
+        }
     }
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid

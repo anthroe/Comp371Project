@@ -2,18 +2,12 @@
 
 GroundDrawer::GroundDrawer()
 {
-    #if defined(PLATFORM_OSX)
-        grassTextureID = loadTexture("Textures/grass.jpg");
-    #else
-        grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
-    #endif
-    texturedCube = new TexturedCubeModel();
-
     srand((unsigned)time(NULL));
     generateGround();
     generateMountain();
     generateMountain();
     generateMountain();
+    createModels();
 }
 GroundDrawer::~GroundDrawer()
 {
@@ -23,30 +17,11 @@ GroundDrawer::~GroundDrawer()
     //Free the array of pointers
     delete[] depthArray;
 }
-void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
+void GroundDrawer::draw(Shader* shader)
 {
-    shader->use();
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, grassTextureID);
-    
-    shader->setVec3("objectColor", vec3(1.0f, 1.0f, 1.0f));
-    for (int z = 0; z < height; z++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            if (a[z][x] > 0)
-            {
-                for (int y = 0; y < a[z][x]; y++)
-                {
-                    mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, y, z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                    texturedCube->Draw(shader, pillarWorldMatrix);
-                }
-                mat4 pillarWorldMatrix = translate(mat4(1.0f), vec3(x - width / 2, a[z][x], z - height / 2)) * scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
-                texturedCube->Draw(shader, pillarWorldMatrix);
-            }
-        }
+    for (int i = 0; i < models.size(); i++) {
+        models[i]->draw(shader);
     }
-    shader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)));
 }
 
 void GroundDrawer::generateGround() {
@@ -107,4 +82,26 @@ void GroundDrawer::generateMountain()
     }
     int additional = rand() % 2;
     depthArray[zCord][xCord] = depthArray[zCord][xCord] + 2 + additional;
+}
+void GroundDrawer::createModels() {
+    #if defined(PLATFORM_OSX)
+        GLuint grassTextureID = loadTexture("Textures/grass.jpg");
+    #else
+        GLuint grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+    #endif
+    for (int z = 0; z < height; z++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (depthArray[z][x] > 0)
+            {
+                for (int y = 0; y < depthArray[z][x]; y++)
+                {
+                    /* position, rotation, scaling, color, texture*/
+                    models.push_back(new TexturedCubeModel(vec3(x - width / 2, y, z - height / 2), vec3(0.0f), vec3 (1.0f), vec3 (1.0f), grassTextureID));
+                }
+                models.push_back(new TexturedCubeModel(vec3(x - width / 2, depthArray[z][x], z - height / 2), vec3(0.0f), vec3(1.0f), vec3(1.0f), grassTextureID));
+            }
+        }
+    }
 }
