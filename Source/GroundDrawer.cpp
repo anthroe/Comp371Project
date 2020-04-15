@@ -86,9 +86,13 @@ void GroundDrawer::generateMountain()
 void GroundDrawer::createModels() {
     #if defined(PLATFORM_OSX)
         GLuint grassTextureID = loadTexture("Textures/grass.jpg");
+        GLuint grassTextureID = loadTexture("Textures/space.jpg");
     #else
         GLuint grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+        GLuint spaceTextureID = loadTexture("../Resources/Assets/Textures/space.jpg");
     #endif
+    //sky
+    models.push_back(new TexturedCubeModel(vec3(0.0f,20.0f,0.0f), vec3(0.0f), vec3(2000.0f,1.0f,2000.0f), vec3(1.0f), spaceTextureID));
     for (int z = 0; z < height; z++)
     {
         for (int x = 0; x < width; x++)

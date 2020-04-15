@@ -53,6 +53,7 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) //free looking camera
     {
         world->cameraMode = 2;
+        world->snowManDrawer->scaleNumber = 1.0f;
     }
    
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // move camera to the left
