@@ -57,6 +57,7 @@ void World::draw() {
     snowManDrawer->draw(shader, worldRotationMatrix);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
+
     groundDrawer->draw(textureShader);
     // Setting world matrix for the loaded model
     environmentDrawer->draw(textureShader);	   		  
@@ -106,6 +107,7 @@ void World::Update(float dt)
     //first person camera
     if (cameraMode == 0) {
         camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 3.0f, 1.5f);
+        snowManDrawer->scaleNumber = 0.0f;
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -114,13 +116,13 @@ void World::Update(float dt)
         if (camera->cameraHorizontalAngle < -180.0f) {
             camera->cameraHorizontalAngle = -180.0f;
         }*/
-        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
 
     }
     //third person camera
     if (cameraMode == 1) {
         camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 4.0f, -4.2f);
         snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        snowManDrawer->scaleNumber = 1.0f;
     }
    
     if (flyMode == false) {

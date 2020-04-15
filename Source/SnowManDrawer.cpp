@@ -1,6 +1,7 @@
 
 #include "SnowManDrawer.h"
 #include "glm/gtx/string_cast.hpp"
+
 using namespace glm;
 
 SnowManDrawer::SnowManDrawer()
@@ -57,6 +58,7 @@ void SnowManDrawer::snowManAnimation()
 
 void SnowManDrawer::Update(float dt)
 {
+ 
     translationVector += dt * mVelocity;
     //mPosition += dt * mVelocity;
     
