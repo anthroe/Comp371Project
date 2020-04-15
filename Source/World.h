@@ -24,6 +24,8 @@ using namespace std;
 
 class World {
 	public:
+        vector<string> cameraModes = { "firstPerson","thirdPerson","free" };
+        int cameraMode = 0;
         bool flyMode = false;
         static const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
         // initializing all the variable that will be used for transformations

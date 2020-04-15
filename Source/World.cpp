@@ -37,6 +37,7 @@ World::World(GLFWwindow* window) {
     textureShader->use();
     textureShader->setInt("textureSampler", 0);
     textureShader->setInt("shadowMap", 1);
+  
    
 }
 
@@ -60,6 +61,7 @@ void World::draw() {
     // Setting world matrix for the loaded model
     environmentDrawer->draw(textureShader);	   		  
     camera->updateLookAt();
+   
 }
 
 void World::setupLighting() {
@@ -101,13 +103,33 @@ void World::setupShadows() {
 
 void World::Update(float dt)
 {
+    //first person camera
+    if (cameraMode == 0) {
+        camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 3.0f, 1.5f);
+        //lock viewing angle to simulate a fov
+        /*
+        if (camera->cameraHorizontalAngle > 0.0f) {
+            camera->cameraHorizontalAngle = 0.0f;
+        }
+        if (camera->cameraHorizontalAngle < -180.0f) {
+            camera->cameraHorizontalAngle = -180.0f;
+        }*/
+        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+
+    }
+    //third person camera
+    if (cameraMode == 1) {
+        camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 4.0f, -4.2f);
+        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+    }
+   
     if (flyMode == false) {
         vec3 gravityVector(0.0f, -gravity, 0.0f);
         snowManDrawer->Accelerate(gravityVector, dt);
         snowManDrawer->Update(dt);
         vec3 groundPoint = vec3(0.0f);
         vec3 groundUp = vec3(0.0f, 1.0f, 0.0f);
-
+        //cout << glm::to_string(snowManDrawer->translationVector) << endl;
         for (int i = 0; i < groundDrawer->models.size(); i++) {
             groundUp = groundDrawer->models[i]->position;
             if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
