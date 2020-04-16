@@ -1,5 +1,6 @@
 #include <EventHandler.h>
 
+bool spacePressed = false;
 
 EventHandler::EventHandler(World * world, GLFWwindow* window) {
 	this->world = world;
@@ -78,9 +79,14 @@ void EventHandler::handleEvents() {
     
     //TRANSFORMATIONS
     if (!world->flyMode) {
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !spacePressed) // move olaf to the right
         {
             snowman->Jump();
+            spacePressed = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && spacePressed) // move olaf to the right
+        {
+            spacePressed = false;
         }
     }
 

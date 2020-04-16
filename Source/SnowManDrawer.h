@@ -13,7 +13,7 @@ public:
     float footRotationFactor = 0;
     bool footSwitch = true;
 
-    vec3 translationVector = vec3(2.0f);
+    vec3 translationVector = vec3(2.0f, 10.0f, 2.0f);
     vec3 scaleVector = vec3(1.0f);
 
     mat4 groupMatrix;
@@ -40,9 +40,8 @@ public:
     glm::vec3 mAngularAxis;
     float     mAngularVelocityInDegrees;
     void Jump();
-    void BounceOffGround();
-    bool ContainsPoint(glm::vec3 position);//Whether or not the given point is withing the model. For collisions.
-    bool IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal);
+    bool ContainsPoint(glm::vec3 position);
+ 
 
     glm::vec3 GetScaling() const { return mScaling; }
     glm::vec3 GetPosition() const { return translationVector; }

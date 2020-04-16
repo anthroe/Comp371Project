@@ -126,19 +126,28 @@ void World::Update(float dt)
     }
    
     if (flyMode == false) {
-        vec3 gravityVector(0.0f, -gravity, 0.0f);
-        snowManDrawer->Accelerate(gravityVector, dt);
-        snowManDrawer->Update(dt);
+        
         vec3 groundPoint = vec3(0.0f);
-        vec3 groundUp = vec3(0.0f, 1.0f, 0.0f);
-        //cout << glm::to_string(snowManDrawer->translationVector) << endl;
+        vec3 lastHighestPoint = vec3(0.0f);
         for (int i = 0; i < groundDrawer->models.size(); i++) {
-            groundUp = groundDrawer->models[i]->position;
-            if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-            {
-                snowManDrawer->translationVector.y = groundUp.y;
-
+            groundPoint = groundDrawer->models[i]->position;
+            if (snowManDrawer->ContainsPoint(groundPoint))  {
+                if (groundPoint.y > lastHighestPoint.y) {
+                    lastHighestPoint = groundPoint;
+                }
             }
         }
+        // Snowman is on the ground
+        if (lastHighestPoint != vec3(0.0f)) {
+            snowManDrawer->translationVector.y = lastHighestPoint.y +0.5f;
+
+        }
+        // Snowman is falling
+        else {
+            vec3 gravityVector(0.0f, -gravity, 0.0f);
+            snowManDrawer->Accelerate(gravityVector, dt);
+            snowManDrawer->Update(dt);
+        }
+        
     }
 }

@@ -84,15 +84,15 @@ void GroundDrawer::generateMountain()
     depthArray[zCord][xCord] = depthArray[zCord][xCord] + 2 + additional;
 }
 void GroundDrawer::createModels() {
-    #if defined(PLATFORM_OSX)
-        GLuint grassTextureID = loadTexture("Textures/grass.jpg");
-        GLuint grassTextureID = loadTexture("Textures/space.jpg");
-    #else
-        GLuint grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
-        GLuint spaceTextureID = loadTexture("../Resources/Assets/Textures/space.jpg");
-    #endif
+#if defined(PLATFORM_OSX)
+    GLuint grassTextureID = loadTexture("Textures/grass.jpg");
+    GLuint grassTextureID = loadTexture("Textures/space.jpg");
+#else
+    GLuint grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+    GLuint spaceTextureID = loadTexture("../Resources/Assets/Textures/space.jpg");
+#endif
     //sky
-    models.push_back(new TexturedCubeModel(vec3(0.0f,20.0f,0.0f), vec3(0.0f), vec3(2000.0f,1.0f,2000.0f), vec3(1.0f), spaceTextureID));
+    models.push_back(new TexturedCubeModel(vec3(0.0f, 20.0f, 0.0f), vec3(0.0f), vec3(2000.0f, 1.0f, 2000.0f), vec3(1.0f), spaceTextureID));
     for (int z = 0; z < height; z++)
     {
         for (int x = 0; x < width; x++)
@@ -102,7 +102,7 @@ void GroundDrawer::createModels() {
                 for (int y = 0; y < depthArray[z][x]; y++)
                 {
                     /* position, rotation, scaling, color, texture*/
-                    models.push_back(new TexturedCubeModel(vec3(x - width / 2, y, z - height / 2), vec3(0.0f), vec3 (1.0f), vec3 (1.0f), grassTextureID));
+                    models.push_back(new TexturedCubeModel(vec3(x - width / 2, y, z - height / 2), vec3(0.0f), vec3(1.0f), vec3(1.0f), grassTextureID));
                 }
                 models.push_back(new TexturedCubeModel(vec3(x - width / 2, depthArray[z][x], z - height / 2), vec3(0.0f), vec3(1.0f), vec3(1.0f), grassTextureID));
             }

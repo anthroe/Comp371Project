@@ -82,10 +82,11 @@ int main(int argc, char* argv[])
         // @TODO 1 - Clear Depth Buffer Bit as well
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Drawing world
-        world->draw();
         float dt = glfwGetTime();
 
         world->Update(dt);
+        world->draw();
+        
         // Handle inputs
         eventHandler->handleEvents();
         // End Frame

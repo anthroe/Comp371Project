@@ -84,37 +84,20 @@ void SnowManDrawer::Angulate(glm::vec3 torque)
     }
 }
 
-void SnowManDrawer::BounceOffGround()
-{
-    translationVector.y = 0.0f;
-    mVelocity.y = 0.0f;
-}
 void SnowManDrawer::Jump()
 {
-    translationVector.y = 3.0f;
-    mVelocity.y = 0.0f;
-}
-
-//Assumes the sphere is evenly scaled
-bool SnowManDrawer::IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal)
-{
-    //TODO 1 - Make spheres bounce on the ground
-    
-    //We simply compare the distance between the ground and sphere center, with its radius
-    float radius = GetScaling().x;
-    
-   
-    return glm::dot(planeNormal, GetPosition() - planePoint) < radius;
-
-    return false;
+    translationVector.y += 0.4f;
+    mVelocity.y = 0.05f;
 }
 
 bool SnowManDrawer::ContainsPoint(glm::vec3 position)
 {
-    float radius = GetScaling().x; //This is where the assumption lies
-    float distance = glm::distance(GetPosition(), position);
-
-    return distance <= radius;
+    if (position.y <= GetPosition().y) {
+       float radius = GetScaling().x; //This is where the assumption lies
+       float distance = glm::distance(GetPosition(), position);
+       return distance <0.75f;
+    }
+    return false;
 }
 void SnowManDrawer::createModels() {
     /* position, rotation, scaling, color*/
