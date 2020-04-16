@@ -15,6 +15,19 @@ GroundDrawer::GroundDrawer()
     generateMountain();
     generateMountain();
     generateMountain();
+    generateTrees();
+    generateTrees();
+    generateTrees();
+    generateRocks();
+    for (int z = 0; z < height; z++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            cout << treeAndRockArray[z][x] << ",";
+
+        }
+        cout << endl;
+    }
 }
 GroundDrawer::~GroundDrawer()
 {
@@ -23,6 +36,12 @@ GroundDrawer::~GroundDrawer()
     }
     //Free the array of pointers
     delete[] depthArray;
+
+    for (int i = 0; i < 10; ++i) {
+        delete[] treeAndRockArray[i];
+    }
+    //Free the array of pointers
+    delete[] treeAndRockArray;
 }
 void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
 {
@@ -53,6 +72,8 @@ void GroundDrawer::draw(Shader* shader, double** a, int width, int height)
             }
         }
     }
+    
+
 }
 
 void GroundDrawer::generateGround() {
@@ -81,8 +102,59 @@ void GroundDrawer::generateGround() {
         }
     }
 
+    //initialzing tree and rock array
+    treeAndRockArray = new int* [width];
+    for (unsigned int i = 0; i < height; i++) {
+        treeAndRockArray[i] = new int[height];
+        for (unsigned int j = 0; j < width; j++) {
+            treeAndRockArray[i][j] = 0;
+
+        }
+    }
 
 }
+void GroundDrawer::generateTrees()
+{
+    
+    bool treeDrawn = false;
+    while (!treeDrawn)
+    {
+        int xCord = rand() % width;
+        int zCord = rand() % height;
+        for (int z = zCord - 4; z <= zCord + 4 && zCord - 4 > 0 && zCord + 4 < height; z++)
+        {
+            for (int x = xCord - 4; x <= xCord + 4 && xCord - 4 > 0 && xCord + 4 < width; x++)
+            {
+                int oddsOfTree = rand() % 100;
+                if (treeAndRockArray[z][x] != -1 && oddsOfTree <= 80)
+                {
+                    treeAndRockArray[z][x] = 1;
+                }
+
+            }
+            treeDrawn = true;
+        }
+    }
+    
+
+}
+
+void GroundDrawer::generateRocks()
+{
+
+    for (unsigned int i = 0; i < height; i++) {
+        for (unsigned int j = 0; j < width; j++) {
+            int oddsOfTree = rand() % 100;
+            if (treeAndRockArray[i][j] != -1 && treeAndRockArray[i][j] != 1 && oddsOfTree <= 10)
+            {
+                treeAndRockArray[i][j] = 2;
+            }
+        }
+    }
+
+
+}
+
 void GroundDrawer::generateMountain()
 {
     int xCord = rand() % width;
@@ -101,6 +173,7 @@ void GroundDrawer::generateMountain()
         {
             int additional = rand() % 3;
             depthArray[z][x] = depthArray[zCord][xCord] + 3 + additional;
+            treeAndRockArray[z][x] = -1;
         }
     }
     for (int z = zCord - 1; z <= zCord + 1 && zCord - 1 > 0 && zCord + 1 < height; z++)
@@ -109,8 +182,10 @@ void GroundDrawer::generateMountain()
         {
             int additional = rand() % 3;
             depthArray[z][x] = depthArray[zCord][xCord] + 3 + additional;
+            treeAndRockArray[z][x] = -1;
         }
     }
     int additional = rand() % 3;
     depthArray[zCord][xCord] = depthArray[zCord][xCord] + 3 + additional;
+    treeAndRockArray[zCord][xCord] = -1;
 }
