@@ -106,7 +106,7 @@ void World::Update(float dt)
 {
     //first person camera
     if (cameraMode == 0) {
-        camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 3.0f, 1.5f);
+        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
         snowManDrawer->scaleNumber = 0.0f;
         //lock viewing angle to simulate a fov
         /*
@@ -120,7 +120,7 @@ void World::Update(float dt)
     }
     //third person camera
     if (cameraMode == 1) {
-        camera->cameraPosition = snowManDrawer->translationVector + vec3(0.0f, 4.0f, -4.2f);
+        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
         snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
         snowManDrawer->scaleNumber = 1.0f;
     }
@@ -139,8 +139,8 @@ void World::Update(float dt)
         }
         // Snowman is on the ground
         if (lastHighestPoint != vec3(0.0f)) {
-            snowManDrawer->translationVector.y = lastHighestPoint.y +0.5f;
-
+            snowManDrawer->position.y = lastHighestPoint.y +0.5f;
+            snowManDrawer->mVelocity = vec3(0.0f);
         }
         // Snowman is falling
         else {
@@ -148,6 +148,6 @@ void World::Update(float dt)
             snowManDrawer->Accelerate(gravityVector, dt);
             snowManDrawer->Update(dt);
         }
-        
+        cout << snowManDrawer->position.y << endl;
     }
 }
