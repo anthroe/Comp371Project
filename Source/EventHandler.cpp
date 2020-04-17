@@ -1,10 +1,16 @@
 #include <EventHandler.h>
 
-
+bool spacePressed = false;
+SnowManDrawer* snowman;
+Camera* camera;
+vector<Model*> groundModels;
 EventHandler::EventHandler(World * world, GLFWwindow* window) {
 	this->world = world;
 	this->window = window;
     glfwGetCursorPos(window, &lastMousePosX, &lastMousePosY);
+    snowman = world->snowManDrawer;
+    camera = world->camera;
+    groundModels = world->groundDrawer->models;
 }
 float  EventHandler::sFrameTime = glfwGetTime() ;
 void EventHandler::handleEvents() {
@@ -12,9 +18,8 @@ void EventHandler::handleEvents() {
     float dt = glfwGetTime() - lastFrameTime;
     lastFrameTime += dt;
 
-    SnowManDrawer* snowman = world->snowManDrawer;
-    Camera* camera = world->camera;
-
+    
+   
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
@@ -78,44 +83,73 @@ void EventHandler::handleEvents() {
     
     //TRANSFORMATIONS
     if (!world->flyMode) {
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // move olaf to the right
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !spacePressed) // move olaf to the right
         {
             snowman->Jump();
+            spacePressed = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && spacePressed) // move olaf to the right
+        {
+            spacePressed = false;
         }
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
-     
-           snowman->translationVector[0] += 0.05f;
-           snowman->snowManAnimation();
-
-
-
+        snowman->position[0] += 0.05f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+            if (snowman->CollideXZ(groundModels[i]->position))
+                collision = true;
+        }
+        if (collision) {
+            snowman->position[0] -= 0.05f;
+        }
+        snowman->snowManAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
-
-            snowman->translationVector[0] -= 0.05f;
-            snowman->snowManAnimation();
-
+        snowman->position[0] -= 0.05f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+            if (snowman->CollideXZ(groundModels[i]->position))
+                collision = true;
+        }
+        if (collision) {
+            snowman->position[0] += 0.05f;
+           
+        }
+        snowman->snowManAnimation();
     }
  
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
-        
-            snowman->translationVector[2] += 0.05f;
-            snowman->snowManAnimation();
-        
+        snowman->position[2] += 0.05f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+            if (snowman->CollideXZ(groundModels[i]->position))
+                collision = true;
+        }
+        if (collision) {
+            snowman->position[2]-= 0.05f;
+
+        }
+        snowman->snowManAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
-      
-            snowman->translationVector[2] -= 0.05f;
-            snowman->snowManAnimation();
-        
+        snowman->position[2] -= 0.05f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+            if (snowman->CollideXZ(groundModels[i]->position))
+                collision = true;
+        }
+        if (collision) {
+            snowman->position[2] += 0.05f;
+        }
+        snowman->snowManAnimation();
     }
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) // move olaf up
     {
@@ -127,7 +161,7 @@ void EventHandler::handleEvents() {
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) // reset
     {
-        snowman->translationVector *= 0.0f;
+        snowman->position *= 0.0f;
         snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
         snowman->rotateFactor = snowman->rotateFactor * 0.0f;
         camera->zoomFactor = 0.5f;
@@ -207,11 +241,11 @@ void EventHandler::handleEvents() {
         snowman->mVelocity = vec3(0.0f,0.0f,0.0f);
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         {
-            snowman->translationVector[1] -= 0.1f;
+            snowman->position[1] -= 0.1f;
         }
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) 
         {
-            snowman->translationVector[1] += 0.1f;
+            snowman->position[1] += 0.1f;
         }
     }
     /*
@@ -219,8 +253,8 @@ void EventHandler::handleEvents() {
     {
         float x = rand() % 100 - 50.0f;
         float z = rand() % 100 - 50.0f;
-        snowman->translationVector[0] = x;
-        snowman->translationVector[2] = z;
+        snowman->position[0] = x;
+        snowman->position[2] = z;
     }
     */
     // TODO 6
