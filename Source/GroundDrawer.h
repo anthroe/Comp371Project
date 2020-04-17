@@ -12,11 +12,17 @@ class GroundDrawer : public Drawer  {
         double** depthArray;
         // All our models
         vector<Model*> models;
-
+        int** treeAndRockArray;
+        //TexturedCubeModel* texturedCube;
+        //CubeModel* regularCube;
+        //GLuint grassTextureID;
         GroundDrawer();
         ~GroundDrawer();
         void draw(Shader* shader);
         void generateGround();
         void generateMountain();
         void createModels();
+        void generateTrees();
+        void generateRocks();
+
 };
