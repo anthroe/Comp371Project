@@ -12,7 +12,6 @@ class GroundDrawer : public Drawer  {
         double** depthArray;
         // All our models
         vector<Model*> models;
-        int** treeAndRockArray;
         //TexturedCubeModel* texturedCube;
         //CubeModel* regularCube;
         //GLuint grassTextureID;
@@ -22,7 +21,5 @@ class GroundDrawer : public Drawer  {
         void generateGround();
         void generateMountain();
         void createModels();
-        void generateTrees();
-        void generateRocks();
 
 };

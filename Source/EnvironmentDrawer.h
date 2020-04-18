@@ -4,10 +4,14 @@
 
 class EnvironmentDrawer : public Drawer {
     public:
-        EnvironmentDrawer();
+        int** treeAndRockArray;
+        const int width = 40, height = 40;
+        EnvironmentDrawer(double** depthArray);
         ~EnvironmentDrawer();
         void draw(Shader* shader);
-        void createModels();
+        void generateTrees();
+        void generateRocks();
+        void createModels(double** depthArray);
         /* Models */
         vector<Model*> models;
 };
