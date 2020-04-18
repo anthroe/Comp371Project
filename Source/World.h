@@ -41,7 +41,7 @@ class World {
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
-        EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer();
+        EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer(groundDrawer->depthArray);
         GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;

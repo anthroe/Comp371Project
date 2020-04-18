@@ -40,7 +40,8 @@ void TexturedModel::draw(Shader* shader)
 
 	mat4 worldMatrix = translate(mat4(1.0f), position);
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
-	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 0.0f, 1.0f));
+	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
 
 	shader->setMat4("worldMatrix", worldMatrix);
