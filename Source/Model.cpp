@@ -33,3 +33,7 @@ void Model::draw(Shader* shader) {
 void Model::init() {
 
 }
+
+void Model::init(string name)
+{
+}

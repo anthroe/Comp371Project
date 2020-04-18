@@ -16,12 +16,14 @@
 class TexturedModel : public Model {
 public:
 	TexturedModel();
+	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, string name);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
 	TexturedModel(vec3 position, vec3 scaling, vec3 color);
 	~TexturedModel();
 	void draw(Shader* shader);
 	void init();
+	void init(string name);
 	//protected:
 	  //  virtual bool ParseLine(const std::vector<ci_string> &token);
 

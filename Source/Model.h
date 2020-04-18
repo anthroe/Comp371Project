@@ -19,6 +19,7 @@ public:
     virtual void draw(Shader* shader, glm::mat4 WorldMatrix);
     virtual void draw(Shader* shader);
     virtual void init();
+	virtual void init(string name);
     vec3 position = vec3(0.0f);
     vec3 scaling = vec3(1.0f);
     vec3 rotation = vec3(0.0f);

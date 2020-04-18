@@ -1,6 +1,11 @@
 #include <TexturedModel.h>
 using namespace glm;
 
+TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, string name) :
+	Model(position, rotation, scaling, color, texture)
+{
+	init(name);
+}
 TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture) :
 	Model(position, rotation, scaling, color, texture)
 {
@@ -48,8 +53,11 @@ void TexturedModel::draw(Shader* shader)
 	glDrawElements(GL_TRIANGLES, numOfVertices, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
-void TexturedModel::init() {
-	setupModelEBO("../Resources/Assets/Models/rock.obj");
+void TexturedModel::init()
+{
+}
+void TexturedModel::init(string name) {
+	setupModelEBO("../Resources/Assets/Models/" + name + ".obj");
 }
 GLuint TexturedModel::setupModelVBO(std::string path, int& vertexCount) {
 	std::vector<glm::vec3> vertices;
