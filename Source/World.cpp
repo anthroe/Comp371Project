@@ -148,6 +148,5 @@ void World::Update(float dt)
             snowManDrawer->Accelerate(gravityVector, dt);
             snowManDrawer->Update(dt);
         }
-        cout << snowManDrawer->position.y << endl;
     }
 }
