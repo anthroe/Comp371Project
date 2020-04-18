@@ -174,12 +174,14 @@ void GroundDrawer::createModels() {
         {
             if (depthArray[z][x] > 0)
             {
+                float xValue = x * cubeFactor;
+                float zValue = z * cubeFactor;
                 for (int y = 0; y < depthArray[z][x]; y++)
                 {
                     /* position, rotation, scaling, color, texture*/
-                    models.push_back(new TexturedCubeModel(vec3(x - widthValue / 2, y, z - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                    models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, y, zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
                 }
-                models.push_back(new TexturedCubeModel(vec3(x - widthValue / 2, depthArray[z][x], z - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, depthArray[z][x], zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
             }
         }
     }
