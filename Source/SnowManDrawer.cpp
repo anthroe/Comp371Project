@@ -90,17 +90,16 @@ void SnowManDrawer::Jump()
     mVelocity.y = 0.05f;
 }
 
-bool SnowManDrawer::ContainsPoint(glm::vec3 modelPosition)
+float SnowManDrawer::ContainsPoint(glm::vec3 modelPosition)
 {
-    if (modelPosition.y < position.y) {
-       float radius = scaling.x; //This is where the assumption lies
-       float distance = glm::distance(position, modelPosition);
-       return distance <1.0f && modelPosition.y < position.y;
-    }
-    return false;
+    float distance = glm::distance(position, modelPosition);
+    float yDistance = abs(modelPosition.y - position.y);
+    if (distance <= 1.84f && yDistance <= 0.5f)
+        return distance;
+    return -1;
 }
 bool SnowManDrawer::CollideXZ(glm::vec3 modelPosition) {
-    return (modelPosition.y > position.y + 0.5f && abs(modelPosition.x - position.x) < 0.75 && abs(modelPosition.z - position.z) < 0.75)  ;
+    return (modelPosition.y > position.y + 0.5f && abs(modelPosition.x - position.x) < 1.25 && abs(modelPosition.z - position.z) < 1.25)  ;
 }
 void SnowManDrawer::createModels() {
     /* position, rotation, scaling, color*/
