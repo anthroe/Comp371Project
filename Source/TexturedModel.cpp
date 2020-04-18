@@ -2,9 +2,9 @@
 using namespace glm;
 
 TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, string name) :
-	Model(position, rotation, scaling, color, texture)
+	Model(position, rotation, scaling, color, texture, name)
 {
-	init(name);
+	init();
 }
 TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture) :
 	Model(position, rotation, scaling, color, texture)
@@ -31,7 +31,7 @@ TexturedModel::~TexturedModel()
 	glDeleteVertexArrays(1, &mVAO);
 }
 
-void TexturedModel::draw(Shader* shader)
+void TexturedModel::draw(Shader* shader, GLuint drawingPrimitive)
 {
 	shader->use();
 
@@ -50,13 +50,11 @@ void TexturedModel::draw(Shader* shader)
 	worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
 
 	shader->setMat4("worldMatrix", worldMatrix);
-	glDrawElements(GL_TRIANGLES, numOfVertices, GL_UNSIGNED_INT, 0);
+	glDrawElements(drawingPrimitive, numOfVertices, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 void TexturedModel::init()
 {
-}
-void TexturedModel::init(string name) {
 	setupModelEBO("../Resources/Assets/Models/" + name + ".obj");
 }
 GLuint TexturedModel::setupModelVBO(std::string path, int& vertexCount) {
