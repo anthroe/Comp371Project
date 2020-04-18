@@ -55,6 +55,7 @@ void World::draw() {
     setupShadows();
     //gridDrawer->draw(shader);
     snowManDrawer->draw(shader, worldRotationMatrix);
+
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
 
@@ -66,9 +67,9 @@ void World::draw() {
 }
 
 void World::setupLighting() {
-    float near_plane = 1.0f, far_plane = 480.0f;
-    mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f, 60.0f, near_plane, far_plane);
-    mat4 lightView = lookAt(vec3(125.0f, 160.0f, 125.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
+    float near_plane = 30.0f, far_plane = 240.0f;
+    mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f,60.0f, near_plane, far_plane);
+    mat4 lightView = lookAt(vec3(75.0f, 160.0f, 75.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
     shadowShader->use();
@@ -90,16 +91,18 @@ void World::setupShadows() {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
-
+    glCullFace(GL_FRONT);
     groundDrawer->draw(shadowShader);
     shadowShader->use();
+    
     environmentDrawer->draw(shadowShader);
-
+    glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);
     glViewport(0, 0, WIDTH, HEIGHT);
+    
 }
 
 void World::Update(float dt)
