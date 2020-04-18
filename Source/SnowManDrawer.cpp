@@ -1,6 +1,7 @@
 
 #include "SnowManDrawer.h"
 #include "glm/gtx/string_cast.hpp"
+
 using namespace glm;
 
 SnowManDrawer::SnowManDrawer()
@@ -21,7 +22,7 @@ void SnowManDrawer::setGroupMatrix(mat4 snowManGroupMatrix)
 void SnowManDrawer::draw(Shader* shader, mat4 worldRotationMatrix)
 {
     // create groupMatrix which is used to transform all the parts, using predifined data
-    mat4 groupMatrix = translate(mat4(1.0f), translationVector) * rotate(mat4(1.0f), glm::radians(rotateFactor), vec3(0.0f,1.0f,0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
+    mat4 groupMatrix = translate(mat4(1.0f), position) * rotate(mat4(1.0f), glm::radians(rotateFactor), vec3(0.0f,1.0f,0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
     // create world rotation matrix, which is used to rotate the whole world
     setGroupMatrix(groupMatrix);
     for (int i = 0; i < models.size(); i++) {
@@ -57,7 +58,8 @@ void SnowManDrawer::snowManAnimation()
 
 void SnowManDrawer::Update(float dt)
 {
-    translationVector += dt * mVelocity;
+ 
+    position += dt * mVelocity;
     //mPosition += dt * mVelocity;
     
     //std::cout << dt << std::endl;
@@ -66,7 +68,7 @@ void SnowManDrawer::Update(float dt)
 void SnowManDrawer::Accelerate(glm::vec3 acceleration, float delta)
 {
     if (mMass != 0.0f) { //No acceleration for massless objects
-        if (translationVector.y > 0.0f) {
+        if (position.y > 0.0f) {
             if (mVelocity.y > -0.010000) {
                 mVelocity += acceleration * delta;
             }
@@ -82,37 +84,23 @@ void SnowManDrawer::Angulate(glm::vec3 torque)
     }
 }
 
-void SnowManDrawer::BounceOffGround()
-{
-    translationVector.y = 0.0f;
-    mVelocity.y = 0.0f;
-}
 void SnowManDrawer::Jump()
 {
-    translationVector.y = 3.0f;
-    mVelocity.y = 0.0f;
+    position.y += 0.4f;
+    mVelocity.y = 0.05f;
 }
 
-//Assumes the sphere is evenly scaled
-bool SnowManDrawer::IntersectsPlane(glm::vec3 planePoint, glm::vec3 planeNormal)
+bool SnowManDrawer::ContainsPoint(glm::vec3 modelPosition)
 {
-    //TODO 1 - Make spheres bounce on the ground
-    
-    //We simply compare the distance between the ground and sphere center, with its radius
-    float radius = GetScaling().x;
-    
-   
-    return glm::dot(planeNormal, GetPosition() - planePoint) < radius;
-
+    if (modelPosition.y < position.y) {
+       float radius = scaling.x; //This is where the assumption lies
+       float distance = glm::distance(position, modelPosition);
+       return distance <1.0f && modelPosition.y < position.y;
+    }
     return false;
 }
-
-bool SnowManDrawer::ContainsPoint(glm::vec3 position)
-{
-    float radius = GetScaling().x; //This is where the assumption lies
-    float distance = glm::distance(GetPosition(), position);
-
-    return distance <= radius;
+bool SnowManDrawer::CollideXZ(glm::vec3 modelPosition) {
+    return (modelPosition.y > position.y + 0.5f && abs(modelPosition.x - position.x) < 0.75 && abs(modelPosition.z - position.z) < 0.75)  ;
 }
 void SnowManDrawer::createModels() {
     /* position, rotation, scaling, color*/
