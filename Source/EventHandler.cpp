@@ -45,7 +45,8 @@ void EventHandler::handleEvents() {
     //to do shift see fast cam
     // @TODO 5 = use camera lookat and side vectors to update positions with ASDW
     // adjust code below
-
+    camera->cameraHorizontalAngle -= dx * camera->cameraAngularSpeed * dt;
+    camera->cameraVerticalAngle -= dy * camera->cameraAngularSpeed * dt;
    
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) //change to first person camera
     {
@@ -186,17 +187,7 @@ void EventHandler::handleEvents() {
         }
 
     }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) // panning
-    {
-        camera->cameraHorizontalAngle -= dx * camera->cameraAngularSpeed * dt;
 
-
-    }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // tilting
-    {
-        camera->cameraVerticalAngle -= dy * camera->cameraAngularSpeed * dt;
-
-    }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) // rotate world positive x
     {
         world->worldRotateXFactor += 0.5f;

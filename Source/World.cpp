@@ -66,9 +66,9 @@ void World::draw() {
 }
 
 void World::setupLighting() {
-    float near_plane = 1.0f, far_plane = 180.0f;
-    mat4 lightProjection = ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
-    mat4 lightView = lookAt(vec3(30.0f, 100.0f, 40.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
+    float near_plane = 1.0f, far_plane = 480.0f;
+    mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f, 60.0f, near_plane, far_plane);
+    mat4 lightView = lookAt(vec3(125.0f, 160.0f, 125.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
     shadowShader->use();
@@ -128,18 +128,21 @@ void World::Update(float dt)
     if (flyMode == false) {
         
         vec3 groundPoint = vec3(0.0f);
-        vec3 lastHighestPoint = vec3(0.0f);
+        // Some out of bound points as default values
+        vec3 closestPoint = vec3(-10.0f);
+        float smallestDistance = 1000.0f;
         for (int i = 0; i < groundDrawer->models.size(); i++) {
             groundPoint = groundDrawer->models[i]->position;
-            if (snowManDrawer->ContainsPoint(groundPoint))  {
-                if (groundPoint.y > lastHighestPoint.y) {
-                    lastHighestPoint = groundPoint;
-                }
+            float distance = snowManDrawer->ContainsPoint(groundPoint);
+            if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+                smallestDistance = distance;
+                closestPoint = groundPoint;
             }
         }
         // Snowman is on the ground
-        if (lastHighestPoint != vec3(0.0f)) {
-            snowManDrawer->position.y = lastHighestPoint.y +0.5f;
+        
+        if (closestPoint != vec3(-10.0f)) {
+            snowManDrawer->position.y = closestPoint.y + 0.25;
             snowManDrawer->mVelocity = vec3(0.0f);
         }
         // Snowman is falling

@@ -39,7 +39,7 @@ public:
     float     mAngularVelocityInDegrees;
     void Jump();
 
-    bool ContainsPoint(glm::vec3 modelPosition);
+    float ContainsPoint(glm::vec3 modelPosition);
     bool CollideXZ(glm::vec3 modelPosition);
 
     float mMass = 1.0f;
