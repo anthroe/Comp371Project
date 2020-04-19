@@ -1,19 +1,11 @@
 #pragma once
 
-//
-// COMP 371 Assignment Framework
-//
-// Created by Nicolas Bergeron on 8/7/14.
-// Updated by Gary Chang on 14/1/15
-//
-// Copyright (c) 2014-2019 Concordia University. All rights reserved.
-//
-#include <GL/glew.h>    // Include GLEW - OpenGL Extension Wrangler
+#include <GL/glew.h> 
 
-#include <GLFW/glfw3.h> // cross-platform interface for creating a graphical context,
-                        // initializing OpenGL and binding inputs
-#include <glm/glm.hpp>  // GLM is an optimized math library with syntax to similar to OpenGL Shading Language
-#include <glm/gtc/matrix_transform.hpp> // include this to create transformation matrices
+#include <GLFW/glfw3.h> 
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> 
 #include <glm/common.hpp>
 #include "glm/gtx/string_cast.hpp"
 
@@ -24,6 +16,10 @@
 #include "SphereModel.h"
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
+
+#include "OBJloader.h"
+#include "OBJloaderV2.h"
+
 class Drawer {
     public:
         Drawer();
@@ -32,4 +28,6 @@ class Drawer {
         virtual void createModels();
         unsigned int loadTexture(std::string imagePath);
         unsigned int loadCubemap(vector<std::string> faces);
+        GLuint setupModelVBO(std::string path, int& vertexCount);
+        GLuint setupModelEBO(std::string path, int& vertexCount);
  };
