@@ -126,28 +126,36 @@ void EnvironmentDrawer::createModels(double** depthArray) {
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             if (treeAndRockArray[i][j] == 1) {
-				float xScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
-				float yScale = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.15f - 0.05f)));
-				float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
-				float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
+                vec3 scaleFactor = vec3(0.5f,0.6f,0.5f);
+                vec3 dimensions = vec3(1.0f, 5.0f, 1.0f);
+                float xzScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
+                float yScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
+                float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
                 // Adding tree trunk
 				/* position, rotation, scaling, color, texture, drawingPrimitive */
-                TexturedModel * trunk = new TexturedModel(
-                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                TexturedModel* trunk = new TexturedModel(
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.5f + dimensions.y * scaleFactor.y * yScale, (i - height / 2) * 2.5f),
                     vec3(0.0f, yAngle, 0.0f),
-                    vec3(xScale * 2.0, yScale * 2.0, zScale * 2.0),
+                    scaleFactor*vec3(xzScale , yScale, xzScale),
+                    dimensions * vec3(xzScale / 2, yScale/2, xzScale / 2),
                     vec3(1.0f),
                     treeTrunkTextureID,
                     GL_TRIANGLE_FAN
                 );
+                // The trunk has a centering offset since it's 0,0,0 position is centered at its base in y. This
+                // offset allows us to do calculation on it as if it was centered at half its height in y.
+                trunk->centeringOffset = vec3(0.0f, -dimensions.y * scaleFactor.y * yScale, 0.0f);
                 trunk->setVAO(trunkVAO, trunkVerticesCount);
+                cout << to_string(trunk->hitbox) << endl;
 				models.push_back(trunk);
-
+    
+                scaleFactor = vec3(2.5f);
                 // Adding tree leaves
                 TexturedModel* leaves = new TexturedModel(
-                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] - trunk->centeringOffset.y/2, (i - height / 2) * 2.5f),
                     vec3(0.0f, yAngle, 0.0f),
-                    vec3(xScale * 7.0, yScale * 18.0, zScale * 7.0),
+                    scaleFactor * vec3(xzScale, yScale, xzScale),
+                    vec3(0.0f),
                     vec3(1.0f),
                     treeLeavesTextureID,
                     GL_TRIANGLES
@@ -156,19 +164,23 @@ void EnvironmentDrawer::createModels(double** depthArray) {
 				models.push_back(leaves);
             }
             if (treeAndRockArray[i][j] == 2) {
-                float xScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
-                float yScale = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.15f - 0.05f)));
-                float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
+                vec3 scaleFactor = vec3(0.2f,0.05f,0.2f);
+                vec3 dimensions = vec3(1.0f, 2.0f, 1.0f);
+                float xScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
+                float yScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
+                float zScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
                 float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
-                /* position, rotation, scaling, color, texture*/
+                /* position, rotation, scaling, hitbox, color, texture, renderType*/
                 TexturedModel* rock = new TexturedModel(
-                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.5f + dimensions.y * scaleFactor.y * yScale, (i - height / 2) * 2.5f),
                     vec3(0.0f, yAngle, 0.0f),
-                    vec3(xScale, yScale, zScale),
+                    scaleFactor*vec3(xScale, yScale, zScale),
+                    dimensions*vec3(xScale/2, yScale/2, zScale/2),
                     vec3(1.0f),
                     rockTextureID,
                     GL_TRIANGLES
                 );
+                
                 rock->setVAO(rockVAO, rockVerticesCount);
                 models.push_back(rock);
 			}

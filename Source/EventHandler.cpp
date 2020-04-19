@@ -4,6 +4,7 @@ bool spacePressed = false;
 SnowManDrawer* snowman;
 Camera* camera;
 vector<Model*> groundModels;
+vector<Model*> environmentModels;
 EventHandler::EventHandler(World * world, GLFWwindow* window) {
 	this->world = world;
 	this->window = window;
@@ -11,6 +12,7 @@ EventHandler::EventHandler(World * world, GLFWwindow* window) {
     snowman = world->snowManDrawer;
     camera = world->camera;
     groundModels = world->groundDrawer->models;
+    environmentModels = world->environmentDrawer->models;
 }
 float  EventHandler::sFrameTime = glfwGetTime() ;
 void EventHandler::handleEvents() {
@@ -103,6 +105,10 @@ void EventHandler::handleEvents() {
             if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
+        for (int i = 0; i < environmentModels.size(); i++) {
+            if (snowman->CollideXZ(environmentModels[i]))
+                collision = true;
+        }
         if (collision) {
             snowman->position[0] -= 0.10f;
         }
@@ -115,6 +121,10 @@ void EventHandler::handleEvents() {
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
+                collision = true;
+        }
+        for (int i = 0; i < environmentModels.size(); i++) {
+            if (snowman->CollideXZ(environmentModels[i]))
                 collision = true;
         }
         if (collision) {
@@ -132,6 +142,10 @@ void EventHandler::handleEvents() {
             if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
+        for (int i = 0; i < environmentModels.size(); i++) {
+            if (snowman->CollideXZ(environmentModels[i]))
+                collision = true;
+        }
         if (collision) {
             snowman->position[2]-= 0.10f;
 
@@ -145,6 +159,10 @@ void EventHandler::handleEvents() {
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
+                collision = true;
+        }
+        for (int i = 0; i < environmentModels.size(); i++) {
+            if (snowman->CollideXZ(environmentModels[i]))
                 collision = true;
         }
         if (collision) {

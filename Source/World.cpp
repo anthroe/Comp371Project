@@ -147,10 +147,16 @@ void World::Update(float dt)
                 closestModel = model;
             }
         }
+        for (int i = 0; i < environmentDrawer->models.size(); i++) {
+            Model* model = environmentDrawer->models[i];
+            if (model->hitbox!= vec3(0.0f) && snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y) {
+                closestModel = model;
+            }
+        }
         // Snowman is on the ground
         
         if (closestModel->position != vec3(0.0f)) {
-            snowManDrawer->position.y = closestModel->position.y + 0.25;
+            snowManDrawer->position.y = closestModel->position.y + closestModel->hitbox.y/2;
             snowManDrawer->mVelocity = vec3(0.0f);
         }
         // Snowman is falling

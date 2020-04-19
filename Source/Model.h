@@ -16,7 +16,7 @@ public:
     Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
 	Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
     Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive);
-    Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, vec3 hitbox, GLuint texture, GLenum drawingPrimitive);
+    Model(vec3 position, vec3 rotation, vec3 scaling,  vec3 hitbox, vec3 color, GLuint texture, GLenum drawingPrimitive);
     ~Model();
     virtual void draw(Shader* shader, glm::mat4 WorldMatrix);
 	virtual void draw(Shader* shader, GLuint drawingPrimitive);

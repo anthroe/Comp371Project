@@ -19,20 +19,24 @@ using namespace glm;
 TexturedCubeModel::TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture) :
     Model(position, rotation, scaling, color, texture)
 {
+    hitbox = vec3(scaling.x / 2, scaling.y / 2, scaling.z / 2);
     init();
 }
 TexturedCubeModel::TexturedCubeModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color) :
     Model(position, rotation, scaling, color)
 {
+    hitbox = vec3(scaling.x / 2, scaling.y / 2, scaling.z / 2);
     init();
 }
 TexturedCubeModel::TexturedCubeModel(vec3 position, vec3 scaling, vec3 color) :
     Model(position, scaling, color)
 {
+    hitbox = vec3(scaling.x / 2, scaling.y / 2, scaling.z / 2);
     init();
 }
 TexturedCubeModel::TexturedCubeModel()
 {
+    hitbox = vec3(scaling.x / 2, scaling.y / 2, scaling.z / 2);
     init();
 }
 TexturedCubeModel::~TexturedCubeModel()

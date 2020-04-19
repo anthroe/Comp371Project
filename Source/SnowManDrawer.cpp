@@ -86,7 +86,7 @@ void SnowManDrawer::Angulate(glm::vec3 torque)
 
 void SnowManDrawer::Jump()
 {
-    position.y += 0.4f;
+    position.y += 0.8f;
     mVelocity.y = 0.05f;
 }
 
@@ -98,8 +98,8 @@ bool SnowManDrawer::ContainsModel(Model* model)
     float yDistance = abs(modelPosition.y - position.y);
     // Calculating distance between the center point and the farthest point in the model
     float XZHitbox = sqrt((modelHitbox.x * modelHitbox.x) + (modelHitbox.z * modelHitbox.z));
-    float diagonnalHitbox= sqrt((XZHitbox * XZHitbox) + (modelHitbox.y * modelHitbox.y));
-    return distance <= diagonnalHitbox && yDistance <= modelHitbox.y;
+    float diagonalHitbox= sqrt((XZHitbox * XZHitbox) + (modelHitbox.y * modelHitbox.y));
+    return distance <= diagonalHitbox && yDistance <= modelHitbox.y;
 }
 bool SnowManDrawer::CollideXZ(Model* model) {
     return (model->position.y > position.y + model->hitbox.y
