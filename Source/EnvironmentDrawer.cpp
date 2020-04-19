@@ -21,7 +21,14 @@ EnvironmentDrawer::~EnvironmentDrawer() {
 }
 void EnvironmentDrawer::draw(Shader * shader) {
     for (int i = 0; i < models.size(); i++) {
-        models[i]->draw(shader);
+		if (models[i]->name == "tree_leaves")
+			models[i]->draw(shader, GL_TRIANGLES);
+		else if (models[i]->name == "tree_trunk")
+			models[i]->draw(shader, GL_TRIANGLE_FAN);
+		else if (models[i]->name == "rock")
+			models[i]->draw(shader, GL_TRIANGLES);
+		else if (models[i]->name == "astronaut")
+			models[i]->draw(shader, GL_TRIANGLE_FAN);
     }
 }
 void EnvironmentDrawer::generateTrees()
@@ -57,9 +64,9 @@ void EnvironmentDrawer::generateTrees()
 void EnvironmentDrawer::generateRocks()
 {
     #if defined(PLATFORM_OSX)
-        GLuint rockTextureID = loadTexture("Textures/grass.jpg");
+        GLuint rockTextureID = loadTexture("Textures/rock.jpg");
     #else
-        GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+        GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/rock.jpg");
     #endif
     for (unsigned int i = 0; i < height; i++) {
         for (unsigned int j = 0; j < width; j++) {
@@ -76,8 +83,12 @@ void EnvironmentDrawer::generateRocks()
 void EnvironmentDrawer::createModels(double** depthArray) {
     #if defined(PLATFORM_OSX)
         GLuint rockTextureID = loadTexture("Textures/rock.jpg");
+		GLuint treeTrunkTextureID = loadTexture("Textures/tree_trunk.jpg");
+		GLuint treeLeavesTextureID = loadTexture("Textures/tree_leaves.jpg");
     #else
         GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/rock.jpg");
+		GLuint treeTrunkTextureID = loadTexture("../Resources/Assets/Textures/tree_trunk.jpg");
+		GLuint treeLeavesTextureID = loadTexture("../Resources/Assets/Textures/tree_leaves.jpg");
     #endif
     generateTrees();
     generateTrees();
@@ -96,7 +107,23 @@ void EnvironmentDrawer::createModels(double** depthArray) {
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             if (treeAndRockArray[i][j] == 1) {
-
+				float xScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
+				float yScale = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.15f - 0.05f)));
+				float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
+				float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
+				/* position, rotation, scaling, color, texture*/
+				models.push_back(new TexturedModel(
+					vec3((j - width / 2) * 1.0f, depthArray[i][j] + 0.0f, (i - height / 2.0f)),
+					vec3(0.0f, yAngle, 0.0f),
+					vec3(xScale * 2.0, yScale * 2.0, zScale * 2.0),
+					vec3(1.0f), treeTrunkTextureID,
+					"tree_trunk"));
+				models.push_back(new TexturedModel(
+					vec3((j - width / 2) * 1.0f, depthArray[i][j] + 0.0f, (i - height / 2.0f)),
+					vec3(0.0f, yAngle, 0.0f),
+					vec3(xScale * 7.0, yScale * 18.0, zScale * 7.0),
+					vec3(1.0f), treeLeavesTextureID,
+					"tree_leaves"));
             }
             if (treeAndRockArray[i][j] == 2) {
                 float xScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
@@ -104,8 +131,16 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                 float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
                 float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
                 /* position, rotation, scaling, color, texture*/
-                models.push_back(new TexturedModel(vec3((j-width/2) * 2.5f, depthArray[i][j] +0.4, (i-height/2) * 2.5f), vec3(0.0f, yAngle, 0.0f), vec3(xScale, yScale, zScale), vec3(1.0f), rockTextureID));
-            }
+                models.push_back(new TexturedModel(
+					vec3((j - width / 2) * 2.5f, 
+					depthArray[i][j] +0.4, (i - height/2) * 2.5f),
+					vec3(0.0f, yAngle, 0.0f),
+					vec3(xScale, yScale, zScale),
+					vec3(1.0f),
+					rockTextureID,
+					"rock"));
+
+			}
         }
     }
 
