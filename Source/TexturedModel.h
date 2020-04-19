@@ -11,27 +11,20 @@
 #include <Model.h>
 
 #include <string>
-#include "OBJloader.h"
-#include "OBJloaderV2.h"
+
 class TexturedModel : public Model {
 public:
 	TexturedModel();
-	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, string name);
+	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
 	TexturedModel(vec3 position, vec3 scaling, vec3 color);
 	~TexturedModel();
-	void draw(Shader* shader, GLuint drawingPrimitive);
-	void init();
+	void setVAO(GLuint VAO, int verticesCount);
+	void draw(Shader* shader);
 	//protected:
 	  //  virtual bool ParseLine(const std::vector<ci_string> &token);
-
-
-	GLuint setupModelVBO(std::string path, int& vertexCount);
-	void setupModelEBO(std::string path);
-
 	private:
 		unsigned int mVAO;
-		unsigned int mEBO;
 		unsigned int numOfVertices;
 };

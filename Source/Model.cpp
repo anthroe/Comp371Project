@@ -3,13 +3,13 @@
 Model::Model() {
 
 }
-Model::Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, string name) {
+Model::Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive) {
 	this->position = position;
 	this->rotation = rotation;
 	this->scaling = scaling;
 	this->color = color;
 	this->texture = texture;
-	this->name = name;
+	this->drawingPrimitive = drawingPrimitive;
 }
 Model::Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture) {
 	this->position = position;

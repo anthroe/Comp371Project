@@ -9,6 +9,7 @@ class EnvironmentDrawer : public Drawer {
         EnvironmentDrawer(double** depthArray);
         ~EnvironmentDrawer();
         void draw(Shader* shader);
+        void generateForest();
         void generateTrees();
         void generateRocks();
         void createModels(double** depthArray);
