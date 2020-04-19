@@ -15,6 +15,7 @@
 class TexturedModel : public Model {
 public:
 	TexturedModel();
+	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 hitbox, vec3 color, GLuint texture, GLenum drawingPrimitive);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture);
 	TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color);
@@ -22,6 +23,7 @@ public:
 	~TexturedModel();
 	void setVAO(GLuint VAO, int verticesCount);
 	void draw(Shader* shader);
+	vec3 centeringOffset = vec3(0.0f);
 	//protected:
 	  //  virtual bool ParseLine(const std::vector<ci_string> &token);
 	private:

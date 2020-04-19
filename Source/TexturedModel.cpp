@@ -1,5 +1,10 @@
 #include <TexturedModel.h>
 using namespace glm;
+TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 hitbox, vec3 color, GLuint texture, GLenum drawingPrimitive) :
+	Model(position, rotation, scaling, hitbox, color, texture, drawingPrimitive)
+{
+
+}
 TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive) :
 	Model(position, rotation, scaling, color, texture, drawingPrimitive)
 {
@@ -39,7 +44,7 @@ void TexturedModel::draw(Shader* shader)
 
 	glBindVertexArray(mVAO);
 
-	mat4 worldMatrix = translate(mat4(1.0f), position);
+	mat4 worldMatrix = translate(mat4(1.0f), position + centeringOffset);
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));

@@ -3,6 +3,16 @@
 Model::Model() {
 
 }
+Model::Model(vec3 position, vec3 rotation, vec3 scaling, vec3 hitbox, vec3 color, GLuint texture, GLenum drawingPrimitive) {
+	this->position = position;
+	this->rotation = rotation;
+	this->scaling = scaling;
+	this->hitbox = hitbox;
+	this->color = color;
+	this->texture = texture;
+	this->drawingPrimitive = drawingPrimitive;
+	
+}
 Model::Model(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive) {
 	this->position = position;
 	this->rotation = rotation;

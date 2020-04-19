@@ -1,7 +1,7 @@
 #pragma once
 #include <Drawer.h>
 #include <TexturedModel.h>
-
+#include <TexturedCubeModel.h>
 class EnvironmentDrawer : public Drawer {
     public:
         int** treeAndRockArray;

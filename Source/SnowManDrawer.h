@@ -15,7 +15,7 @@ public:
 
     vec3 position = vec3(2.0f, 10.0f, 2.0f);
     vec3 scaling = vec3(1.0f);
-
+    vec3 hitbox = vec3(0.5f);
     mat4 groupMatrix;
 
     // All our models
@@ -39,8 +39,8 @@ public:
     float     mAngularVelocityInDegrees;
     void Jump();
 
-    float ContainsPoint(glm::vec3 modelPosition);
-    bool CollideXZ(glm::vec3 modelPosition);
+    bool ContainsModel(Model * model);
+    bool CollideXZ(Model* model);
 
     float mMass = 1.0f;
 
