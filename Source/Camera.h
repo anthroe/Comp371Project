@@ -25,7 +25,7 @@ class Camera {
 
         vec3 cameraSideVector = vec3(1.0f);
         // Other camera parameters
-        float cameraSpeed = 5.0f;
+        float cameraSpeed = 0.2f;
         float cameraFastSpeed = 2 * cameraSpeed;
         float cameraHorizontalAngle = -90.0f;
         float cameraVerticalAngle = -30.0f;

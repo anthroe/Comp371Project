@@ -63,8 +63,6 @@ void GroundDrawer::generateMountain()
     //int xCord = 24;
     //int zCord = 20;
 
-    std::cout << xCord << ", " << zCord << endl;
-
 
 
     for (int z = zCord - 2; z <= zCord + 2 && zCord - 2 > 0 && zCord + 2 < height; z++)

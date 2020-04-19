@@ -18,6 +18,7 @@
 #include <EnvironmentDrawer.h>
 #include <AstronautDrawer.h>
 
+#include <math.h>
 
 
 using namespace glm;

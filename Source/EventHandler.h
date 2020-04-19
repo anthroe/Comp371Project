@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h> // cross-platform interface for creating a graphical context,
 #include "World.h"
 
+#include "math.h"
+
 using namespace glm;
 using namespace std;
 
