@@ -100,7 +100,7 @@ void EventHandler::handleEvents() {
         snowman->position[0] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
+            if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
         if (collision) {
@@ -114,7 +114,7 @@ void EventHandler::handleEvents() {
         snowman->position[0] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
+            if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
         if (collision) {
@@ -129,7 +129,7 @@ void EventHandler::handleEvents() {
         snowman->position[2] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
+            if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
         if (collision) {
@@ -144,7 +144,7 @@ void EventHandler::handleEvents() {
         snowman->position[2] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
+            if (snowman->CollideXZ(groundModels[i]))
                 collision = true;
         }
         if (collision) {

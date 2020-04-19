@@ -139,22 +139,18 @@ void World::Update(float dt)
    
     if (flyMode == false) {
         
-        vec3 groundPoint = vec3(0.0f);
         // Some out of bound points as default values
-        vec3 closestPoint = vec3(-10.0f);
-        float smallestDistance = 1000.0f;
+        Model * closestModel = new Model();
         for (int i = 0; i < groundDrawer->models.size(); i++) {
-            groundPoint = groundDrawer->models[i]->position;
-            float distance = snowManDrawer->ContainsPoint(groundPoint);
-            if (distance!=-1 && closestPoint.y < groundPoint.y)  {
-                smallestDistance = distance;
-                closestPoint = groundPoint;
+            Model * model = groundDrawer->models[i];
+            if (snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y)  {
+                closestModel = model;
             }
         }
         // Snowman is on the ground
         
-        if (closestPoint != vec3(-10.0f)) {
-            snowManDrawer->position.y = closestPoint.y + 0.25;
+        if (closestModel->position != vec3(0.0f)) {
+            snowManDrawer->position.y = closestModel->position.y + 0.25;
             snowManDrawer->mVelocity = vec3(0.0f);
         }
         // Snowman is falling

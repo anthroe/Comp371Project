@@ -90,16 +90,21 @@ void SnowManDrawer::Jump()
     mVelocity.y = 0.05f;
 }
 
-float SnowManDrawer::ContainsPoint(glm::vec3 modelPosition)
+bool SnowManDrawer::ContainsModel(Model* model)
 {
+    vec3 modelPosition = model->position;
+    vec3 modelHitbox = model->hitbox;
     float distance = glm::distance(position, modelPosition);
     float yDistance = abs(modelPosition.y - position.y);
-    if (distance <= 1.84f && yDistance <= 0.5f)
-        return distance;
-    return -1;
+    // Calculating distance between the center point and the farthest point in the model
+    float XZHitbox = sqrt((modelHitbox.x * modelHitbox.x) + (modelHitbox.z * modelHitbox.z));
+    float diagonnalHitbox= sqrt((XZHitbox * XZHitbox) + (modelHitbox.y * modelHitbox.y));
+    return distance <= diagonnalHitbox && yDistance <= modelHitbox.y;
 }
-bool SnowManDrawer::CollideXZ(glm::vec3 modelPosition) {
-    return (modelPosition.y > position.y + 0.5f && abs(modelPosition.x - position.x) < 1.25 && abs(modelPosition.z - position.z) < 1.25)  ;
+bool SnowManDrawer::CollideXZ(Model* model) {
+    return (model->position.y > position.y + model->hitbox.y
+        && abs(model->position.x - position.x) < model->hitbox.x + hitbox.x
+        && abs(model->position.z - position.z) < model->hitbox.z + hitbox.z);
 }
 void SnowManDrawer::createModels() {
     /* position, rotation, scaling, color*/
