@@ -31,4 +31,5 @@ class Drawer {
         virtual void draw(Shader* shader);
         virtual void createModels();
         unsigned int loadTexture(std::string imagePath);
+        unsigned int loadCubemap(vector<std::string> faces);
  };

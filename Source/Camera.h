@@ -35,5 +35,6 @@ class Camera {
         const float cameraAngularSpeed = 60.0f;
 
         void setViewProjectionMatrices(Shader * shader);
+        void setViewMatrices(Shader* shader);
         void updateLookAt();
 };

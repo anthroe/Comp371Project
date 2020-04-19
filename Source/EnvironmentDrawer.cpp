@@ -75,9 +75,9 @@ void EnvironmentDrawer::generateRocks()
 }
 void EnvironmentDrawer::createModels(double** depthArray) {
     #if defined(PLATFORM_OSX)
-        GLuint rockTextureID = loadTexture("Textures/grass.jpg");
+        GLuint rockTextureID = loadTexture("Textures/rock.jpg");
     #else
-        GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+        GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/rock.jpg");
     #endif
     generateTrees();
     generateTrees();

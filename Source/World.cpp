@@ -9,6 +9,8 @@ World::World(GLFWwindow* window) {
 	shader = new Shader("SHADER", "../Resources/Shaders/VertexShader.glsl", "../Resources/Shaders/FragmentShader.glsl");
 	textureShader = new Shader("TEXTURE", "../Resources/Shaders/VertexShaderTexture.glsl", "../Resources/Shaders/FragmentShaderTexture.glsl");
     shadowShader = new Shader("SHADOW", "../Resources/Shaders/VertexShaderShadow.glsl", "../Resources/Shaders/FragmentShaderShadow.glsl");
+    skyShader = new Shader("SKY", "../Resources/Shaders/VertexShaderSky.glsl", "../Resources/Shaders/FragmentShaderSky.glsl");
+
     glGenTextures(1, &depthMap);
     // Bind the texture so the next glTex calls affect it
     glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -37,31 +39,40 @@ World::World(GLFWwindow* window) {
     textureShader->use();
     textureShader->setInt("textureSampler", 0);
     textureShader->setInt("shadowMap", 1);
-  
-   
+    skyShader->use();
+    skyShader->setInt("skybox", 0);
 }
 
 void World::draw() {
 	camera->setViewProjectionMatrices(shader);
 	camera->setViewProjectionMatrices(textureShader);
+    camera->setViewMatrices(skyShader);
+
+    skyDrawer->draw(skyShader);
+ 
     setupLighting();
     mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), vec3(0.0f,1.0f,0.0f)) * rotate(mat4(1.0f), radians(worldRotateXFactor), vec3(1.0f,0.0f,0.0f));
+    
     shadowShader->use();
     shadowShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     textureShader->use();
     textureShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     shader->use();
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
+
     setupShadows();
     //gridDrawer->draw(shader);
-    snowManDrawer->draw(shader, worldRotationMatrix);
-
+    
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
 
     groundDrawer->draw(textureShader);
     // Setting world matrix for the loaded model
-    environmentDrawer->draw(textureShader);	   		  
+    environmentDrawer->draw(textureShader);	
+    
+    snowManDrawer->draw(shader, worldRotationMatrix);
+
     camera->updateLookAt();
    
 }
@@ -69,19 +80,19 @@ void World::draw() {
 void World::setupLighting() {
     float near_plane = 30.0f, far_plane = 240.0f;
     mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f,60.0f, near_plane, far_plane);
-    mat4 lightView = lookAt(vec3(75.0f, 160.0f, 75.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
+    mat4 lightView = lookAt(vec3(-75.0f, 160.0f, 60.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
     // Setting up texture shader lighting
     textureShader->use();
-    textureShader->setVec3("lightPosition", vec3(30.0f, 100.0f, 40.0f));
+    textureShader->setVec3("lightPosition", vec3(-75.0f, 160.0f, 60.0f));
     textureShader->setVec3("viewPos", camera->cameraPosition);
     textureShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
     // Setting up color shader lighting
     shader->use();
-    shader->setVec3("lightPosition", vec3(30.0f, 100.0f, 40.0f));
+    shader->setVec3("lightPosition", vec3(-75.0f, 160.0f, 60.0f));
     shader->setVec3("viewPos", camera->cameraPosition);
     shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 }

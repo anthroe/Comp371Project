@@ -14,6 +14,7 @@
 #include <Camera.h>
 #include <SnowManDrawer.h>
 #include <GridDrawer.h>
+#include <SkyDrawer.h>
 #include <GroundDrawer.h>
 #include <EnvironmentDrawer.h>
 
@@ -41,12 +42,14 @@ class World {
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
+        SkyDrawer* skyDrawer = new SkyDrawer();
         EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer(groundDrawer->depthArray);
         GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;
 		Shader* textureShader;
         Shader* shadowShader;
+        Shader* skyShader;
 
 		World(GLFWwindow* window);
 		void draw();

@@ -161,6 +161,8 @@
     <ClCompile Include="..\Source\OBJloaderV2.cpp" />
     <ClCompile Include="..\Source\PerlinNoise.cpp" />
     <ClCompile Include="..\Source\Shader.cpp" />
+    <ClCompile Include="..\Source\SkyBoxModel.cpp" />
+    <ClCompile Include="..\Source\SkyDrawer.cpp" />
     <ClCompile Include="..\Source\SnowManDrawer.cpp" />
     <ClCompile Include="..\Source\SphereModel.cpp" />
     <ClCompile Include="..\Source\TexturedCubeModel.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="..\Source\OBJloaderV2.h" />
     <ClInclude Include="..\Source\PerlinNoise.h" />
     <ClInclude Include="..\Source\Shader.h" />
+    <ClInclude Include="..\Source\SkyBoxModel.h" />
+    <ClInclude Include="..\Source\SkyDrawer.h" />
     <ClInclude Include="..\Source\SnowManDrawer.h" />
     <ClInclude Include="..\Source\SphereModel.h" />
     <ClInclude Include="..\Source\TexturedCubeModel.h" />
