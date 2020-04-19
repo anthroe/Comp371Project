@@ -13,11 +13,11 @@
 #include <Shader.h>
 #include <Camera.h>
 #include <SnowManDrawer.h>
+#include <AstronautDrawer.h>
 #include <GridDrawer.h>
 #include <SkyDrawer.h>
 #include <GroundDrawer.h>
 #include <EnvironmentDrawer.h>
-
 
 
 using namespace glm;
@@ -40,7 +40,8 @@ class World {
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
-        GridDrawer* gridDrawer = new GridDrawer();
+		AstronautDrawer* astronautDrawer = new AstronautDrawer();
+		GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
         SkyDrawer* skyDrawer = new SkyDrawer();
         EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer(groundDrawer->depthArray);

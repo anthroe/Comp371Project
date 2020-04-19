@@ -21,7 +21,12 @@ EnvironmentDrawer::~EnvironmentDrawer() {
 }
 void EnvironmentDrawer::draw(Shader * shader) {
     for (int i = 0; i < models.size(); i++) {
+									   
+										 
+										   
 	    models[i]->draw(shader);
+									 
+										 
     }
 }
 
@@ -51,6 +56,8 @@ void EnvironmentDrawer::generateForest()
             treeDrawn = true;
         }
     }
+
+
 }
 // 5% chance of tree generation
 void EnvironmentDrawer::generateTrees()

@@ -31,8 +31,8 @@ World::World(GLFWwindow* window) {
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     // Attach the depth map texture to the depth map framebuffer
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values								   								 
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
+
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
@@ -61,8 +61,6 @@ void World::draw() {
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
     setupShadows();
-    //gridDrawer->draw(shader);
-    
     
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -71,7 +69,9 @@ void World::draw() {
     // Setting world matrix for the loaded model
     environmentDrawer->draw(textureShader);	
     
-    snowManDrawer->draw(shader, worldRotationMatrix);
+    //snowManDrawer->draw(shader, worldRotationMatrix);
+	  astronautDrawer->draw(textureShader, worldRotationMatrix);
+
 
     camera->updateLookAt();
    
@@ -118,8 +118,11 @@ void World::Update(float dt)
 {
     //first person camera
     if (cameraMode == 0) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
-        snowManDrawer->scaleNumber = 0.0f;
+      /*  camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        snowManDrawer->scaleNumber = 0.0f;*/
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        astronautDrawer->scaleNumber = 0.0f;
+
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -129,12 +132,15 @@ void World::Update(float dt)
             camera->cameraHorizontalAngle = -180.0f;
         }*/
 
-    }
+    
     //third person camera
     if (cameraMode == 1) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+       /* camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
         snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
-        snowManDrawer->scaleNumber = 1.0f;
+        snowManDrawer->scaleNumber = 1.0f;*/
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+        astronautDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        astronautDrawer->scaleNumber = 1.0f;
     }
    
     if (flyMode == false) {
@@ -145,8 +151,14 @@ void World::Update(float dt)
         float smallestDistance = 1000.0f;
         for (int i = 0; i < groundDrawer->models.size(); i++) {
             groundPoint = groundDrawer->models[i]->position;
-            float distance = snowManDrawer->ContainsPoint(groundPoint);
+
+            //float distance = snowManDrawer->ContainsPoint(groundPoint);
+            float distance = astronautDrawer->ContainsPoint(groundPoint);
             if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+
+//             float distance = snowManDrawer->ContainsPoint(groundPoint);
+//             if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+
                 smallestDistance = distance;
                 closestPoint = groundPoint;
             }
@@ -154,14 +166,19 @@ void World::Update(float dt)
         // Snowman is on the ground
         
         if (closestPoint != vec3(-10.0f)) {
-            snowManDrawer->position.y = closestPoint.y + 0.25;
-            snowManDrawer->mVelocity = vec3(0.0f);
+           /* snowManDrawer->position.y = closestPoint.y + 0.25;
+            snowManDrawer->mVelocity = vec3(0.0f);*/
+            astronautDrawer->position.y = closestPoint.y + 0.25;
+            astronautDrawer->mVelocity = vec3(0.0f);
+
         }
         // Snowman is falling
         else {
             vec3 gravityVector(0.0f, -gravity, 0.0f);
-            snowManDrawer->Accelerate(gravityVector, dt);
-            snowManDrawer->Update(dt);
-        }
+            /*snowManDrawer->Accelerate(gravityVector, dt);
+            snowManDrawer->Update(dt);*/
+            astronautDrawer->Accelerate(gravityVector, dt);
+            astronautDrawer->Update(dt);
+		    }
     }
 }

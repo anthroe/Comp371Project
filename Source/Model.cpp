@@ -1,3 +1,4 @@
+
 #include "Model.h"
 
 Model::Model() {
@@ -46,4 +47,3 @@ void Model::draw(Shader* shader) {
 void Model::init() {
 
 }
-

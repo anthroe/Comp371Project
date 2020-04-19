@@ -1,3 +1,4 @@
+
 #include <TexturedModel.h>
 using namespace glm;
 TexturedModel::TexturedModel(vec3 position, vec3 rotation, vec3 scaling, vec3 color, GLuint texture, GLenum drawingPrimitive) :

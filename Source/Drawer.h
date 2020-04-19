@@ -16,9 +16,9 @@
 #include "SphereModel.h"
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
-
-#include "OBJloader.h"
 #include "OBJloaderV2.h"
+#include "TexturedModel.h"
+#include "OBJloader.h"
 
 class Drawer {
     public:

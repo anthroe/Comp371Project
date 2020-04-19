@@ -2,13 +2,15 @@
 
 bool spacePressed = false;
 SnowManDrawer* snowman;
+AstronautDrawer* astronaut;
 Camera* camera;
 vector<Model*> groundModels;
 EventHandler::EventHandler(World * world, GLFWwindow* window) {
-	this->world = world;
-	this->window = window;
+	  this->world = world;
+	  this->window = window;
     glfwGetCursorPos(window, &lastMousePosX, &lastMousePosY);
     snowman = world->snowManDrawer;
+	  astronaut = world->astronautDrawer;
     camera = world->camera;
     groundModels = world->groundDrawer->models;
 }
@@ -59,7 +61,8 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) //free looking camera
     {
         world->cameraMode = 2;
-        world->snowManDrawer->scaleNumber = 1.0f;
+        //world->snowManDrawer->scaleNumber = 1.0f;
+		world->astronautDrawer->scaleNumber = 1.0f;
     }
    
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) // move camera to the left
@@ -86,7 +89,8 @@ void EventHandler::handleEvents() {
     if (!world->flyMode) {
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !spacePressed) // move olaf to the right
         {
-            snowman->Jump();
+            //snowman->Jump();
+			      astronaut->Jump();
             spacePressed = true;
         }
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && spacePressed) // move olaf to the right
@@ -97,28 +101,48 @@ void EventHandler::handleEvents() {
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
-        snowman->position[0] += 0.10f;
+        //snowman->position[0] += 0.05f;
+		    astronaut->position[0] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
-                collision = true;
+          /*if (snowman->CollideXZ(groundModels[i]->position))
+            collision = true;*/
+          if (astronaut->CollideXZ(groundModels[i]->position))
+            collision = true;
         }
-        if (collision) {
-            snowman->position[0] -= 0.10f;
-        }
-        snowman->snowManAnimation();
+        //if (collision) 
+        //    snowman->position[0] -= 0.05f;
+        if (collision)
+          astronaut->position[0] -= 0.10f;
+        
+        //snowman->snowManAnimation();
+		    astronaut->astronautAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
-        snowman->position[0] -= 0.10f;
+   /*   snowman->position[0] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]->position))
                 collision = true;
         }
         if (collision) {
-            snowman->position[0] += 0.10f;
+            snowman->position[0] += 0.05f;
+           
+        }
+        snowman->snowManAnimation();*/
+        astronaut->position[0] -= 0.10f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+          if (astronaut->CollideXZ(groundModels[i]->position))
+            collision = true;
+        }
+        if (collision) {
+          astronaut->position[0] += 0.10f;
+
+        }
+	    	astronaut->astronautAnimation();
            
         }
         snowman->snowManAnimation();
@@ -126,6 +150,10 @@ void EventHandler::handleEvents() {
  
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
+        if (shiftHold && fmod(snowman->rotateFactor, 360.0f) != 0.0f)
+        {
+     /* snowman->position[2] += 0.05f;
+
         snowman->position[2] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
@@ -136,39 +164,102 @@ void EventHandler::handleEvents() {
             snowman->position[2]-= 0.10f;
 
         }
-        snowman->snowManAnimation();
+        snowman->snowManAnimation();*/
+        astronaut->position[2] += 0.10f;
+        bool collision = false;
+        for (int i = 0; i < groundModels.size(); i++) {
+          if (astronaut->CollideXZ(groundModels[i]->position))
+            collision = true;
+        }
+        if (collision) {
+          astronaut->position[2] -= 0.10f;
+
+        }
+        astronaut->astronautAnimation();
+        //snowman->snowManAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
-        snowman->position[2] -= 0.10f;
+        //snowman->position[2] -= 0.05f;
+        //bool collision = false;
+        //for (int i = 0; i < groundModels.size(); i++) {
+        //    if (snowman->CollideXZ(groundModels[i]->position))
+        //        collision = true;
+        //}
+        //if (collision) {
+        //    snowman->position[2] += 0.05f;
+        //}
+        //snowman->snowManAnimation();
+        astronaut->position[2] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
-            if (snowman->CollideXZ(groundModels[i]->position))
-                collision = true;
+          if (astronaut->CollideXZ(groundModels[i]->position))
+            collision = true;
         }
         if (collision) {
-            snowman->position[2] += 0.10f;
+          astronaut->position[2] += 0.10f;
         }
-        snowman->snowManAnimation();
+        astronaut->astronautAnimation();
     }
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) // move olaf up
     {
-        snowman->rotateFactor += 1.0f;
+        //snowman->rotateFactor += 1.0f;
+		    astronaut->rotateFactor += 1.0f;
     }
     if (!shiftHold && glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) // move olaf down
     {
-        snowman->rotateFactor -= 1.0f;
-    }
+        //snowman->rotateFactor -= 1.0f;
+        astronaut->rotateFactor -= 1.0f;
+		
+	}
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) // reset
     {
-        snowman->position *= 0.0f;
-        snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
-        snowman->rotateFactor = snowman->rotateFactor * 0.0f;
+//         snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
+//         snowman->rotateFactor = snowman->rotateFactor * 0.0f;
+//         camera->zoomFactor = 0.5f;
+//         world->worldRotateXFactor = 0.0f;
+//         world->worldRotateYFactor = 0.0f;
+        astronaut->scaleNumber = astronaut->scaleNumber * 0.0f + 1.0f;
+        astronaut->rotateFactor = astronaut->rotateFactor * 0.0f;
         camera->zoomFactor = 0.5f;
         world->worldRotateXFactor = 0.0f;
         world->worldRotateYFactor = 0.0f;
     }
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) // Getting bigger
+    {
+//         snowman->scaleNumber -= 0.01f;
+//         if (snowman->scaleNumber < 0)
+//         {
+//             snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
+//         }
+      
+        astronaut->scaleNumber -= 0.01f;
+        if (astronaut->scaleNumber < 0)
+        {
+            astronaut->scaleNumber = astronaut->scaleNumber * 0.0f + 1.0f;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) // getting smaller
+    {
+        //snowman->scaleNumber += 0.01f;
+        astronaut->scaleNumber += 0.01f;
+
+    }
+
+        //snowman->position *= 0.0f;
+        //snowman->scaleNumber = snowman->scaleNumber * 0.0f + 1.0f;
+        //snowman->rotateFactor = snowman->rotateFactor * 0.0f;
+        //camera->zoomFactor = 0.5f;
+        //world->worldRotateXFactor = 0.0f;
+        //world->worldRotateYFactor = 0.0f;
+		astronaut->position *= 0.0f;
+		astronaut->scaleNumber = astronaut->scaleNumber * 0.0f + 1.0f;
+		astronaut->rotateFactor = astronaut->rotateFactor * 0.0f;
+		camera->zoomFactor = 0.5f;
+		world->worldRotateXFactor = 0.0f;
+		world->worldRotateYFactor = 0.0f;
+	}
     if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) // zooming in and out, holding m and moving along x axis with mouse
     {
         if (dx > 0)
@@ -228,7 +319,7 @@ void EventHandler::handleEvents() {
         world->flyMode = world->flyMode ? false : true;
     }
     if (world->flyMode) {
-        world->gravity = 0;
+     /*  world->gravity = 0;
         snowman->mVelocity = vec3(0.0f,0.0f,0.0f);
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         {
@@ -237,6 +328,18 @@ void EventHandler::handleEvents() {
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) 
         {
             snowman->position[1] += 0.1f;
+        }*/
+        world->gravity = 0;
+        astronaut->mVelocity = vec3(0.0f, 0.0f, 0.0f);
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        {
+          astronaut->position[1] -= 0.1f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        {
+          astronaut->position[1] += 0.1f;
+        }
+    }
         }
     }
     /*

@@ -122,10 +122,13 @@
     <ClInclude Include="..\Source\OBJloaderV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\TexturedModel.h">
+    <ClInclude Include="..\Source\OBJloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\OBJloader.h">
+    <ClInclude Include="..\Source\RockDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\AstronautDrawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Model.h">
