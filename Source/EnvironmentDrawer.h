@@ -13,6 +13,7 @@ class EnvironmentDrawer : public Drawer {
         vec3 rockColor1 = vec3(1.0f);
         vec3 rockColor2 = vec3(1.0f);
         float rockTypeRatio = 0.5f;
+
         EnvironmentDrawer(double** depthArray);
         ~EnvironmentDrawer();
         void draw(Shader* shader);
@@ -27,10 +28,9 @@ class EnvironmentDrawer : public Drawer {
             vec3 trunkColor;
             vec3 leavesColor;
             vec3 scale;
-            float height;
+            float treeHeight;
         } tree1, tree2;
         struct Rock {
             vec3 color;
-            vec3 scale;
-        }rock1, rock2;
+        } rock1, rock2;
 };

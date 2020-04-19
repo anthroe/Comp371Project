@@ -63,7 +63,7 @@ void AstronautDrawer::Angulate(glm::vec3 torque)
 
 void AstronautDrawer::Jump()
 {
-	position.y += 1.0f;
+	position.y += 1.5f;
 	mVelocity.y = 0.05f;
 }
 
@@ -97,7 +97,7 @@ void AstronautDrawer::createModels() {
 			vec3(0.0f, 0.5f, 0.0f),
 			vec3(0.0f, 0.0f, 0.0f),
 			vec3(0.75f, 0.75f, 0.75f),
-			vec3(1.0f, 1.0f, 1.0f),
+			vec3(0.5f, 1.0f, 0.5f),
 			vec3(1.0f, 1.0f, 1.0f),
 			astronautTextureID,
 			GL_TRIANGLES);
