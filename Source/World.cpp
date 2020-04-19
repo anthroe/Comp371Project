@@ -71,7 +71,7 @@ void World::draw() {
     // Setting world matrix for the loaded model
     environmentDrawer->draw(textureShader);	
     
-    snowManDrawer->draw(shader, worldRotationMatrix);
+    astronautDrawer->draw(textureShader, worldRotationMatrix);
 
     camera->updateLookAt();
    
@@ -118,8 +118,8 @@ void World::Update(float dt)
 {
     //first person camera
     if (cameraMode == 0) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
-        snowManDrawer->scaleNumber = 0.0f;
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        astronautDrawer->scaleNumber = 0.0f;
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -132,9 +132,9 @@ void World::Update(float dt)
     }
     //third person camera
     if (cameraMode == 1) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
-        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
-        snowManDrawer->scaleNumber = 1.0f;
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+        astronautDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        astronautDrawer->scaleNumber = 1.0f;
     }
    
     if (flyMode == false) {
@@ -143,27 +143,27 @@ void World::Update(float dt)
         Model * closestModel = new Model();
         for (int i = 0; i < groundDrawer->models.size(); i++) {
             Model * model = groundDrawer->models[i];
-            if (snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y)  {
+            if (astronautDrawer->ContainsModel(model) && closestModel->position.y < model->position.y)  {
                 closestModel = model;
             }
         }
         for (int i = 0; i < environmentDrawer->models.size(); i++) {
             Model* model = environmentDrawer->models[i];
-            if (model->hitbox!= vec3(0.0f) && snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y) {
+            if (model->hitbox!= vec3(0.0f) && astronautDrawer->ContainsModel(model) && closestModel->position.y < model->position.y) {
                 closestModel = model;
             }
         }
-        // Snowman is on the ground
+        // astronaut is on the ground
         
         if (closestModel->position != vec3(0.0f)) {
-            snowManDrawer->position.y = closestModel->position.y + closestModel->hitbox.y/2;
-            snowManDrawer->mVelocity = vec3(0.0f);
+            astronautDrawer->position.y = closestModel->position.y + closestModel->hitbox.y/2;
+            astronautDrawer->mVelocity = vec3(0.0f);
         }
-        // Snowman is falling
+        // astronaut is falling
         else {
             vec3 gravityVector(0.0f, -gravity, 0.0f);
-            snowManDrawer->Accelerate(gravityVector, dt);
-            snowManDrawer->Update(dt);
+            astronautDrawer->Accelerate(gravityVector, dt);
+            astronautDrawer->Update(dt);
         }
     }
 }
