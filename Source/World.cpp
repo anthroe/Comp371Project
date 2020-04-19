@@ -104,8 +104,6 @@ void World::setupShadows() {
     glClear(GL_DEPTH_BUFFER_BIT);
     glCullFace(GL_FRONT);
     groundDrawer->draw(shadowShader);
-    shadowShader->use();
-    
     environmentDrawer->draw(shadowShader);
     glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
