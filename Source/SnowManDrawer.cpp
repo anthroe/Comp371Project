@@ -22,7 +22,7 @@ void SnowManDrawer::setGroupMatrix(mat4 snowManGroupMatrix)
 void SnowManDrawer::draw(Shader* shader, mat4 worldRotationMatrix)
 {
     // create groupMatrix which is used to transform all the parts, using predifined data
-    mat4 groupMatrix = translate(mat4(1.0f), position) * rotate(mat4(1.0f), glm::radians(rotateFactor), vec3(0.0f,1.0f,0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
+    mat4 groupMatrix = translate(mat4(1.0f), position) * rotate(mat4(1.0f), glm::radians(180.0f + rotateFactor), vec3(0.0f,1.0f,0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
     // create world rotation matrix, which is used to rotate the whole world
     setGroupMatrix(groupMatrix);
     for (int i = 0; i < models.size(); i++) {
