@@ -13,6 +13,7 @@
 #include <Shader.h>
 #include <Camera.h>
 #include <SnowManDrawer.h>
+#include <AstronautDrawer.h>
 #include <GridDrawer.h>
 #include <GroundDrawer.h>
 #include <RockDrawer.h>
@@ -39,7 +40,8 @@ class World {
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
-        GridDrawer* gridDrawer = new GridDrawer();
+		AstronautDrawer* astronautDrawer = new AstronautDrawer();
+		GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
 		RockDrawer* rockDrawer = new RockDrawer();
         GLFWwindow* window;

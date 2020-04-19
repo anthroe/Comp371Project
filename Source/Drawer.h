@@ -23,7 +23,11 @@
 #include "SphereModel.h"
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
+<<<<<<< Updated upstream
 #include "OBJloaderV2.h"
+=======
+#include "TexturedModel.h"
+>>>>>>> Stashed changes
 class Drawer {
     public:
         unsigned int loadTexture(std::string imagePath);

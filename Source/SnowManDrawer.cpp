@@ -143,7 +143,7 @@ void SnowManDrawer::draw(Shader* shader, Shader* textureShader, mat4 worldRotati
 }
 void SnowManDrawer::snowManAnimation()
 {
-    if (footSwitch)
+    /*if (footSwitch)
     {
         if (footRotationFactor < 45.0f)
             footRotationFactor += 2.0f;
@@ -157,6 +157,7 @@ void SnowManDrawer::snowManAnimation()
             footRotationFactor -= 2.0f;
         else
             footSwitch = true;
+<<<<<<< Updated upstream
     }
 }
 float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired)
@@ -167,6 +168,17 @@ float SnowManDrawer::snowRotateAnimation(float rotateFactor, float angleRequired
     if (fmod(rotateFactor, 360.0f) != angleRequired)
         rotateFactor += 1.0f;
     return rotateFactor;
+=======
+    }*/
+    //// Left arm
+    //footAndArmsModels[0]->rotation.x = 180.0f + footRotationFactor;
+    //// Right arm
+    //footAndArmsModels[1]->rotation.x = 180.0f - footRotationFactor;
+    //// Left foot
+    //footAndArmsModels[2]->rotation.x = 180.0f + footRotationFactor;
+    //// Right foot
+    //footAndArmsModels[3]->rotation.x = 180.0f - footRotationFactor;
+>>>>>>> Stashed changes
 }
 
 void SnowManDrawer::Update(float dt)
@@ -203,6 +215,7 @@ void SnowManDrawer::BounceOffGround()
 }
 void SnowManDrawer::Jump()
 {
+<<<<<<< Updated upstream
     translationVector.y = 1.0f;
     mVelocity.y = 0.0f;
 }
@@ -228,3 +241,46 @@ bool SnowManDrawer::ContainsPoint(glm::vec3 position)
 
     return distance <= radius;
 }
+=======
+    position.y += 0.4f;
+    mVelocity.y = 0.05f;
+}
+
+float SnowManDrawer::ContainsPoint(glm::vec3 modelPosition)
+{
+    float distance = glm::distance(position, modelPosition);
+    float yDistance = abs(modelPosition.y - position.y);
+    if (distance <= 1.84f && yDistance <= 0.5f)
+        return distance;
+    return -1;
+}
+bool SnowManDrawer::CollideXZ(glm::vec3 modelPosition) {
+    return (modelPosition.y > position.y + 0.5f && abs(modelPosition.x - position.x) < 1.25 && abs(modelPosition.z - position.z) < 1.25)  ;
+}
+void SnowManDrawer::createModels() {
+    ///* position, rotation, scaling, color*/
+    //// Body
+    //models.push_back(new SphereModel(vec3(0.0f, 1.1f, 0.0f), vec3(0.75f), vec3(1.0f,1.0f,1.0f)));
+    //models.push_back(new SphereModel(vec3(0.0f, 2.1f, 0.0f), vec3(0.60f), vec3(1.0f,1.0f,1.0f)));
+    //// Eyes and mouth
+    //models.push_back(new CubeModel(vec3(0.12f, 2.3f, 0.60f), vec3(0.1f), vec3(0.0f, 0.0f, 0.0f)));
+    //models.push_back(new CubeModel(vec3(-0.12f, 2.3f, 0.60f), vec3(0.1f), vec3(0.0f, 0.0f, 0.0f)));
+    //models.push_back(new CubeModel(vec3(0.0f, 1.9f, 0.60f), vec3(0.1f), vec3(0.0f, 0.0f, 0.0f)));
+    //// Nose
+    //models.push_back(new CubeModel(vec3(0.0f, 2.1f, 0.8f), vec3(0.1f, 0.1f, 0.5f), vec3(0.90f, 0.65f, 0.0f)));
+    //// Hat
+    //models.push_back(new CubeModel(vec3(0.0f, 3.0f, 0.0f), vec3(0.3f, 0.7f, 0.3f), vec3(0.82f, 0.82f, 0.82f)));
+    //// Left arm
+    //models.push_back(new CubeModel(vec3(0.9f, 1.5f, 0.0f), vec3(180.0f, 0.0f, -60.0f), vec3(0.2f, 1.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    //footAndArmsModels.push_back(models[7]);
+    //// Right arm
+    //models.push_back(new CubeModel(vec3(-0.9f, 1.5f, 0.0f), vec3(180.0f, 0.0f, 60.0f), vec3(0.2f, 1.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    //footAndArmsModels.push_back(models[8]);
+    //// Left foot
+    //models.push_back(new CubeModel(vec3(-0.5f, 0.5f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    //footAndArmsModels.push_back(models[9]);
+    //// Right foot
+    //models.push_back(new CubeModel(vec3(0.5f, 0.5f, 0.0f), vec3(180.0f, 0.0f, 0.0f), vec3(0.2f, 0.5f, 0.2f), vec3(0.98f, 0.98f, 0.98f)));
+    //footAndArmsModels.push_back(models[10]);
+}
+>>>>>>> Stashed changes

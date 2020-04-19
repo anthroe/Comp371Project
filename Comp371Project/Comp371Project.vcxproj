@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Assignment2.cpp" />
+    <ClCompile Include="..\Source\AstronautDrawer.cpp" />
     <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\CubeModel.cpp" />
     <ClCompile Include="..\Source\Drawer.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="..\Source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\AstronautDrawer.h" />
     <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\CubeModel.h" />
     <ClInclude Include="..\Source\Drawer.h" />

@@ -73,7 +73,14 @@ void World::draw() {
 
     setupShadows();
     //gridDrawer->draw(shader);
+<<<<<<< Updated upstream
     snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
+=======
+    //snowManDrawer->draw(shader, worldRotationMatrix);
+	astronautDrawer->draw(textureShader, worldRotationMatrix);
+
+
+>>>>>>> Stashed changes
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
@@ -143,6 +150,23 @@ void World::setupShadows() {
 
 void World::Update(float dt)
 {
+<<<<<<< Updated upstream
+=======
+    //first person camera
+    if (cameraMode == 0) {
+      /*  camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        snowManDrawer->scaleNumber = 0.0f;*/
+		camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+		astronautDrawer->scaleNumber = 0.0f;
+        //lock viewing angle to simulate a fov
+        /*
+        if (camera->cameraHorizontalAngle > 0.0f) {
+            camera->cameraHorizontalAngle = 0.0f;
+        }
+        if (camera->cameraHorizontalAngle < -180.0f) {
+            camera->cameraHorizontalAngle = -180.0f;
+        }*/
+>>>>>>> Stashed changes
 
     glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
     snowManDrawer->Accelerate(gravityVector, dt);
@@ -159,5 +183,50 @@ void World::Update(float dt)
 
         snowManDrawer->BounceOffGround(); //Reverses y velocity
     }
+<<<<<<< Updated upstream
 
+=======
+    //third person camera
+    if (cameraMode == 1) {
+       /* camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        snowManDrawer->scaleNumber = 1.0f;*/
+		camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+		astronautDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+		astronautDrawer->scaleNumber = 1.0f;
+    }
+   
+    if (flyMode == false) {
+        
+        vec3 groundPoint = vec3(0.0f);
+        // Some out of bound points as default values
+        vec3 closestPoint = vec3(-10.0f);
+        float smallestDistance = 1000.0f;
+        for (int i = 0; i < groundDrawer->models.size(); i++) {
+            groundPoint = groundDrawer->models[i]->position;
+            //float distance = snowManDrawer->ContainsPoint(groundPoint);
+			float distance = astronautDrawer->ContainsPoint(groundPoint);
+			if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+                smallestDistance = distance;
+                closestPoint = groundPoint;
+            }
+        }
+        // Snowman is on the ground
+        
+        if (closestPoint != vec3(-10.0f)) {
+           /* snowManDrawer->position.y = closestPoint.y + 0.25;
+            snowManDrawer->mVelocity = vec3(0.0f);*/
+			astronautDrawer->position.y = closestPoint.y + 0.25;
+			astronautDrawer->mVelocity = vec3(0.0f);
+        }
+        // Snowman is falling
+        else {
+            vec3 gravityVector(0.0f, -gravity, 0.0f);
+            /*snowManDrawer->Accelerate(gravityVector, dt);
+            snowManDrawer->Update(dt);*/
+			astronautDrawer->Accelerate(gravityVector, dt);
+			astronautDrawer->Update(dt);
+		}
+    }
+>>>>>>> Stashed changes
 }
