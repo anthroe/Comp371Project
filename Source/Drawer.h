@@ -29,6 +29,7 @@ class Drawer {
         virtual void createModels();
         unsigned int loadTexture(std::string imagePath);
         unsigned int loadCubemap(vector<std::string> faces);
+        float randomize(float min, float max);
         GLuint setupModelVBO(std::string path, int& vertexCount);
         GLuint setupModelEBO(std::string path, int& vertexCount);
  };

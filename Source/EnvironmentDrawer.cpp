@@ -10,6 +10,28 @@ EnvironmentDrawer::EnvironmentDrawer(double** depthArray) {
 
         }
     }
+    // generating first tree species
+    tree1.trunkColor = vec3(randomize(0.5f,1.0f), randomize(0.5f,1.0f), randomize(0.5f,1.0f));
+    tree1.leavesColor = vec3(randomize(0.3f,1.0f), randomize(0.3f,1.0f), randomize(0.3f,1.0f));
+   
+    float XZScale = randomize(1.0f, 1.5f);
+    tree1.scale = vec3(XZScale, randomize(1.0f, 1.5f), XZScale);
+    tree1.treeHeight = tree1.scale.y*randomize(3.0f, 7.0f);
+    // generating second tree species
+    tree2.trunkColor = vec3(randomize(0.5f, 1.0f), randomize(0.5f, 1.0f), randomize(0.5f,1.0f));
+    tree2.leavesColor = vec3(randomize(0.3f, 1.0f), randomize(0.3f,1.0f), randomize(0.3f,1.0f));
+
+    XZScale = randomize(1.0f, 1.5f);
+    tree2.scale = vec3(XZScale, randomize(1.0f, 1.5f), XZScale);
+    tree2.treeHeight = tree2.scale.y * randomize(3.0f, 7.0f);
+    // Generating chance of a tree species to appear more than the other
+    treeSpeciesRatio = randomize(0.25f, 0.75f);
+    // generating first type of rock
+    rock1.color = vec3(randomize(0.5f, 1.0f), randomize(0.5f, 1.0f), randomize(0.5f, 1.0f));
+    // generating second type of rock
+    rock2.color = vec3(randomize(0.5f, 1.0f), randomize(0.5f, 1.0f), randomize(0.5f, 1.0f));
+    // Generating chance of a rock type to appear more than the other
+    rockTypeRatio = randomize(0.25f, 0.75f);
     createModels(depthArray);
 }
 EnvironmentDrawer::~EnvironmentDrawer() {
@@ -104,9 +126,9 @@ void EnvironmentDrawer::createModels(double** depthArray) {
     int rockVerticesCount;
     GLuint rockVAO = setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
     int trunkVerticesCount;
-    GLuint trunkVAO = setupModelEBO("../Resources/Assets/Models/tree_trunk.obj", trunkVerticesCount);
+    GLuint trunkVAO = setupModelEBO("../Resources/Assets/Models/trunk.obj", trunkVerticesCount);
     int leavesVerticesCount;
-    GLuint leavesVAO = setupModelEBO("../Resources/Assets/Models/tree_leaves.obj", leavesVerticesCount);
+    GLuint leavesVAO = setupModelEBO("../Resources/Assets/Models/cone.obj", leavesVerticesCount);
 
     generateForest();
     generateForest();
@@ -126,43 +148,69 @@ void EnvironmentDrawer::createModels(double** depthArray) {
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             if (treeAndRockArray[i][j] == 1) {
-                vec3 scaleFactor = vec3(0.5f,0.6f,0.5f);
-                vec3 dimensions = vec3(1.0f, 5.0f, 1.0f);
-                float xzScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
-                float yScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
+                vec3 trunkColor = vec3(1.0f);
+                vec3 leavesColor = vec3(1.0f);
+                vec3 scale = vec3(1.0f);
+                float minHeight = 0.0f;
+                float treeHeight = 0.0f;
+                if (randomize(0.0f, 1.0f) >= treeSpeciesRatio) {
+                    trunkColor = tree1.trunkColor;
+                    leavesColor = tree1.leavesColor;
+                    treeHeight = tree1.treeHeight;
+                    scale = tree1.scale;
+                }
+                else {
+                    trunkColor = tree2.trunkColor;
+                    leavesColor = tree2.leavesColor;
+                    treeHeight = tree2.treeHeight;
+                    scale = tree1.scale;
+                }
+                // Tree size
+                float size = randomize(0.5f,1.0f);
+                // Scale  with tree size
+                vec3 scaleFactor = vec3(size*scale.x, size * scale.y, size * scale.z);
+                vec3 dimensions = vec3(1.0f, 4.0f, 1.0f);
                 float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
                 // Adding tree trunk
 				/* position, rotation, scaling, color, texture, drawingPrimitive */
                 TexturedModel* trunk = new TexturedModel(
-                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.5f + dimensions.y * scaleFactor.y * yScale, (i - height / 2) * 2.5f),
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.5f + dimensions.y * scaleFactor.y * scale.y, (i - height / 2) * 2.5f),
                     vec3(0.0f, yAngle, 0.0f),
-                    scaleFactor*vec3(xzScale , yScale, xzScale),
-                    dimensions * vec3(xzScale / 2, yScale/2, xzScale / 2),
-                    vec3(1.0f),
+                    scaleFactor* scale,
+                    dimensions * vec3(size * scale.x/2, size * scale.y/2, size * scale.z/2),
+                    trunkColor,
                     treeTrunkTextureID,
-                    GL_TRIANGLE_FAN
+                    GL_TRIANGLES
                 );
                 // The trunk has a centering offset since it's 0,0,0 position is centered at its base in y. This
                 // offset allows us to do calculation on it as if it was centered at half its height in y.
-                trunk->centeringOffset = vec3(0.0f, -dimensions.y * scaleFactor.y * yScale, 0.0f);
+                trunk->centeringOffset = vec3(0.0f, -dimensions.y * scaleFactor.y * scale.y, 0.0f);
                 trunk->setVAO(trunkVAO, trunkVerticesCount);
 				models.push_back(trunk);
-    
-                scaleFactor = vec3(2.5f);
-                // Adding tree leaves
-                TexturedModel* leaves = new TexturedModel(
-                    vec3((j - width / 2) * 2.5f, depthArray[i][j] - trunk->centeringOffset.y/2, (i - height / 2) * 2.5f),
-                    vec3(0.0f, yAngle, 0.0f),
-                    scaleFactor * vec3(xzScale, yScale, xzScale),
-                    vec3(0.0f),
-                    vec3(1.0f),
-                    treeLeavesTextureID,
-                    GL_TRIANGLES
-                );
-                leaves->setVAO(leavesVAO, leavesVerticesCount);
-				models.push_back(leaves);
+                for (int k = 0; k <= treeHeight; k++) {
+                    // Adding tree leaves
+                    TexturedModel* leaves = new TexturedModel(
+                        vec3((j - width / 2) * 2.5f, depthArray[i][j] - trunk->centeringOffset.y / 2 + k*scale.y, (i - height / 2) * 2.5f),
+                        vec3(0.0f, yAngle, 0.0f),
+                        scaleFactor * scale,
+                        vec3(0.0f),
+                        leavesColor,
+                        treeLeavesTextureID,
+                        GL_TRIANGLES
+                    );
+                    leaves->setVAO(leavesVAO, leavesVerticesCount);
+                    models.push_back(leaves);
+                    scale = vec3(scale.x * 0.9, scale.y * 0.9, scale.z * 0.9);
+                }
             }
             if (treeAndRockArray[i][j] == 2) {
+                vec3 color = vec3(1.0f);
+                if (randomize(0.0f, 1.0f) >= rockTypeRatio) {
+                    color = rock1.color;
+                }
+                else {
+                    color = rock2.color;
+                }
                 vec3 scaleFactor = vec3(0.2f,0.05f,0.2f);
                 vec3 dimensions = vec3(1.0f, 2.0f, 1.0f);
                 float xScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
@@ -175,7 +223,7 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                     vec3(0.0f, yAngle, 0.0f),
                     scaleFactor*vec3(xScale, yScale, zScale),
                     dimensions*vec3(xScale/2, yScale/2, zScale/2),
-                    vec3(1.0f),
+                    color,
                     rockTextureID,
                     GL_TRIANGLES
                 );

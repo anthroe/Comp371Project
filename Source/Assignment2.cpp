@@ -62,7 +62,6 @@ int main(int argc, char* argv[])
     
     // Black background
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glDisable(GL_CULL_FACE);
     world = new World(window);
     eventHandler = new EventHandler(world, window);
 
