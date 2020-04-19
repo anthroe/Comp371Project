@@ -92,13 +92,13 @@ void GroundDrawer::generateMountain()
 void GroundDrawer::createModels() {
 #if defined(PLATFORM_OSX)
     GLuint grassTextureID = loadTexture("Textures/grass.jpg");
-    GLuint grassTextureID = loadTexture("Textures/space.jpg");
+    GLuint cliffTextureID = loadTexture("Textures/cliff.jpg");
+    GLuint snowTextureID = loadTexture("Textures/snow.jpg");
 #else
     GLuint grassTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
-    GLuint spaceTextureID = loadTexture("../Resources/Assets/Textures/space.jpg");
+    GLuint cliffTextureID = loadTexture("../Resources/Assets/Textures/cliff.jpg");
+    GLuint snowTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
 #endif
-    //sky
-    models.push_back(new TexturedCubeModel(vec3(0.0f, 200.0f, 0.0f), vec3(0.0f), vec3(2000.0f, 1.0f, 2000.0f), vec3(1.0f), spaceTextureID));
     float cubeFactor = 2.5f;
     float heightValue = height * cubeFactor;
     float widthValue = width * cubeFactor;
@@ -112,10 +112,25 @@ void GroundDrawer::createModels() {
                 float zValue = z * cubeFactor;
                 for (int y = 0; y < depthArray[z][x]; y++)
                 {
-                    /* position, rotation, scaling, color, texture*/
-                    models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, y, zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                    if (y < 2) {
+                        /* position, rotation, scaling, color, texture*/
+                        models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, y, zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                    }
+                    else if (y < 8) {
+                        models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, y, zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), cliffTextureID));
+                    }
+                    else {
+                        models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, y, zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), snowTextureID));
+                    }
                 }
-                models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, depthArray[z][x], zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                if (depthArray[z][x] < 2) {
+                    models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, depthArray[z][x], zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), grassTextureID));
+                } else if (depthArray[z][x] < 8) {
+                    models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, depthArray[z][x], zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), cliffTextureID));
+                }
+                else {
+                    models.push_back(new TexturedCubeModel(vec3(xValue - widthValue / 2, depthArray[z][x], zValue - heightValue / 2), vec3(0.0f), vec3(cubeFactor, 1.0f, cubeFactor), vec3(1.0f), snowTextureID));
+                }
             }
         }
     }

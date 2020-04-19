@@ -113,16 +113,18 @@ void EnvironmentDrawer::createModels(double** depthArray) {
 				float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
 				/* position, rotation, scaling, color, texture*/
 				models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 1.0f, depthArray[i][j] + 0.0f, (i - height / 2.0f)),
+					vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
 					vec3(0.0f, yAngle, 0.0f),
 					vec3(xScale * 2.0, yScale * 2.0, zScale * 2.0),
-					vec3(1.0f), treeTrunkTextureID,
+					vec3(1.0f), 
+                    treeTrunkTextureID,
 					"tree_trunk"));
 				models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 1.0f, depthArray[i][j] + 0.0f, (i - height / 2.0f)),
+					vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
 					vec3(0.0f, yAngle, 0.0f),
 					vec3(xScale * 7.0, yScale * 18.0, zScale * 7.0),
-					vec3(1.0f), treeLeavesTextureID,
+					vec3(1.0f), 
+                    treeLeavesTextureID,
 					"tree_leaves"));
             }
             if (treeAndRockArray[i][j] == 2) {
@@ -132,8 +134,7 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                 float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
                 /* position, rotation, scaling, color, texture*/
                 models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 2.5f, 
-					depthArray[i][j] +0.4, (i - height/2) * 2.5f),
+					vec3((j - width / 2) * 2.5f, depthArray[i][j] +0.4, (i - height/2) * 2.5f),
 					vec3(0.0f, yAngle, 0.0f),
 					vec3(xScale, yScale, zScale),
 					vec3(1.0f),

@@ -4,18 +4,23 @@ void Camera::setViewProjectionMatrices(Shader * shader) {
     mat4 projectionMatrix = glm::mat4(1.0f);
     mat4 viewMatrix = glm::mat4(1.0f);
     // Set projection matrix for shader
-    projectionMatrix = glm::perspective(zoomFactor,            // field of view in degrees
-        1024.0f / 768.0f,  // aspect ratio
-        0.01f, 100.0f);   // near and far (near > 0)
-
-
+    projectionMatrix = glm::perspective(zoomFactor, 1024.0f / 768.0f, 0.01f, 1000.0f);
     // Set initial view matrix
-    viewMatrix = lookAt(cameraPosition,  // eye
-        cameraPosition + cameraLookAt,  // center
-        cameraUp); // up
-
+    viewMatrix = lookAt(cameraPosition, cameraPosition + cameraLookAt,cameraUp);
     // creating pointers to matrices that compose modelViewProjection (and the rotationMatrix
     shader->use();
+    shader->setMat4("viewMatrix", viewMatrix);
+    shader->setMat4("projectionMatrix", projectionMatrix);
+}
+void Camera::setViewMatrices(Shader* shader) {
+    shader->use();
+    mat4 projectionMatrix = glm::mat4(1.0f);
+    mat4 viewMatrix = glm::mat4(1.0f);
+    // Set projection matrix for shader
+    projectionMatrix = glm::perspective(zoomFactor, 1024.0f / 768.0f, 0.01f, 100.0f);
+    // Set initial view matrix
+    viewMatrix = lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
+    viewMatrix = glm::mat4(glm::mat3(viewMatrix));
     shader->setMat4("viewMatrix", viewMatrix);
     shader->setMat4("projectionMatrix", projectionMatrix);
 }

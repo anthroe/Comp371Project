@@ -97,28 +97,28 @@ void EventHandler::handleEvents() {
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
-        snowman->position[0] += 0.05f;
+        snowman->position[0] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]->position))
                 collision = true;
         }
         if (collision) {
-            snowman->position[0] -= 0.05f;
+            snowman->position[0] -= 0.10f;
         }
         snowman->snowManAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
-        snowman->position[0] -= 0.05f;
+        snowman->position[0] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]->position))
                 collision = true;
         }
         if (collision) {
-            snowman->position[0] += 0.05f;
+            snowman->position[0] += 0.10f;
            
         }
         snowman->snowManAnimation();
@@ -126,14 +126,14 @@ void EventHandler::handleEvents() {
  
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
-        snowman->position[2] += 0.05f;
+        snowman->position[2] += 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]->position))
                 collision = true;
         }
         if (collision) {
-            snowman->position[2]-= 0.05f;
+            snowman->position[2]-= 0.10f;
 
         }
         snowman->snowManAnimation();
@@ -141,14 +141,14 @@ void EventHandler::handleEvents() {
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
-        snowman->position[2] -= 0.05f;
+        snowman->position[2] -= 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]->position))
                 collision = true;
         }
         if (collision) {
-            snowman->position[2] += 0.05f;
+            snowman->position[2] += 0.10f;
         }
         snowman->snowManAnimation();
     }
