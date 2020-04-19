@@ -1,41 +1,3 @@
-<<<<<<< Updated upstream
-#include <EnvironmentDrawer.h>
-
-EnvironmentDrawer::EnvironmentDrawer() {
-    createModels();
-}
-EnvironmentDrawer::~EnvironmentDrawer() {
-   
-}
-void EnvironmentDrawer::draw(Shader * shader) {
-    for (int i = 0; i < models.size(); i++) {
-		if (models[i]->name == "tree_leaves")
-			models[i]->draw(shader, GL_TRIANGLES);
-		else if (models[i]->name == "tree_trunk")
-			models[i]->draw(shader, GL_TRIANGLE_FAN);
-		else if (models[i]->name == "rock")
-			models[i]->draw(shader, GL_TRIANGLES);
-		else if (models[i]->name == "astronaut")
-			models[i]->draw(shader, GL_TRIANGLE_FAN);
-    }
-}
-void EnvironmentDrawer::createModels() {
-#if defined(PLATFORM_OSX)
-    GLuint rockTextureID = loadTexture("Textures/rock.jpg");
-	GLuint treeTextureID = loadTexture("Textures/tree_leaves.jpg");
-	GLuint treeTrunkTextureID = loadTexture("Textures/tree_trunk.jpg");
-	GLuint astronautTextureID = loadTexture("Textures/astronaut.jpg");
-#else
-    GLuint rockTextureID = loadTexture("../Resources/Assets/Textures/rock.jpg");
-	GLuint treeTextureID = loadTexture("../Resources/Assets/Textures/tree_leaves.jpg");
-	GLuint treeTrunkTextureID = loadTexture("../Resources/Assets/Textures/tree_trunk.jpg");
-	GLuint astronautTextureID = loadTexture("../Resources/Assets/Textures/astronaut.jpg");
-#endif
-    models.push_back(new TexturedModel(vec3(10.0f, 0.0f, 10.0f), vec3(0.0f), vec3(1.0f), vec3(1.0f), rockTextureID, "rock"));
-	models.push_back(new TexturedModel(vec3(0.0f, 1.0f, 10.0f), vec3(0.0f), vec3(0.5f, 0.1f, 0.5f), vec3(1.0f), treeTrunkTextureID, "tree_trunk"));
-	models.push_back(new TexturedModel(vec3(0.0f, 1.0f, 10.0f), vec3(0.0f), vec3(1.5f, 2.0f, 1.5f), vec3(1.0f), treeTextureID, "tree_leaves"));
-	models.push_back(new TexturedModel(vec3(5.0f, 0.0f, 10.0f), vec3(0.0f), vec3(1.0f), vec3(1.0f), astronautTextureID, "astronaut"));
-=======
 #include <EnvironmentDrawer.h>
 
 EnvironmentDrawer::EnvironmentDrawer(double** depthArray) {
@@ -59,15 +21,16 @@ EnvironmentDrawer::~EnvironmentDrawer() {
 }
 void EnvironmentDrawer::draw(Shader * shader) {
     for (int i = 0; i < models.size(); i++) {
-		if (models[i]->name == "tree_leaves")
-			models[i]->draw(shader, GL_TRIANGLES);
-		else if (models[i]->name == "tree_trunk")
-			models[i]->draw(shader, GL_TRIANGLE_FAN);
-		else if (models[i]->name == "rock")
-			models[i]->draw(shader, GL_TRIANGLES);
+									   
+										 
+										   
+	    models[i]->draw(shader);
+									 
+										 
     }
 }
-void EnvironmentDrawer::generateTrees()
+
+void EnvironmentDrawer::generateForest()
 {
     #if defined(PLATFORM_OSX)
         GLuint treeTextureID = loadTexture("Textures/grass.jpg");
@@ -96,7 +59,25 @@ void EnvironmentDrawer::generateTrees()
 
 
 }
-
+// 5% chance of tree generation
+void EnvironmentDrawer::generateTrees()
+{
+#if defined(PLATFORM_OSX)
+    GLuint treeTextureID = loadTexture("Textures/grass.jpg");
+#else
+    GLuint treeTextureID = loadTexture("../Resources/Assets/Textures/grass.jpg");
+#endif    
+    for (unsigned int i = 0; i < height; i++) {
+        for (unsigned int j = 0; j < width; j++) {
+            int oddsOfTree = rand() % 100;
+            if (treeAndRockArray[i][j] != -1 && treeAndRockArray[i][j] != 1 && oddsOfTree <= 5)
+            {
+                treeAndRockArray[i][j] = 1;
+            }
+        }
+    }
+}
+// 10% chance of tree generation
 void EnvironmentDrawer::generateRocks()
 {
     #if defined(PLATFORM_OSX)
@@ -126,8 +107,17 @@ void EnvironmentDrawer::createModels(double** depthArray) {
 		GLuint treeTrunkTextureID = loadTexture("../Resources/Assets/Textures/tree_trunk.jpg");
 		GLuint treeLeavesTextureID = loadTexture("../Resources/Assets/Textures/tree_leaves.jpg");
     #endif
-    generateTrees();
-    generateTrees();
+
+    int rockVerticesCount;
+    GLuint rockVAO = setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
+    int trunkVerticesCount;
+    GLuint trunkVAO = setupModelEBO("../Resources/Assets/Models/tree_trunk.obj", trunkVerticesCount);
+    int leavesVerticesCount;
+    GLuint leavesVAO = setupModelEBO("../Resources/Assets/Models/tree_leaves.obj", leavesVerticesCount);
+
+    generateForest();
+    generateForest();
+    generateForest();
     generateTrees();
     generateRocks();
     for (int z = 0; z < height; z++)
@@ -147,21 +137,30 @@ void EnvironmentDrawer::createModels(double** depthArray) {
 				float yScale = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.15f - 0.05f)));
 				float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
 				float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
-				/* position, rotation, scaling, color, texture*/
-				models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 1.0f, (depthArray[i][j] + 0.4f) / 2, (i - height / 2) * 1.0f),
-					vec3(0.0f, yAngle, 0.0f),
-					vec3(xScale * 7.0, yScale * 18.0, zScale * 7.0),
-					vec3(1.0f),
-					treeLeavesTextureID,
-					"tree_leaves"));
-				models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 1.0f, (depthArray[i][j] + 0.4f) / 2, (i - height / 2) * 1.0f),
-					vec3(0.0f, yAngle, 0.0f),
-					vec3(xScale * 2.0, yScale * 2.0, zScale * 2.0),
-					vec3(1.0f),
-					treeTrunkTextureID,
-					"tree_trunk"));
+                // Adding tree trunk
+				/* position, rotation, scaling, color, texture, drawingPrimitive */
+                TexturedModel * trunk = new TexturedModel(
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                    vec3(0.0f, yAngle, 0.0f),
+                    vec3(xScale * 2.0, yScale * 2.0, zScale * 2.0),
+                    vec3(1.0f),
+                    treeTrunkTextureID,
+                    GL_TRIANGLE_FAN
+                );
+                trunk->setVAO(trunkVAO, trunkVerticesCount);
+				models.push_back(trunk);
+
+                // Adding tree leaves
+                TexturedModel* leaves = new TexturedModel(
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                    vec3(0.0f, yAngle, 0.0f),
+                    vec3(xScale * 7.0, yScale * 18.0, zScale * 7.0),
+                    vec3(1.0f),
+                    treeLeavesTextureID,
+                    GL_TRIANGLES
+                );
+                leaves->setVAO(leavesVAO, leavesVerticesCount);
+				models.push_back(leaves);
             }
             if (treeAndRockArray[i][j] == 2) {
                 float xScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
@@ -169,17 +168,18 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                 float zScale = 0.1f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.25f - 0.1f)));
                 float yAngle = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (180.0f - 0.0f)));
                 /* position, rotation, scaling, color, texture*/
-                models.push_back(new TexturedModel(
-					vec3((j - width / 2) * 2.5f, depthArray[i][j] +0.4, (i - height/2) * 2.5f),
-					vec3(0.0f, yAngle, 0.0f),
-					vec3(xScale, yScale, zScale),
-					vec3(1.0f),
-					rockTextureID,
-					"rock"));
-
+                TexturedModel* rock = new TexturedModel(
+                    vec3((j - width / 2) * 2.5f, depthArray[i][j] + 0.4, (i - height / 2) * 2.5f),
+                    vec3(0.0f, yAngle, 0.0f),
+                    vec3(xScale, yScale, zScale),
+                    vec3(1.0f),
+                    rockTextureID,
+                    GL_TRIANGLES
+                );
+                rock->setVAO(rockVAO, rockVerticesCount);
+                models.push_back(rock);
 			}
         }
     }
 
->>>>>>> Stashed changes
 }

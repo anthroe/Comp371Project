@@ -27,7 +27,7 @@ class Camera {
         // Other camera parameters
         float cameraSpeed = 5.0f;
         float cameraFastSpeed = 2 * cameraSpeed;
-        float cameraHorizontalAngle = 90.0f;
+        float cameraHorizontalAngle = -90.0f;
         float cameraVerticalAngle = -30.0f;
 
         float zoomFactor =0.5f;
@@ -35,5 +35,6 @@ class Camera {
         const float cameraAngularSpeed = 60.0f;
 
         void setViewProjectionMatrices(Shader * shader);
+        void setViewMatrices(Shader* shader);
         void updateLookAt();
 };

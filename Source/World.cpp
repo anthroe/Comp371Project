@@ -1,9 +1,6 @@
 #include <World.h>
-
-
-				 
-						
-
+#include "TexturedModel.h"
+#include "glm/gtx/string_cast.hpp"
 World::World(GLFWwindow* window) {
     this->window = window;
     // Setup Camera
@@ -12,6 +9,8 @@ World::World(GLFWwindow* window) {
 	shader = new Shader("SHADER", "../Resources/Shaders/VertexShader.glsl", "../Resources/Shaders/FragmentShader.glsl");
 	textureShader = new Shader("TEXTURE", "../Resources/Shaders/VertexShaderTexture.glsl", "../Resources/Shaders/FragmentShaderTexture.glsl");
     shadowShader = new Shader("SHADOW", "../Resources/Shaders/VertexShaderShadow.glsl", "../Resources/Shaders/FragmentShaderShadow.glsl");
+    skyShader = new Shader("SKY", "../Resources/Shaders/VertexShaderSky.glsl", "../Resources/Shaders/FragmentShaderSky.glsl");
+
     glGenTextures(1, &depthMap);
     // Bind the texture so the next glTex calls affect it
     glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -32,38 +31,28 @@ World::World(GLFWwindow* window) {
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     // Attach the depth map texture to the depth map framebuffer
     //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depth_map_texture, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
-<<<<<<< Updated upstream
-	// Model loading goes here
-	int rockVerticesCount;
-	TexturedModel* rock = new TexturedModel();
-	GLuint rockVAO = rock->setupModelEBO("../Resources/Assets/Models/rock.obj", rockVerticesCount);
-	activeVAO = rockVAO;
-	activeVerticesCount = rockVerticesCount;							
-					   
-										   
-																								
-					 
-										 
-=======
-	// Model loading goes here			
-					   								 
->>>>>>> Stashed changes
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);    glDrawBuffer(GL_NONE); //disable rendering colors, only write depth values
+
     /* Shaders init */
     shader->use();
     shader->setInt("shadowMap", 1);
     textureShader->use();
     textureShader->setInt("textureSampler", 0);
     textureShader->setInt("shadowMap", 1);
-   
+    skyShader->use();
+    skyShader->setInt("skybox", 0);
 }
 
 void World::draw() {
 	camera->setViewProjectionMatrices(shader);
 	camera->setViewProjectionMatrices(textureShader);
+    camera->setViewMatrices(skyShader);
+
+    skyDrawer->draw(skyShader);
+ 
     setupLighting();
-    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), yRotationVector) * rotate(mat4(1.0f), radians(worldRotateXFactor), xRotationVector);
+    mat4 worldRotationMatrix = rotate(mat4(1.0f), radians(worldRotateYFactor), vec3(0.0f,1.0f,0.0f)) * rotate(mat4(1.0f), radians(worldRotateXFactor), vec3(1.0f,0.0f,0.0f));
+    
     shadowShader->use();
     shadowShader->setMat4("globalRotationMatrix", worldRotationMatrix);
     textureShader->use();
@@ -72,52 +61,38 @@ void World::draw() {
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
     setupShadows();
-    //gridDrawer->draw(shader);
-<<<<<<< Updated upstream
-    snowManDrawer->draw(shader, textureShader, worldRotationMatrix);
-=======
-    //snowManDrawer->draw(shader, worldRotationMatrix);
-	astronautDrawer->draw(textureShader, worldRotationMatrix);
-
-
->>>>>>> Stashed changes
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthMap);
-    groundDrawer->draw(textureShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
-	// Draw models
-<<<<<<< Updated upstream
-	textureShader->use();
-	textureShader->setMat4("worldMatrix", mat4(1.0f) * translate(mat4(1.0f), vec3(0.5f, 0.0f, 0.5f) * scale(mat4(1.0f), 50.0f * vec3(0.0f, 1.0f, 0.0f));
-	glBindVertexArray(activeVAO);
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);		   		  
-=======
-	rockDrawer->draw(textureShader);
-	rockDrawer->generateRock();
-	textureShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
 
->>>>>>> Stashed changes
+    groundDrawer->draw(textureShader);
+    // Setting world matrix for the loaded model
+    environmentDrawer->draw(textureShader);	
+    
+    //snowManDrawer->draw(shader, worldRotationMatrix);
+	  astronautDrawer->draw(textureShader, worldRotationMatrix);
+
+
     camera->updateLookAt();
-
-
+   
 }
 
 void World::setupLighting() {
-    float near_plane = 1.0f, far_plane = 180.0f;
-    mat4 lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, near_plane, far_plane);
-    mat4 lightView = lookAt(vec3(30.0f, 100.0f, 40.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
+    float near_plane = 30.0f, far_plane = 240.0f;
+    mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f,60.0f, near_plane, far_plane);
+    mat4 lightView = lookAt(vec3(-75.0f, 160.0f, 60.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
     shadowShader->use();
     shadowShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
     // Setting up texture shader lighting
     textureShader->use();
-    textureShader->setVec3("lightPosition", vec3(30.0f, 100.0f, 40.0f));
+    textureShader->setVec3("lightPosition", vec3(-75.0f, 160.0f, 60.0f));
     textureShader->setVec3("viewPos", camera->cameraPosition);
     textureShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
     // Setting up color shader lighting
     shader->use();
-    shader->setVec3("lightPosition", vec3(30.0f, 100.0f, 40.0f));
+    shader->setVec3("lightPosition", vec3(-75.0f, 160.0f, 60.0f));
     shader->setVec3("viewPos", camera->cameraPosition);
     shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 }
@@ -127,37 +102,27 @@ void World::setupShadows() {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, groundDrawer->grassTextureID);
-    groundDrawer->draw(shadowShader, groundDrawer->depthArray, groundDrawer->width, groundDrawer->height);
+    glCullFace(GL_FRONT);
+    groundDrawer->draw(shadowShader);
+    environmentDrawer->draw(shadowShader);
+    glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Draw models
-<<<<<<< Updated upstream
-	glBindVertexArray(activeVAO);
-	glDrawElements(GL_TRIANGLES, activeVerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);					  
-=======
-	rockDrawer->draw(shadowShader);
-    shadowShader->setMat4("worldMatrix", translate(mat4(1.0f), vec3(10.0f, 0.0f, 10.0f)));
-	rockDrawer->generateRock();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
->>>>>>> Stashed changes
     // reset viewport
     int WIDTH, HEIGHT;
     glfwGetFramebufferSize(window, &WIDTH, &HEIGHT);
     glViewport(0, 0, WIDTH, HEIGHT);
+    
 }
 
 void World::Update(float dt)
 {
-<<<<<<< Updated upstream
-=======
     //first person camera
     if (cameraMode == 0) {
       /*  camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
         snowManDrawer->scaleNumber = 0.0f;*/
-		camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
-		astronautDrawer->scaleNumber = 0.0f;
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        astronautDrawer->scaleNumber = 0.0f;
+
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -166,34 +131,16 @@ void World::Update(float dt)
         if (camera->cameraHorizontalAngle < -180.0f) {
             camera->cameraHorizontalAngle = -180.0f;
         }*/
->>>>>>> Stashed changes
 
-    glm::vec3 gravityVector(0.0f, -gravity, 0.0f);
-    snowManDrawer->Accelerate(gravityVector, dt);
-    snowManDrawer->Update(dt);
-
-    glm::vec3 groundPoint = glm::vec3(0.0f);
-    glm::vec3 groundUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    //Collisions with ground
-    //complexity: O(n)
-
-    if (snowManDrawer->IntersectsPlane(groundPoint, groundUp))
-    {
-
-        snowManDrawer->BounceOffGround(); //Reverses y velocity
-    }
-<<<<<<< Updated upstream
-
-=======
+    
     //third person camera
     if (cameraMode == 1) {
        /* camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
         snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
         snowManDrawer->scaleNumber = 1.0f;*/
-		camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 4.0f, -4.2f);
-		astronautDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
-		astronautDrawer->scaleNumber = 1.0f;
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 4.0f, -4.2f);
+        astronautDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        astronautDrawer->scaleNumber = 1.0f;
     }
    
     if (flyMode == false) {
@@ -204,9 +151,14 @@ void World::Update(float dt)
         float smallestDistance = 1000.0f;
         for (int i = 0; i < groundDrawer->models.size(); i++) {
             groundPoint = groundDrawer->models[i]->position;
+
             //float distance = snowManDrawer->ContainsPoint(groundPoint);
-			float distance = astronautDrawer->ContainsPoint(groundPoint);
-			if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+            float distance = astronautDrawer->ContainsPoint(groundPoint);
+            if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+
+//             float distance = snowManDrawer->ContainsPoint(groundPoint);
+//             if (distance!=-1 && closestPoint.y < groundPoint.y)  {
+
                 smallestDistance = distance;
                 closestPoint = groundPoint;
             }
@@ -216,17 +168,17 @@ void World::Update(float dt)
         if (closestPoint != vec3(-10.0f)) {
            /* snowManDrawer->position.y = closestPoint.y + 0.25;
             snowManDrawer->mVelocity = vec3(0.0f);*/
-			astronautDrawer->position.y = closestPoint.y + 0.25;
-			astronautDrawer->mVelocity = vec3(0.0f);
+            astronautDrawer->position.y = closestPoint.y + 0.25;
+            astronautDrawer->mVelocity = vec3(0.0f);
+
         }
         // Snowman is falling
         else {
             vec3 gravityVector(0.0f, -gravity, 0.0f);
             /*snowManDrawer->Accelerate(gravityVector, dt);
             snowManDrawer->Update(dt);*/
-			astronautDrawer->Accelerate(gravityVector, dt);
-			astronautDrawer->Update(dt);
-		}
+            astronautDrawer->Accelerate(gravityVector, dt);
+            astronautDrawer->Update(dt);
+		    }
     }
->>>>>>> Stashed changes
 }

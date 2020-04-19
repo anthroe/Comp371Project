@@ -17,7 +17,7 @@ Shader::Shader(string name, string vertex_shader_path, string fragment_shader_pa
     this->name = name;
     // Getting vertex shader code
     string VertexShaderCode = getShaderCode(vertex_shader_path);
-    cout << (VertexShaderCode);
+    // cout << (VertexShaderCode);
     // Getting fragment shader code
     string FragmentShaderCode = getShaderCode(fragment_shader_path);
     // Compile ColorVertex Shader

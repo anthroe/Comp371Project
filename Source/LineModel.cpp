@@ -75,7 +75,7 @@ LineModel::~LineModel()
 }
 
 
-void LineModel::Draw(Shader * shader, mat4 WorldMatrix)
+void LineModel::draw(Shader * shader, mat4 WorldMatrix)
 {
     // Draw the Vertex Buffer
     // Note this draws a Sphere

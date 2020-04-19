@@ -15,9 +15,9 @@
 #include <SnowManDrawer.h>
 #include <AstronautDrawer.h>
 #include <GridDrawer.h>
+#include <SkyDrawer.h>
 #include <GroundDrawer.h>
-#include <RockDrawer.h>
-
+#include <EnvironmentDrawer.h>
 
 
 using namespace glm;
@@ -25,7 +25,9 @@ using namespace std;
 
 class World {
 	public:
-
+        vector<string> cameraModes = { "firstPerson","thirdPerson","free" };
+        int cameraMode = 0;
+        bool flyMode = false;
         static const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
         // initializing all the variable that will be used for transformations
         float worldRotateXFactor = 0.0f;
@@ -34,28 +36,28 @@ class World {
 
         unsigned int depthMap;
         unsigned int depthMapFBO;
-
-        vec3 xRotationVector = vec3(1.0f, 0.0f, 0.0f);
-        vec3 yRotationVector = vec3(0.0f, 1.0f, 0.0f);
+        
 
         LineModel* lineModel = new LineModel();
         SnowManDrawer* snowManDrawer = new SnowManDrawer();
 		AstronautDrawer* astronautDrawer = new AstronautDrawer();
 		GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
-		RockDrawer* rockDrawer = new RockDrawer();
+        SkyDrawer* skyDrawer = new SkyDrawer();
+        EnvironmentDrawer * environmentDrawer = new EnvironmentDrawer(groundDrawer->depthArray);
         GLFWwindow* window;
 		Camera* camera;
 		Shader* shader;
 		Shader* textureShader;
         Shader* shadowShader;
+        Shader* skyShader;
 
 		World(GLFWwindow* window);
 		void draw();
         void setupLighting();
         void setupShadows();
         void Update(float dt);
-        float gravity = 0.03f;
+        float gravity = 0.0003f;
         float friction = 0.0f;
 };
 

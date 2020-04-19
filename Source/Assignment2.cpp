@@ -61,8 +61,8 @@ int main(int argc, char* argv[])
     }
     
     // Black background
-    glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glDisable(GL_CULL_FACE);
     world = new World(window);
     eventHandler = new EventHandler(world, window);
 
@@ -82,10 +82,11 @@ int main(int argc, char* argv[])
         // @TODO 1 - Clear Depth Buffer Bit as well
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Drawing world
-        world->draw();
         float dt = glfwGetTime();
 
         world->Update(dt);
+        world->draw();
+        
         // Handle inputs
         eventHandler->handleEvents();
         // End Frame

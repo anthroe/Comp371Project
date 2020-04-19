@@ -152,16 +152,23 @@
     <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\CubeModel.cpp" />
     <ClCompile Include="..\Source\Drawer.cpp" />
+    <ClCompile Include="..\Source\EnvironmentDrawer.cpp" />
     <ClCompile Include="..\Source\EventHandler.cpp" />
     <ClCompile Include="..\Source\GridDrawer.cpp" />
     <ClCompile Include="..\Source\GroundDrawer.cpp" />
     <ClCompile Include="..\Source\LineModel.cpp" />
+    <ClCompile Include="..\Source\Model.cpp" />
+    <ClCompile Include="..\Source\OBJloader.cpp" />
+    <ClCompile Include="..\Source\OBJloaderV2.cpp" />
     <ClCompile Include="..\Source\PerlinNoise.cpp" />
     <ClCompile Include="..\Source\RockDrawer.cpp" />
     <ClCompile Include="..\Source\Shader.cpp" />
+    <ClCompile Include="..\Source\SkyBoxModel.cpp" />
+    <ClCompile Include="..\Source\SkyDrawer.cpp" />
     <ClCompile Include="..\Source\SnowManDrawer.cpp" />
     <ClCompile Include="..\Source\SphereModel.cpp" />
     <ClCompile Include="..\Source\TexturedCubeModel.cpp" />
+    <ClCompile Include="..\Source\TexturedModel.cpp" />
     <ClCompile Include="..\Source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,15 +176,19 @@
     <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\CubeModel.h" />
     <ClInclude Include="..\Source\Drawer.h" />
+    <ClInclude Include="..\Source\EnvironmentDrawer.h" />
     <ClInclude Include="..\Source\EventHandler.h" />
     <ClInclude Include="..\Source\GridDrawer.h" />
     <ClInclude Include="..\Source\GroundDrawer.h" />
     <ClInclude Include="..\Source\LineModel.h" />
+    <ClInclude Include="..\Source\Model.h" />
     <ClInclude Include="..\Source\OBJloader.h" />
     <ClInclude Include="..\Source\OBJloaderV2.h" />
     <ClInclude Include="..\Source\PerlinNoise.h" />
     <ClInclude Include="..\Source\RockDrawer.h" />
     <ClInclude Include="..\Source\Shader.h" />
+    <ClInclude Include="..\Source\SkyBoxModel.h" />
+    <ClInclude Include="..\Source\SkyDrawer.h" />
     <ClInclude Include="..\Source\SnowManDrawer.h" />
     <ClInclude Include="..\Source\SphereModel.h" />
     <ClInclude Include="..\Source\TexturedCubeModel.h" />
