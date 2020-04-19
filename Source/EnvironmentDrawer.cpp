@@ -10,6 +10,20 @@ EnvironmentDrawer::EnvironmentDrawer(double** depthArray) {
 
         }
     }
+    // generating first tree species
+    tree1.trunkColor = vec3(randomize(0.5f,1.0f), randomize(0.5f,1.0f), randomize(0.5f,1.0f));
+    tree1.leavesColor = vec3(randomize(0.5f,1.0f), randomize(0.5f,1.0f), randomize(0.5f,1.0f));
+    // generating second tree species
+    tree2.trunkColor = vec3(randomize(0.5f, 1.0f), randomize(0.5f,1.0f), randomize(0.5f,1.0f));
+    tree2.leavesColor = vec3(randomize(0.5f, 1.0f), randomize(0.5f,1.0f), randomize(0.5f,1.0f));
+    // Generating chance of a tree species to appear more than the other
+    treeSpeciesRatio = randomize(0.25f, 0.75f);
+    // generating first type of rock
+    rock1.color = vec3(randomize(0.5f, 1.0f), randomize(0.5f, 1.0f), randomize(0.5f, 1.0f));
+    // generating second type of rock
+    rock2.color = vec3(randomize(0.5f, 1.0f), randomize(0.5f, 1.0f), randomize(0.5f, 1.0f));
+    // Generating chance of a rock type to appear more than the other
+    rockTypeRatio = randomize(0.25f, 0.75f);
     createModels(depthArray);
 }
 EnvironmentDrawer::~EnvironmentDrawer() {
@@ -126,6 +140,16 @@ void EnvironmentDrawer::createModels(double** depthArray) {
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             if (treeAndRockArray[i][j] == 1) {
+                vec3 trunkColor = vec3(1.0f);
+                vec3 leavesColor = vec3(1.0f);
+                if (randomize(0.0f, 1.0f) >= treeSpeciesRatio) {
+                    trunkColor = tree1.trunkColor;
+                    leavesColor = tree1.leavesColor;
+                }
+                else {
+                    trunkColor = tree2.trunkColor;
+                    leavesColor = tree2.leavesColor;
+                }
                 vec3 scaleFactor = vec3(0.5f,0.6f,0.5f);
                 vec3 dimensions = vec3(1.0f, 5.0f, 1.0f);
                 float xzScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
@@ -138,7 +162,7 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                     vec3(0.0f, yAngle, 0.0f),
                     scaleFactor*vec3(xzScale , yScale, xzScale),
                     dimensions * vec3(xzScale / 2, yScale/2, xzScale / 2),
-                    vec3(1.0f),
+                    trunkColor,
                     treeTrunkTextureID,
                     GL_TRIANGLE_FAN
                 );
@@ -155,7 +179,7 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                     vec3(0.0f, yAngle, 0.0f),
                     scaleFactor * vec3(xzScale, yScale, xzScale),
                     vec3(0.0f),
-                    vec3(1.0f),
+                    leavesColor,
                     treeLeavesTextureID,
                     GL_TRIANGLES
                 );
@@ -163,6 +187,13 @@ void EnvironmentDrawer::createModels(double** depthArray) {
 				models.push_back(leaves);
             }
             if (treeAndRockArray[i][j] == 2) {
+                vec3 color = vec3(1.0f);
+                if (randomize(0.0f, 1.0f) >= rockTypeRatio) {
+                    color = rock1.color;
+                }
+                else {
+                    color = rock2.color;
+                }
                 vec3 scaleFactor = vec3(0.2f,0.05f,0.2f);
                 vec3 dimensions = vec3(1.0f, 2.0f, 1.0f);
                 float xScale = 0.2f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - 0.2f)));
@@ -175,7 +206,7 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                     vec3(0.0f, yAngle, 0.0f),
                     scaleFactor*vec3(xScale, yScale, zScale),
                     dimensions*vec3(xScale/2, yScale/2, zScale/2),
-                    vec3(1.0f),
+                    color,
                     rockTextureID,
                     GL_TRIANGLES
                 );

@@ -12,6 +12,8 @@ class GroundDrawer : public Drawer  {
         double** depthArray;
         // All our models
         vector<Model*> models;
+        vec3 groundColor = vec3(1.0f);
+        vec3 cliffColor = vec3(1.0f);
         //TexturedCubeModel* texturedCube;
         //CubeModel* regularCube;
         //GLuint grassTextureID;

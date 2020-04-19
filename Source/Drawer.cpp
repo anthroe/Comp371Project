@@ -15,6 +15,9 @@ void Drawer::draw(Shader* shader) {
 void Drawer::createModels() {
 
 }
+float Drawer::randomize(float min, float max) {
+	return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+}
 unsigned int Drawer::loadTexture(std::string imagePath) {
     unsigned int texture;
     glGenTextures(1, &texture);
