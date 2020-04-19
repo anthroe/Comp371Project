@@ -12,11 +12,11 @@
 
 #include <Shader.h>
 #include <Camera.h>
-#include <SnowManDrawer.h>
 #include <GridDrawer.h>
 #include <SkyDrawer.h>
 #include <GroundDrawer.h>
 #include <EnvironmentDrawer.h>
+#include <AstronautDrawer.h>
 
 #include <math.h>
 
@@ -40,7 +40,7 @@ class World {
         
 
         LineModel* lineModel = new LineModel();
-        SnowManDrawer* snowManDrawer = new SnowManDrawer();
+		AstronautDrawer* astronautDrawer = new AstronautDrawer();
         GridDrawer* gridDrawer = new GridDrawer();
         GroundDrawer * groundDrawer = new GroundDrawer();
         SkyDrawer* skyDrawer = new SkyDrawer();

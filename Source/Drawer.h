@@ -16,6 +16,7 @@
 #include "SphereModel.h"
 #include "LineModel.h"
 #include "TexturedCubeModel.h"
+#include "TexturedModel.h"
 
 #include "OBJloader.h"
 #include "OBJloaderV2.h"

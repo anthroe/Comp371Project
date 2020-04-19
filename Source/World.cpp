@@ -69,9 +69,9 @@ void World::draw() {
 
     groundDrawer->draw(textureShader);
     // Setting world matrix for the loaded model
-    environmentDrawer->draw(textureShader);	
+    environmentDrawer->draw(textureShader);
     
-    snowManDrawer->draw(shader, worldRotationMatrix);
+    astronautDrawer->draw(textureShader, worldRotationMatrix);
 
     camera->updateLookAt();
    
@@ -119,9 +119,9 @@ void World::Update(float dt)
     //first person camera
 
     if (cameraMode == 0) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
+        camera->cameraPosition = astronautDrawer->position + vec3(0.0f, 3.0f, 1.5f);
 
-        snowManDrawer->scaleNumber = 0.0f;
+        astronautDrawer->scaleNumber = 0.0f;
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -135,14 +135,14 @@ void World::Update(float dt)
     //third person camera
     if (cameraMode == 1) {
         
-        camera->cameraPosition.y = snowManDrawer->position.y + sin(radians(camera->cameraVerticalAngle + 180.0f)) * 8.0f + 4.0f;
-        camera->cameraPosition.x = snowManDrawer->position.x 
-            - sin(radians(snowManDrawer->rotateFactor + 180.0f)) 
+        camera->cameraPosition.y = astronautDrawer->position.y + sin(radians(camera->cameraVerticalAngle + 180.0f)) * 8.0f + 4.0f;
+        camera->cameraPosition.x = astronautDrawer->position.x 
+            - sin(radians(astronautDrawer->rotateFactor + 180.0f)) 
             * cos(radians(camera->cameraVerticalAngle)) * 10.0f;
-        camera->cameraPosition.z = snowManDrawer->position.z 
-            - cos(radians(snowManDrawer->rotateFactor + 180.0f)) 
+        camera->cameraPosition.z = astronautDrawer->position.z 
+            - cos(radians(astronautDrawer->rotateFactor + 180.0f)) 
             * cos(radians(camera->cameraVerticalAngle)) * 10.0f;
-        snowManDrawer->scaleNumber = 1.0f;
+        astronautDrawer->scaleNumber = 1.0f;
     }
    
     
@@ -151,27 +151,27 @@ void World::Update(float dt)
     Model * closestModel = new Model();
     for (int i = 0; i < groundDrawer->models.size(); i++) {
         Model * model = groundDrawer->models[i];
-        if (snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y)  {
+        if (astronautDrawer->ContainsModel(model) && closestModel->position.y < model->position.y)  {
             closestModel = model;
         }
     }
     for (int i = 0; i < environmentDrawer->models.size(); i++) {
         Model* model = environmentDrawer->models[i];
-        if (model->hitbox!= vec3(0.0f) && snowManDrawer->ContainsModel(model) && closestModel->position.y < model->position.y) {
+        if (model->hitbox!= vec3(0.0f) && astronautDrawer->ContainsModel(model) && closestModel->position.y < model->position.y) {
             closestModel = model;
         }
     }
     // Snowman is colliding in Y
         
     if (closestModel->position != vec3(0.0f)) {
-        snowManDrawer->position.y = closestModel->position.y + closestModel->hitbox.y/2;
-        snowManDrawer->mVelocity = vec3(0.0f);
+        astronautDrawer->position.y = closestModel->position.y + closestModel->hitbox.y/2;
+        astronautDrawer->mVelocity = vec3(0.0f);
     }
     // Snowman is not colliding in Y and falling
     else if (!flyMode) {
         vec3 gravityVector(0.0f, -gravity, 0.0f);
-        snowManDrawer->Accelerate(gravityVector, dt);
-        snowManDrawer->Update(dt);
+        astronautDrawer->Accelerate(gravityVector, dt);
+        astronautDrawer->Update(dt);
     }
     
 }
