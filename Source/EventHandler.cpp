@@ -1,6 +1,7 @@
 #include <EventHandler.h>
-
+#define PI 3.14159265
 bool spacePressed = false;
+bool twoPressed = false;
 SnowManDrawer* snowman;
 Camera* camera;
 vector<Model*> groundModels;
@@ -47,16 +48,27 @@ void EventHandler::handleEvents() {
     //to do shift see fast cam
     // @TODO 5 = use camera lookat and side vectors to update positions with ASDW
     // adjust code below
-    camera->cameraHorizontalAngle -= dx * camera->cameraAngularSpeed * dt;
+    if (world->cameraMode != 1) {
+        camera->cameraHorizontalAngle -= dx * camera->cameraAngularSpeed * dt;
+       
+    }
+    else {
+        camera->cameraHorizontalAngle = 90.0f+snowman->rotateFactor;
+        
+    }
     camera->cameraVerticalAngle -= dy * camera->cameraAngularSpeed * dt;
-   
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) //change to first person camera
     {
         world->cameraMode = 0;
     }
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) //change to third person camera
+    if (glfwGetKey(window, GLFW_KEY_2 ) == GLFW_PRESS && twoPressed == false) //change to third person camera
     {
         world->cameraMode = 1;
+        twoPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE && twoPressed == true) //change to third person camera
+    {
+        twoPressed = false;
     }
     if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) //free looking camera
     {
@@ -99,7 +111,9 @@ void EventHandler::handleEvents() {
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
-        snowman->position[0] += 0.10f;
+        vec3 newPos = normalize(cross(camera->cameraLookAt, camera->cameraUp));
+        snowman->position.x -= newPos.x * 0.10f;
+        snowman->position.z -= newPos.z * 0.10f;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
@@ -110,14 +124,18 @@ void EventHandler::handleEvents() {
                 collision = true;
         }
         if (collision) {
-            snowman->position[0] -= 0.10f;
+            snowman->position.x += newPos.x * 0.10f;
+            snowman->position.z += newPos.z * 0.10f;
         }
         snowman->snowManAnimation();
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
-        snowman->position[0] -= 0.10f;
+        vec3 newPos = normalize(cross(camera->cameraLookAt, camera->cameraUp));
+        snowman->position.x += newPos.x * 0.10f;
+        snowman->position.z += newPos.z * 0.10f;
+      
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
@@ -128,7 +146,8 @@ void EventHandler::handleEvents() {
                 collision = true;
         }
         if (collision) {
-            snowman->position[0] += 0.10f;
+            snowman->position.x -= newPos.x * 0.10f;
+            snowman->position.z -= newPos.z * 0.10f;
            
         }
         snowman->snowManAnimation();
@@ -136,7 +155,17 @@ void EventHandler::handleEvents() {
  
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
-        snowman->position[2] += 0.10f;
+        snowman->position.x += 0.10f * camera->cameraLookAt.x;
+        snowman->position.z += 0.10f * camera->cameraLookAt.z;
+        if (world->cameraMode != 1) {
+            if (camera->cameraLookAt.z > 0) {
+                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
+            }
+            else {
+                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
+            }
+
+        }
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
@@ -147,7 +176,8 @@ void EventHandler::handleEvents() {
                 collision = true;
         }
         if (collision) {
-            snowman->position[2]-= 0.10f;
+            snowman->position.x -= 0.10f * camera->cameraLookAt.x;
+            snowman->position.z -= 0.10f * camera->cameraLookAt.z;
 
         }
         snowman->snowManAnimation();
@@ -155,7 +185,17 @@ void EventHandler::handleEvents() {
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
-        snowman->position[2] -= 0.10f;
+        snowman->position.x -= 0.10f * camera->cameraLookAt.x;
+        snowman->position.z -= 0.10f * camera->cameraLookAt.z;
+        if (world->cameraMode != 1) {
+            if (camera->cameraLookAt.z > 0) {
+                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
+            }
+            else {
+                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
+            }
+
+        }
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (snowman->CollideXZ(groundModels[i]))
@@ -166,15 +206,16 @@ void EventHandler::handleEvents() {
                 collision = true;
         }
         if (collision) {
-            snowman->position[2] += 0.10f;
+            snowman->position.x += 0.10f * camera->cameraLookAt.x;
+            snowman->position.z += 0.10f * camera->cameraLookAt.z;
         }
         snowman->snowManAnimation();
     }
-    if (!shiftHold && glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) // move olaf up
+    if (!shiftHold && glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) // move olaf up
     {
         snowman->rotateFactor += 1.0f;
     }
-    if (!shiftHold && glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) // move olaf down
+    if (!shiftHold && glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) // move olaf down
     {
         snowman->rotateFactor -= 1.0f;
     }
@@ -262,8 +303,8 @@ void EventHandler::handleEvents() {
     {
         float x = rand() % 100 - 50.0f;
         float z = rand() % 100 - 50.0f;
-        snowman->position[0] = x;
-        snowman->position[2] = z;
+        snowman->position.x = x;
+        snowman->position.z = z;
     }
     */
     // TODO 6

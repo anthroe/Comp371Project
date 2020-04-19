@@ -146,7 +146,6 @@ void EnvironmentDrawer::createModels(double** depthArray) {
                 // offset allows us to do calculation on it as if it was centered at half its height in y.
                 trunk->centeringOffset = vec3(0.0f, -dimensions.y * scaleFactor.y * yScale, 0.0f);
                 trunk->setVAO(trunkVAO, trunkVerticesCount);
-                cout << to_string(trunk->hitbox) << endl;
 				models.push_back(trunk);
     
                 scaleFactor = vec3(2.5f);

@@ -117,9 +117,11 @@ void World::setupShadows() {
 void World::Update(float dt)
 {
     //first person camera
+
     if (cameraMode == 0) {
         camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 3.0f, 1.5f);
-        snowManDrawer->scaleNumber = 0.0f;
+
+        snowManDrawer->scaleNumber = 1.0f;
         //lock viewing angle to simulate a fov
         /*
         if (camera->cameraHorizontalAngle > 0.0f) {
@@ -132,8 +134,10 @@ void World::Update(float dt)
     }
     //third person camera
     if (cameraMode == 1) {
-        camera->cameraPosition = snowManDrawer->position + vec3(0.0f, 4.0f, -4.2f);
-        snowManDrawer->rotateFactor = camera->cameraHorizontalAngle + 90.0f;
+        
+        camera->cameraPosition.y = snowManDrawer->position.y + 4.0f;
+        camera->cameraPosition.x = snowManDrawer->position.x - sin(radians(snowManDrawer->rotateFactor + 180.0f)) * 4.2f;
+        camera->cameraPosition.z = snowManDrawer->position.z - cos(radians(snowManDrawer->rotateFactor + 180.0f)) * 4.2f;
         snowManDrawer->scaleNumber = 1.0f;
     }
    
@@ -166,4 +170,6 @@ void World::Update(float dt)
             snowManDrawer->Update(dt);
         }
     }
+    cout << to_string(camera->cameraLookAt) << endl;
+    cout << snowManDrawer->rotateFactor<< endl;
 }

@@ -18,6 +18,7 @@
 #include <GroundDrawer.h>
 #include <EnvironmentDrawer.h>
 
+#include <math.h>
 
 
 using namespace glm;
