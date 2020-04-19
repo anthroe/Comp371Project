@@ -49,7 +49,26 @@ void TexturedModel::draw(Shader* shader)
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
+	shader->setMat4("worldMatrix", worldMatrix);
+	glDrawElements(drawingPrimitive, numOfVertices, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+void TexturedModel::draw(Shader* shader, mat4 groupMatrix)
+{
+	shader->use();
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	shader->setVec3("objectColor", color);
+
+	glBindVertexArray(mVAO);
+
+	mat4 worldMatrix = groupMatrix * translate(mat4(1.0f), position + centeringOffset);
+	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
+	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	worldMatrix = worldMatrix * rotate(mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	worldMatrix = worldMatrix * scale(mat4(1.0f), scaling);
 	shader->setMat4("worldMatrix", worldMatrix);
 	glDrawElements(drawingPrimitive, numOfVertices, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

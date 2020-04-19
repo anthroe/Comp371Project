@@ -23,6 +23,7 @@ public:
 	~TexturedModel();
 	void setVAO(GLuint VAO, int verticesCount);
 	void draw(Shader* shader);
+	void draw(Shader* shader, mat4 groupMatrix);
 	vec3 centeringOffset = vec3(0.0f);
 	//protected:
 	  //  virtual bool ParseLine(const std::vector<ci_string> &token);

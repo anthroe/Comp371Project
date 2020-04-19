@@ -7,7 +7,7 @@ class AstronautDrawer : public Drawer
 public:
 
 	float scaleNumber = 1.0f;
-	float rotateFactor = 0.0f;
+	float rotateFactor = 180.0f;
 
 	// Animation
 	float footRotationFactor = 0;

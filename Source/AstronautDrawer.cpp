@@ -22,26 +22,13 @@ void AstronautDrawer::setGroupMatrix(mat4 astronautGroupMatrix)
 void AstronautDrawer::draw(Shader* shader, mat4 worldRotationMatrix)
 {
 	// create groupMatrix which is used to transform all the parts, using predifined data
-	mat4 groupMatrix = translate(mat4(1.0f), position) * rotate(mat4(1.0f), glm::radians(rotateFactor), vec3(0.0f, 1.0f, 0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
+	mat4 groupMatrix = translate(mat4(1.0f), position) * rotate(mat4(1.0f), glm::radians(rotateFactor + 180.0f), vec3(0.0f, 1.0f, 0.0f)) * scale(mat4(1.0f), scaleNumber * vec3(1.0f));
 	// create world rotation matrix, which is used to rotate the whole world
-	setGroupMatrix(groupMatrix);
+
 	for (int i = 0; i < models.size(); i++) {
 		models[i]->draw(shader, groupMatrix);
 	}
 }
-
-bool AstronautDrawer::ContainsModel(Model* model)
-{
-	vec3 modelPosition = model->position;
-	vec3 modelHitbox = model->hitbox;
-	float distance = glm::distance(position, modelPosition);
-	float yDistance = abs(modelPosition.y - position.y);
-	// Calculating distance between the center point and the farthest point in the model
-	float XZHitbox = sqrt((modelHitbox.x * modelHitbox.x) + (modelHitbox.z * modelHitbox.z));
-	float diagonalHitbox = sqrt((XZHitbox * XZHitbox) + (modelHitbox.y * modelHitbox.y));
-	return distance <= diagonalHitbox && yDistance <= modelHitbox.y;
-}
-
 void AstronautDrawer::astronautAnimation()
 {
 }
@@ -76,17 +63,20 @@ void AstronautDrawer::Angulate(glm::vec3 torque)
 
 void AstronautDrawer::Jump()
 {
-	position.y += 0.4f;
+	position.y += 1.0f;
 	mVelocity.y = 0.05f;
 }
 
-float AstronautDrawer::ContainsPoint(glm::vec3 modelPosition)
+bool AstronautDrawer::ContainsModel(Model* model)
 {
+	vec3 modelPosition = model->position;
+	vec3 modelHitbox = model->hitbox;
 	float distance = glm::distance(position, modelPosition);
 	float yDistance = abs(modelPosition.y - position.y);
-	if (distance <= 1.84f && yDistance <= 0.5f)
-		return distance;
-	return -1;
+	// Calculating distance between the center point and the farthest point in the model
+	float XZHitbox = sqrt((modelHitbox.x * modelHitbox.x) + (modelHitbox.z * modelHitbox.z));
+	float diagonalHitbox = sqrt((XZHitbox * XZHitbox) + (modelHitbox.y * modelHitbox.y));
+	return distance <= diagonalHitbox && yDistance <= modelHitbox.y;
 }
 bool AstronautDrawer::CollideXZ(Model* model) {
 	return (model->position.y > position.y + model->hitbox.y
@@ -102,9 +92,11 @@ void AstronautDrawer::createModels() {
 	#else
 		GLuint astronautTextureID = loadTexture("../Resources/Assets/Textures/snow.jpg");
 	#endif
+		/* position, rotation, scaling, hitbox, color, texture, renderType*/
 		TexturedModel* astronaut = new TexturedModel(
 			vec3(0.0f, 0.5f, 0.0f),
 			vec3(0.0f, 0.0f, 0.0f),
+			vec3(0.75f, 0.75f, 0.75f),
 			vec3(1.0f, 1.0f, 1.0f),
 			vec3(1.0f, 1.0f, 1.0f),
 			astronautTextureID,

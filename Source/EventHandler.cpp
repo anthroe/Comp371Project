@@ -2,7 +2,7 @@
 #define PI 3.14159265
 bool spacePressed = false;
 bool fPressed = false;
-SnowManDrawer* snowman;
+AstronautDrawer* astronaut;
 Camera* camera;
 vector<Model*> groundModels;
 vector<Model*> environmentModels;
@@ -53,7 +53,7 @@ void EventHandler::handleEvents() {
        
     }
     else {
-        camera->cameraHorizontalAngle = 90.0f+snowman->rotateFactor;
+        camera->cameraHorizontalAngle = 90.0f+astronaut->rotateFactor;
         
     }
     camera->cameraVerticalAngle -= dy * camera->cameraAngularSpeed * dt;
@@ -82,8 +82,8 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // move olaf to the left
     {
         vec3 newPos = normalize(cross(camera->cameraLookAt, camera->cameraUp));
-        snowman->position.x -= newPos.x * currentCameraSpeed;
-        snowman->position.z -= newPos.z * currentCameraSpeed;
+        astronaut->position.x -= newPos.x * currentCameraSpeed;
+        astronaut->position.z -= newPos.z * currentCameraSpeed;
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
             if (astronaut->CollideXZ(groundModels[i]))
@@ -94,8 +94,8 @@ void EventHandler::handleEvents() {
                 collision = true;
         }
         if (collision) {
-            snowman->position.x += newPos.x * currentCameraSpeed;
-            snowman->position.z += newPos.z * currentCameraSpeed;
+            astronaut->position.x += newPos.x * currentCameraSpeed;
+            astronaut->position.z += newPos.z * currentCameraSpeed;
         }
         astronaut->astronautAnimation();
     }
@@ -103,8 +103,8 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // move olaf to the right
     {
         vec3 newPos = normalize(cross(camera->cameraLookAt, camera->cameraUp));
-        snowman->position.x += newPos.x * currentCameraSpeed;
-        snowman->position.z += newPos.z * currentCameraSpeed;
+        astronaut->position.x += newPos.x * currentCameraSpeed;
+        astronaut->position.z += newPos.z * currentCameraSpeed;
       
         bool collision = false;
         for (int i = 0; i < groundModels.size(); i++) {
@@ -117,10 +117,10 @@ void EventHandler::handleEvents() {
         }
         if (collision) {
             if (world->flyMode) {
-                snowman->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
+                astronaut->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
             }
-            snowman->position.x -= newPos.x * currentCameraSpeed;
-            snowman->position.z -= newPos.z * currentCameraSpeed;
+            astronaut->position.x -= newPos.x * currentCameraSpeed;
+            astronaut->position.z -= newPos.z * currentCameraSpeed;
            
         }
         astronaut->astronautAnimation();
@@ -129,16 +129,16 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // move olaf up
     {
         if (world->flyMode) {
-            snowman->position.y += currentCameraSpeed * camera->cameraLookAt.y;
+            astronaut->position.y += currentCameraSpeed * camera->cameraLookAt.y;
         }
-        snowman->position.x += currentCameraSpeed * camera->cameraLookAt.x;
-        snowman->position.z += currentCameraSpeed * camera->cameraLookAt.z;
+        astronaut->position.x += currentCameraSpeed * camera->cameraLookAt.x;
+        astronaut->position.z += currentCameraSpeed * camera->cameraLookAt.z;
         if (world->cameraMode != 1) {
             if (camera->cameraLookAt.z > 0) {
-                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
+                astronaut->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
             }
             else {
-                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
+                astronaut->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
             }
 
         }
@@ -153,10 +153,10 @@ void EventHandler::handleEvents() {
         }
         if (collision) {
             if (world->flyMode) {
-                snowman->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
+                astronaut->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
             }
-            snowman->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
-            snowman->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
+            astronaut->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
+            astronaut->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
 
         }
         astronaut->astronautAnimation();
@@ -165,16 +165,16 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
         if (world->flyMode) {
-            snowman->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
+            astronaut->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
         }
-        snowman->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
-        snowman->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
+        astronaut->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
+        astronaut->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
         if (world->cameraMode != 1) {
             if (camera->cameraLookAt.z > 0) {
-                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
+                astronaut->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI + 180.0f;
             }
             else {
-                snowman->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
+                astronaut->rotateFactor = atan(camera->cameraLookAt.x / camera->cameraLookAt.z) * 180 / PI ;
             }
 
         }
@@ -189,20 +189,20 @@ void EventHandler::handleEvents() {
         }
         if (collision) {
             if (world->flyMode) {
-                snowman->position.y += currentCameraSpeed * camera->cameraLookAt.y;
+                astronaut->position.y += currentCameraSpeed * camera->cameraLookAt.y;
             }
-            snowman->position.x += currentCameraSpeed * camera->cameraLookAt.x;
-            snowman->position.z += currentCameraSpeed * camera->cameraLookAt.z;
+            astronaut->position.x += currentCameraSpeed * camera->cameraLookAt.x;
+            astronaut->position.z += currentCameraSpeed * camera->cameraLookAt.z;
         }
         astronaut->astronautAnimation();
     }
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) // move olaf up
     {
-        snowman->rotateFactor += 5.0f * currentCameraSpeed;
+        astronaut->rotateFactor += 5.0f * currentCameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) // move olaf down
     {
-        snowman->rotateFactor -= 5.0f * currentCameraSpeed;
+        astronaut->rotateFactor -= 5.0f * currentCameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) // reset
     {
@@ -270,21 +270,21 @@ void EventHandler::handleEvents() {
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !fPressed)
     {
         world->flyMode = world->flyMode ? false : true;
-        snowman->mVelocity = vec3(0.0f);
+        astronaut->mVelocity = vec3(0.0f);
         fPressed = true;
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && fPressed)
     {
         fPressed = false;
-        snowman->mVelocity = vec3(0.0f);
+        astronaut->mVelocity = vec3(0.0f);
     }
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
     {
         float x = rand() % 100 - 50.0f;
         float z = rand() % 100 - 50.0f;
-        snowman->position.x = x;
-        snowman->position.z = z;
+        astronaut->position.x = x;
+        astronaut->position.z = z;
     }
     */
     // TODO 6
