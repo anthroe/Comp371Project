@@ -55,7 +55,7 @@ class World {
 		World(GLFWwindow* window);
 		void draw();
         void setupLighting();
-        void setupShadows();
+        void setupShadows(mat4 worldRotationMatrix);
         void Update(float dt);
         float gravity = 0.0003f;
         float friction = 0.0f;

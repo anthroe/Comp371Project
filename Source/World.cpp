@@ -60,7 +60,7 @@ void World::draw() {
     shader->use();
     shader->setMat4("globalRotationMatrix", worldRotationMatrix);
 
-    setupShadows();
+    setupShadows(worldRotationMatrix);
     //gridDrawer->draw(shader);
     
     
@@ -79,7 +79,7 @@ void World::draw() {
 
 void World::setupLighting() {
     float near_plane = 30.0f, far_plane = 240.0f;
-    mat4 lightProjection = ortho(-60.0f, 60.0f, -60.0f,60.0f, near_plane, far_plane);
+    mat4 lightProjection = ortho(-62.0f, 62.0f, -60.0f,60.0f, near_plane, far_plane);
     mat4 lightView = lookAt(vec3(-75.0f, 160.0f, 60.0f), vec3(0.0f), vec3(0.0, 1.0, 0.0));
     mat4 lightSpaceMatrix = lightProjection * lightView;
     // Setting up shadow shader lighting
@@ -97,7 +97,7 @@ void World::setupLighting() {
     shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 }
 
-void World::setupShadows() {
+void World::setupShadows(mat4 worldRotationMatrix) {
     shadowShader->use();
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -105,6 +105,7 @@ void World::setupShadows() {
     glCullFace(GL_FRONT);
     groundDrawer->draw(shadowShader);
     environmentDrawer->draw(shadowShader);
+    astronautDrawer->draw(shadowShader, worldRotationMatrix);
     glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
@@ -168,7 +169,7 @@ void World::Update(float dt)
         astronautDrawer->mVelocity = vec3(0.0f);
     }
     // Snowman is not colliding in Y and falling
-    else if (!flyMode) {
+    else if (!flyMode && astronautDrawer-> position.y>0.0f) {
         vec3 gravityVector(0.0f, -gravity, 0.0f);
         astronautDrawer->Accelerate(gravityVector, dt);
         astronautDrawer->Update(dt);

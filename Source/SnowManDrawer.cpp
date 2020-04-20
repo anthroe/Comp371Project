@@ -88,6 +88,10 @@ void SnowManDrawer::Jump()
 {
     position.y += 0.8f;
     mVelocity.y = 0.05f;
+    if (position.y > 100.0f) {
+        position.y -= 0.8f;
+        mVelocity.y = 0.0f;
+    }
 }
 
 bool SnowManDrawer::ContainsModel(Model* model)

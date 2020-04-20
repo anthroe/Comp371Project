@@ -97,6 +97,12 @@ void EventHandler::handleEvents() {
             astronaut->position.x += newPos.x * currentCameraSpeed;
             astronaut->position.z += newPos.z * currentCameraSpeed;
         }
+        if (astronaut->position.x > 49.0f || astronaut->position.x <= -48.0f) {
+            astronaut->position.x += newPos.x * currentCameraSpeed;
+        }
+        if (astronaut->position.z > 49.0f || astronaut->position.z <= -48.0f) {
+            astronaut->position.z += newPos.z * currentCameraSpeed;
+        }
         astronaut->astronautAnimation();
     }
 
@@ -123,6 +129,12 @@ void EventHandler::handleEvents() {
             astronaut->position.z -= newPos.z * currentCameraSpeed;
            
         }
+        if (astronaut->position.x > 49.0f || astronaut->position.x <= -48.0f) {
+            astronaut->position.x -= newPos.x * currentCameraSpeed;
+        }
+        if (astronaut->position.z > 49.0f || astronaut->position.z <= -48.0f) {
+            astronaut->position.z -= newPos.z * currentCameraSpeed;
+        }
         astronaut->astronautAnimation();
     }
  
@@ -130,6 +142,9 @@ void EventHandler::handleEvents() {
     {
         if (world->flyMode) {
             astronaut->position.y += currentCameraSpeed * camera->cameraLookAt.y;
+        }
+        if (astronaut->position.y > 100.0f || astronaut->position.y <= 0.0f) {
+            astronaut->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
         }
         astronaut->position.x += currentCameraSpeed * camera->cameraLookAt.x;
         astronaut->position.z += currentCameraSpeed * camera->cameraLookAt.z;
@@ -159,13 +174,21 @@ void EventHandler::handleEvents() {
             astronaut->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
 
         }
-        astronaut->astronautAnimation();
+        if (astronaut->position.x > 49.0f || astronaut->position.x <= -48.0f) {
+            astronaut->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
+        }
+        if (astronaut->position.z > 49.0f || astronaut->position.z <= -48.0f) {
+            astronaut->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // move olaf down
     {
         if (world->flyMode) {
             astronaut->position.y -= currentCameraSpeed * camera->cameraLookAt.y;
+        }
+        if (astronaut->position.y >100.0f || astronaut->position.y <= 0.0f) {
+            astronaut->position.y += currentCameraSpeed * camera->cameraLookAt.y;
         }
         astronaut->position.x -= currentCameraSpeed * camera->cameraLookAt.x;
         astronaut->position.z -= currentCameraSpeed * camera->cameraLookAt.z;
@@ -194,7 +217,12 @@ void EventHandler::handleEvents() {
             astronaut->position.x += currentCameraSpeed * camera->cameraLookAt.x;
             astronaut->position.z += currentCameraSpeed * camera->cameraLookAt.z;
         }
-        astronaut->astronautAnimation();
+        if (astronaut->position.x > 49.0f || astronaut->position.x <= -48.0f) {
+            astronaut->position.x += currentCameraSpeed * camera->cameraLookAt.x;
+        }
+        if (astronaut->position.z > 49.0f || astronaut->position.z <= -48.0f) {
+            astronaut->position.z += currentCameraSpeed * camera->cameraLookAt.z;
+        }
     }
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) // move olaf up
     {
@@ -281,8 +309,8 @@ void EventHandler::handleEvents() {
     /*
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // randomly summoning the demon olaf anywhere on the grid
     {
-        float x = rand() % 100 - 50.0f;
-        float z = rand() % 100 - 50.0f;
+        float x = rand() % 100 - 49.0f;
+        float z = rand() % 100 - 49.0f;
         astronaut->position.x = x;
         astronaut->position.z = z;
     }
