@@ -13,17 +13,73 @@
 #include "World.h"
 #include "EventHandler.h"
 
-
-using namespace glm;
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cmath>
+#include <ctime>
 using namespace std;
+using namespace glm;
+
+static inline bool is_not_alnum_space(char c)
+{
+    return !(isalnum(c));
+}
+
+bool isAlphaNumeric(const std::string& str)
+{
+    return find_if(str.begin(), str.end(), is_not_alnum_space) == str.end();
+}
+
+void gen_random(char* s, const int len) {
+    static const char alpha[] =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+
+    for (int i = 0; i < len; ++i) {
+        s[i] = alpha[rand() % (sizeof(alpha) - 1)];
+    }
+
+    s[len] = 0;
+}
+
+string generateSeed()
+{
+    char* s = new char;
+    gen_random(s, 8);
+
+    string seedInput; // Data in which user will input info that will be have arithmetic done on it and will be displayed 
+    cout << "Enter a seed value, if you want a seed to be generated, enter period:\n";
+    cin >> seedInput;
+    cout << endl;
+    while (seedInput != "." && !isAlphaNumeric(seedInput))
+    {
+
+        cout << "Enter a seed value, if you want a seed to be generated, press period:\n";
+        cin >> seedInput;
+        cout << endl;
+    }
+    if (seedInput == ".")
+    {
+        seedInput = s;
+        cout << "A seed has been generated for you: " << seedInput << " \n";
+
+    }
+    else
+    {
+        cout << "The seed you have entered is : " << seedInput << " \n";
+    }
+    return seedInput;
+}
 
 World * world;
 EventHandler* eventHandler;
 
-
 int main(int argc, char* argv[])
 {
-   
+    srand((unsigned)time(NULL));
+    string seed = generateSeed();
+    srand(std::hash<std::string>{}(seed));
     // Initialize GLFW and OpenGL version
     glfwInit();
 
@@ -101,3 +157,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+

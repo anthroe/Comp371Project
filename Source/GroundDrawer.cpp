@@ -2,7 +2,6 @@
 
 GroundDrawer::GroundDrawer()
 {
-    srand((unsigned)time(NULL));
     float r = randomize(0.0f, 1.0f);
     float g = randomize(0.0f, 1.0f);
     float b = randomize(0.0f, 1.0f);
